@@ -39,7 +39,7 @@ export function EvolvingSection() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            Evolves every week &<br />learns what drives more revenue
+            Evolves every week <br />outplays competitors
           </h2>
           <p style={{
             fontSize: 17,
