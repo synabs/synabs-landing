@@ -14,7 +14,7 @@ const CYCLE_STEPS = [
     phase: '02',
     label: 'Analyse',
     title: 'AI reads 75 quality signals',
-    desc: 'Each week, Claude analyses the full conversation dataset across 75 diagnostic criteria spanning lead behaviour, support patterns, and information gaps.',
+    desc: 'Each week, AI analyses the full conversation dataset across 75 diagnostic criteria spanning lead behaviour, support patterns, and information gaps.',
     color: '#60a5fa',
   },
   {
