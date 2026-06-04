@@ -30,7 +30,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
         <source src="/bg-vd.mp4" type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-black/40" style={{ zIndex: 0 }} />
+      <div className="absolute inset-0 bg-black/85" style={{ zIndex: 0 }} />
       <ParticleField count={20} />
 
       <img
