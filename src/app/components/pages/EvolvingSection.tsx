@@ -49,7 +49,7 @@ export function EvolvingSection() {
             lineHeight: 1.65,
             margin: '0 0 0 auto',
           }}>
-            Your AI Agent gets smarter every week. Every conversation is captured, analysed across 75 quality signals, and turned into over 200 targeted improvements.
+            Your AI agent improves every week. Each conversation is analyzed across 75 quality signals and converted into 200+ targeted improvements that make it smarter and more effective over time.
           </p>
         </div>
 
