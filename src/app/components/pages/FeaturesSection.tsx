@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { MessageSquare, Brain, Clock, TrendingUp, Zap, Users, Check, X } from 'lucide-react';
 
@@ -752,12 +753,11 @@ function LightboxModal({ slide, onClose, onPrev, onNext }) {
     return () => window.removeEventListener('keydown', handler);
   }, [onClose, onPrev, onNext]);
 
-  return (
+  return createPortal(
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-center justify-center"
-        style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(12px)' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(12px)' }}
         onClick={onClose}>
         <button onClick={onClose}
           className="absolute top-5 right-5 z-10 w-10 h-10 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all">
@@ -782,7 +782,8 @@ function LightboxModal({ slide, onClose, onPrev, onNext }) {
           <img src={slide.src} alt={slide.label} style={{ maxWidth: '85vw', maxHeight: '85vh', display: 'block', borderRadius: 16 }} draggable={false} />
         </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
 
@@ -924,124 +925,95 @@ function CarouselCard({ item, chatTheme, setChatTheme, scrollToForm, paperStackR
 
 function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () => void; isDark: boolean; paperStackRef: React.Ref<{ closeLightbox: () => void }> }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isUserControlled, setIsUserControlled] = useState(false);
   const [chatTheme, setChatTheme] = useState('dark');
-  const dragStartX = useRef(0);
-  const dragAccum = useRef(0);
-  const lastSnappedIdx = useRef(0);
-  const [angle, setAngle] = useState(0);
-  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const userTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const animFrameRef = useRef<number | null>(null);
-  const currentAngleRef = useRef(0);
-  const targetAngleRef = useRef(0);
   const N = CAROUSEL_ITEMS.length;
   const STEP = 360 / N;
-  const SNAP_THRESHOLD = 60; // px drag to snap to next
 
-  // continuous lerp loop
+  // angle state — drives all positions
+  const angleRef = useRef(0);           // current rendered angle
+  const targetAngleRef = useRef(0);     // where we're lerping to
+  const [angle, setAngle] = useState(0);
+
+  // drag state
+  const isDraggingRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartXRef = useRef(0);
+  const dragBaseAngleRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+
+  // raf loop — always running
+  const rafRef = useRef<number | null>(null);
   useEffect(() => {
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const tick = () => {
-      const diff = targetAngleRef.current - currentAngleRef.current;
-      if (Math.abs(diff) > 0.04) {
-        currentAngleRef.current = lerp(currentAngleRef.current, targetAngleRef.current, 0.1);
-        setAngle(currentAngleRef.current);
-      } else {
-        currentAngleRef.current = targetAngleRef.current;
-        setAngle(targetAngleRef.current);
+      const diff = targetAngleRef.current - angleRef.current;
+      if (Math.abs(diff) > 0.015) {
+        angleRef.current += diff * 0.09;
+        setAngle(angleRef.current);
+      } else if (Math.abs(diff) > 0) {
+        angleRef.current = targetAngleRef.current;
+        setAngle(angleRef.current);
       }
-      animFrameRef.current = requestAnimationFrame(tick);
+      rafRef.current = requestAnimationFrame(tick);
     };
-    animFrameRef.current = requestAnimationFrame(tick);
-    return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, []);
 
+  // snap targetAngle to nearest slot for given idx (shortest path)
   const snapTo = useCallback((idx: number) => {
-    const normalised = ((idx % N) + N) % N;
-    // find shortest rotation from current target
-    const currentStep = Math.round(-targetAngleRef.current / STEP);
-    const delta = normalised - ((currentStep % N) + N) % N;
-    let shortDelta = delta;
-    if (shortDelta > N / 2) shortDelta -= N;
-    if (shortDelta < -N / 2) shortDelta += N;
-    targetAngleRef.current = targetAngleRef.current - shortDelta * STEP;
-    setActiveIdx(normalised);
-    lastSnappedIdx.current = normalised;
+    const norm = ((idx % N) + N) % N;
+    // figure out current "index" from target angle
+    const currentSnap = -targetAngleRef.current / STEP;
+    const nearestCurrent = Math.round(currentSnap);
+    // how many steps to reach norm from nearest current?
+    let delta = norm - ((nearestCurrent % N) + N) % N;
+    if (delta > N / 2) delta -= N;
+    if (delta < -N / 2) delta += N;
+    targetAngleRef.current = -(nearestCurrent + delta) * STEP;
+    setActiveIdx(norm);
   }, [N, STEP]);
 
-  const startAutoRotate = useCallback(() => {
-    if (autoRef.current) clearInterval(autoRef.current);
-    autoRef.current = setInterval(() => {
-      const nextIdx = (lastSnappedIdx.current + 1) % N;
-      snapTo(nextIdx);
-    }, 3800);
-  }, [N, snapTo]);
-
-  const stopAutoRotate = () => {
-    if (autoRef.current) { clearInterval(autoRef.current); autoRef.current = null; }
-  };
-
-  useEffect(() => {
-    startAutoRotate();
-    return stopAutoRotate;
-  }, [startAutoRotate]);
+  const goTo = useCallback((idx: number) => {
+    snapTo(idx);
+  }, [snapTo]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    // don't start drag on interactive children
     if ((e.target as HTMLElement).closest('button, a, input')) return;
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
     setIsDragging(true);
-    setIsUserControlled(true);
-    stopAutoRotate();
-    if (userTimerRef.current) clearTimeout(userTimerRef.current);
-    dragStartX.current = e.clientX;
-    dragAccum.current = 0;
+    dragStartXRef.current = e.clientX;
+    dragBaseAngleRef.current = targetAngleRef.current;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging) return;
-    const dx = e.clientX - dragStartX.current;
-    dragAccum.current = dx;
-
-    // snap when threshold crossed
-    const steps = Math.floor(Math.abs(dx) / SNAP_THRESHOLD);
-    const dir = dx < 0 ? 1 : -1;
-    const targetStep = (lastSnappedIdx.current + dir * steps + N * 100) % N;
-
-    if (targetStep !== activeIdx) {
-      snapTo(targetStep);
-    }
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - dragStartXRef.current;
+    if (Math.abs(dx) > 4) hasDraggedRef.current = true;
+    // map px to degrees: full card width ≈ 200px = 1 step
+    const degreesPerPx = STEP / 200;
+    targetAngleRef.current = dragBaseAngleRef.current + dx * degreesPerPx;
+    // update active index as we drag
+    const snapped = ((Math.round(-targetAngleRef.current / STEP) % N) + N) % N;
+    setActiveIdx(snapped);
   };
 
-  const handlePointerUp = () => {
-    if (!isDragging) return;
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
     setIsDragging(false);
-    // ensure snapped
-    snapTo(lastSnappedIdx.current);
-    userTimerRef.current = setTimeout(() => {
-      setIsUserControlled(false);
-      startAutoRotate();
-    }, 4000);
-  };
-
-  const goTo = (idx: number) => {
-    stopAutoRotate();
-    setIsUserControlled(true);
-    if (userTimerRef.current) clearTimeout(userTimerRef.current);
-    snapTo(idx);
-    userTimerRef.current = setTimeout(() => {
-      setIsUserControlled(false);
-      startAutoRotate();
-    }, 4000);
+    // snap to nearest slot
+    const nearest = Math.round(-targetAngleRef.current / STEP);
+    targetAngleRef.current = -nearest * STEP;
+    const norm = ((nearest % N) + N) % N;
+    setActiveIdx(norm);
   };
 
   const RADIUS = 500;
 
   return (
     <div className="flex flex-col items-center gap-8 select-none w-full">
-      {/* 3D stage */}
       <div
         style={{ width: '100%', height: 560, position: 'relative', perspective: '1400px', cursor: isDragging ? 'grabbing' : 'grab' }}
         onPointerDown={handlePointerDown}
@@ -1057,9 +1029,8 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
             const z = Math.cos(rad) * RADIUS;
             const depth = (z + RADIUS) / (2 * RADIUS); // 0=back, 1=front
             const isActive = i === activeIdx;
-            // blur: active always 0, others based on how far back they are
-            const blurAmount = isActive ? 0 : 3 + (1 - depth) * 5;
-            const opacity = isActive ? 1 : 0.38 + depth * 0.42;
+            const blurAmount = isActive ? 0 : 2 + (1 - depth) * 5;
+            const opacity = isActive ? 1 : 0.4 + depth * 0.35;
 
             return (
               <div
@@ -1068,44 +1039,48 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
                   position: 'absolute',
                   left: '50%',
                   top: '50%',
-                  transform: `translate(-50%, -50%) translateX(${x}px) translateY(${(1 - depth) * 30}px)`,
+                  transform: `translate(-50%, -50%) translateX(${x}px) translateY(${(1 - depth) * 24}px)`,
                   filter: `blur(${blurAmount}px)`,
                   opacity,
-                  zIndex: Math.round(depth * 100),
-                  cursor: isActive ? 'grab' : 'pointer',
-                  pointerEvents: isDragging ? 'none' : 'auto',
-                  // smooth blur/opacity transitions
-                  transition: 'filter 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.6s cubic-bezier(0.4,0,0.2,1)',
+                  zIndex: isActive ? 50 : Math.round(depth * 40),
+                  cursor: isActive ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
+                  pointerEvents: 'auto',
+                  transition: 'filter 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.55s cubic-bezier(0.4,0,0.2,1)',
                   willChange: 'filter, opacity, transform',
                 }}
-                onClick={() => { if (!isDragging && !isActive) goTo(i); }}
+                onClick={() => {
+                  if (hasDraggedRef.current) return;
+                  if (!isActive) goTo(i);
+                }}
               >
                 <div style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: isActive ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(255,255,255,0.06)',
                   borderRadius: 24,
-                  padding: '24px 20px 20px',
+                  padding: '20px 20px 16px',
                   boxShadow: isActive
-                    ? '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.1)'
+                    ? '0 32px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)'
                     : '0 16px 40px rgba(0,0,0,0.4)',
                   backdropFilter: 'blur(8px)',
-                  transition: 'border 0.6s ease, box-shadow 0.6s ease',
+                  transition: 'border 0.55s ease, box-shadow 0.55s ease',
                   width: 360,
                 }}>
-                  {/* Card header */}
-                  <div className="flex flex-col items-center gap-1 mb-4">
+                  {/* Card header — only sublabel + badge, no title */}
+                  <div className="flex flex-col items-center gap-1 mb-3">
                     <div className="flex items-center gap-2 flex-wrap justify-center">
-                      <span className="text-base font-semibold text-white tracking-tight">{item.label}</span>
+                      {item.sublabel && (
+                        <span className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em' }}>{item.sublabel}</span>
+                      )}
+                      {!item.sublabel && (
+                        <span className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em' }}>{item.label}</span>
+                      )}
                       {item.badge && (
                         <span style={{ background: item.badgeBg, border: `1px solid ${item.badgeBorder}`, color: item.badgeColor }} className="text-xs font-semibold px-2 py-0.5 rounded-full">{item.badge}</span>
                       )}
                     </div>
-                    {item.sublabel && (
-                      <span className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>{item.sublabel}</span>
-                    )}
                   </div>
 
-                  {/* Chat theme switcher for standard theme */}
+                  {/* Theme switcher */}
                   {item.id === 'standard-dark' && isActive && (
                     <div className="flex items-center justify-center gap-2 mb-3">
                       <motion.button
@@ -1113,13 +1088,13 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
                         animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#000000', '#d4d4d8'] } : { borderColor: '#71717a' }}
                         transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
                         style={{ borderWidth: 2, borderStyle: 'solid' }}
-                        className={`w-5 h-5 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
+                        className={`w-5 h-5 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110' : ''}`} />
                       <motion.button
                         onClick={(e) => { e.stopPropagation(); setChatTheme('light'); }}
                         animate={chatTheme !== 'light' ? { borderColor: ['#e4e4e7', '#52525b', '#e4e4e7'] } : { borderColor: '#a1a1aa' }}
                         transition={chatTheme !== 'light' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
                         style={{ borderWidth: 2, borderStyle: 'solid' }}
-                        className={`w-5 h-5 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
+                        className={`w-5 h-5 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110' : ''}`} />
                     </div>
                   )}
 
@@ -1133,25 +1108,15 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
         </div>
       </div>
 
-      {/* Dots + label */}
+      {/* Dots */}
       <div className="flex flex-col items-center gap-3">
         <div className="flex items-center gap-3">
           {CAROUSEL_ITEMS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className="transition-all duration-500 rounded-full"
-              style={{
-                width: i === activeIdx ? 24 : 7,
-                height: 7,
-                background: i === activeIdx ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-            />
+            <button key={i} onClick={() => goTo(i)}
+              style={{ width: i === activeIdx ? 24 : 7, height: 7, borderRadius: 9999, background: i === activeIdx ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)', border: 'none', cursor: 'pointer', transition: 'all 0.4s ease' }} />
           ))}
         </div>
-        <p className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.14em' }}>
+        <p style={{ color: 'rgba(255,255,255,0.22)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
           {CAROUSEL_ITEMS[activeIdx].label} · {activeIdx + 1} / {N}
         </p>
       </div>
