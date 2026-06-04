@@ -87,7 +87,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   const opacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
 
   const trackBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const fillColor = isDark ? '#ffffff' : '#09090b';
+  const fillColor = isDark ? '#ffffff' : '#000000';
   const fillPct = (planIdx / (PLANS.length - 1)) * 100;
 
   const getPctFromEvent = (clientX: number) => {
@@ -122,7 +122,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
         ref={sectionRef}
         id="pricing"
         style={{ scale, filter: sectionFilter, opacity }}
-        className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-700 ${isDark ? 'bg-zinc-950' : 'bg-white'} py-16 px-6 relative overflow-hidden`}
+        className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-700 ${isDark ? 'bg-black' : 'bg-white'} py-16 px-6 relative overflow-hidden`}
       >
         <ParticleField count={isDark ? 10 : 0} />
         <div className="max-w-2xl mx-auto w-full relative z-10">

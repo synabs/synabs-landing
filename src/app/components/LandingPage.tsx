@@ -22,8 +22,8 @@ export function LandingPage() {
 
   return (
     <>
-      <style>{`html, body { background: #09090b !important; margin: 0; padding: 0; }`}</style>
-      <div className="overflow-x-hidden bg-zinc-950" style={{ minHeight: '100vh', backgroundColor: '#09090b' }}>
+      <style>{`html, body { background: #000000 !important; margin: 0; padding: 0; }`}</style>
+      <div className="overflow-x-hidden bg-black" style={{ minHeight: '100vh', backgroundColor: '#000000' }}>
         {leadOpen && (
           <LeadFormModal
             isDark={true}

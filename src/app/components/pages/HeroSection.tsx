@@ -11,9 +11,9 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#09090b' }}
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#000000' }}
     >
-      <div className="absolute inset-0 bg-zinc-950" />
+      <div className="absolute inset-0 bg-black" />
       <ParticleField count={20} />
 
       <img

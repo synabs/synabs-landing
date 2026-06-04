@@ -21,10 +21,10 @@ export function CTASection({ activeTheme, onGetStarted }: CTASectionProps) {
     <div style={{ perspective: '1400px', overflow: 'hidden' }}>
       <motion.section
         ref={ref}
-        style={{ y, scale, rotateX, opacity, minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#09090b' }}
+        style={{ y, scale, rotateX, opacity, minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#000000' }}
         className="relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-zinc-950" />
+        <div className="absolute inset-0 bg-black" />
         <ParticleField count={20} />
 
         <img

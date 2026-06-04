@@ -11,7 +11,7 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      style={{ background: '#09090b', padding: '96px 24px' }}
+      style={{ background: '#000000', padding: '96px 24px' }}
     >
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 

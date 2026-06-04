@@ -12,7 +12,7 @@ export function Footer({ activeTheme }: FooterProps) {
       id="contact"
       className={`py-12 px-6 border-t transition-colors duration-700 ${
         isDark
-          ? 'bg-zinc-950 text-zinc-400 border-zinc-800'
+          ? 'bg-black text-zinc-400 border-zinc-800'
           : 'bg-white text-zinc-500 border-zinc-200'
       }`}
     >

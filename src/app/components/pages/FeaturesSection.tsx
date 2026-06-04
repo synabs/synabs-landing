@@ -6,7 +6,7 @@ import { MessageSquare, Brain, Clock, TrendingUp, Zap, Users, Check, X } from 'l
 export const CHAT_THEMES = {
   dark: {
     name: 'Obsidian Black',
-    bg: '#09090b',
+    bg: '#000000',
     headerBg: 'rgba(13,13,15,0.97)',
     msgBg: '#232325',
     userMsgBg: '#2c2c30',
@@ -875,7 +875,7 @@ const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boo
         <div className="flex items-center gap-2">
           {SLIDES.map((_, i) => (
             <button key={i} onClick={() => goTo(i)} className="transition-all duration-300 rounded-full"
-              style={{ width: i === activeIdx ? 20 : 6, height: 6, background: i === activeIdx ? (isDark ? '#fff' : '#09090b') : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)') }} />
+              style={{ width: i === activeIdx ? 20 : 6, height: 6, background: i === activeIdx ? (isDark ? '#fff' : '#000000') : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)') }} />
           ))}
         </div>
 
@@ -929,10 +929,10 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
         ref={ref}
         id="features"
         style={{ rotateX, scale, opacity, y }}
-        className="min-h-screen flex items-center justify-center bg-zinc-950 py-20 px-6 relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center bg-black py-20 px-6 relative overflow-hidden"
       >
         <video src="/dots.mp4" autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-80" />
-        <div className="absolute inset-0 bg-zinc-950/20" />
+        <div className="absolute inset-0 bg-black/20" />
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
@@ -956,7 +956,7 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
                 <div className="flex items-center gap-2 mt-1">
                   <motion.button
                     onClick={() => setChatTheme('dark')}
-                    animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#09090b', '#d4d4d8'] } : { borderColor: '#71717a' }}
+                    animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#000000', '#d4d4d8'] } : { borderColor: '#71717a' }}
                     transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
                     style={{ borderWidth: 2, borderStyle: 'solid' }}
                     className={`w-6 h-6 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
