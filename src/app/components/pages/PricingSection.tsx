@@ -272,7 +272,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {isCustom ? (
               <div style={{ marginBottom: 36 }}>
                 <p style={{ color: c.label, fontSize: 17, fontWeight: 300, margin: '0 0 6px' }}>
-                  Tell us what you need — we'll build it around you.
+                  Tell us what you need we'll build it around you.
                 </p>
                 <p style={{ color: c.faint, fontSize: 14, fontWeight: 300, margin: 0 }}>
                   Volume pricing, custom integrations, dedicated support.
