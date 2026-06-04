@@ -146,10 +146,10 @@ export function EvolvingSection() {
             </span>
           </div>
           <h2 className="text-5xl md:text-6xl font-light mb-3 text-white leading-tight">
-            Smarter every week,<br />without lifting a finger
+            Evolves every week,<br />gets smarter constantly
           </h2>
           <p className="text-lg font-light text-zinc-400 max-w-2xl">
-            Most AI tools stay static after launch. TIA is different. Every week it reads its own conversations, finds what could be sharper, and upgrades itself automatically.
+            Most AI tools stop evolving once they're deployed. Ours continuously analyzes data, discovers optimization opportunities, and improves itself automatically.
           </p>
         </motion.div>
 
