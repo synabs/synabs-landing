@@ -19,7 +19,7 @@ export const CHAT_THEMES = {
     accentDot: '#34d399',
     sendArrow: 'rgba(255,255,255,0.6)',
     glow: '0 32px 80px rgba(0,0,0,0.7)',
-    avatarSrc: '/logo.png',
+    avatarSrc: '/lg-aw.avif',
     scrollTrack: 'rgba(255,255,255,0.04)',
     scrollThumb: 'rgba(255,255,255,0.12)',
     scrollThumbHover: 'rgba(255,255,255,0.22)',
@@ -41,7 +41,7 @@ export const CHAT_THEMES = {
     accentDot: '#34d399',
     sendArrow: 'rgba(0,0,0,0.5)',
     glow: '0 32px 80px rgba(0,0,0,0.35)',
-    avatarSrc: '/logo-black.png',
+    avatarSrc: '/lg-aw.avif',
     scrollTrack: 'rgba(0,0,0,0.04)',
     scrollThumb: 'rgba(0,0,0,0.12)',
     scrollThumbHover: 'rgba(0,0,0,0.22)',
@@ -83,7 +83,7 @@ function TypedText({ text, color, onDone = undefined, onChar = undefined }) {
 
 /* ─── CONVERSATION DATA ──────────────────────────────────────── */
 const CONVERSATION = [
-  { from: 'bot',  text: "Hey! I'm TIA. Tell me what you're looking for, and I'll point you in the right direction.", delay: 800 },
+  { from: 'bot',  text: "Hello! I'm your Agent. How can I assist you today?", delay: 800 },
   { from: 'user', text: 'How much does installation cost?', delay: 4000, inputTyping: 'How much does installation cost?' },
   { from: 'bot',  text: 'Plans start at 149/mo and go up to 699/mo depending on chat volume. How many customer chats do you estimate per day?', delay: 5800 },
   { from: 'user', text: 'Maybe around 10 max', delay: 9000, inputTyping: 'Maybe around 10 max' },
@@ -268,7 +268,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       <img src={theme.avatarSrc} alt="TIA" className="w-full h-full object-contain p-0.5" />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">TIA</span>
+                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">Agent</span>
                       <span style={{ background: theme.accentDot }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
                     </div>
                   </div>
@@ -496,7 +496,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                 {/* Footer */}
                 <div style={{ background: theme.headerBg }} className="flex items-center gap-1 py-2 justify-center flex-shrink-0">
                   <span style={{ color: theme.subtleText, fontSize: '9px', letterSpacing: '0.04em' }}>Powered by</span>
-                  <img src="https://i.ibb.co/WWGrHnHy/asd3.png" alt="" className="h-2.5 opacity-50"
+                  <img src="/logo-white.avif" alt="" className="h-2.5 opacity-50"
                     style={{ filter: isLight ? 'brightness(0)' : 'brightness(2)' }} />
                 </div>
               </div>
@@ -508,7 +508,272 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
   );
 }
 
-/* ─── PAPER SLIDESHOW ─────────────────────────────────────────── */
+/* ─── CUSTOMIZED CHAT CONVERSATION ──────────────────────────── */
+const CUSTOM_CONVERSATION = [
+  { from: 'bot',  text: "Hello! I'm your Agent. This is a fully customized version — every element, from colors to content, is tailored to your brand.", delay: 800 },
+  { from: 'user', text: 'Interesting, which parts can be customized?', delay: 5000, inputTyping: 'Interesting, which parts can be customized?' },
+  { from: 'bot',  text: "Everything you see here — header colors, avatar, message bubbles, fonts, and the conversation flow itself. As you can tell from this chat.", delay: 7200 },
+  { from: 'user', text: 'What does it cost?', delay: 11500, inputTyping: 'What does it cost?' },
+  { from: 'bot',  text: 'Full customization is included in all plans. If you prefer our standard look (with a link to our site in the footer), you get a 20% discount — unlimited.', delay: 13500 },
+  { from: 'user', text: "I'm interested in full customization. Where can I read more?", delay: 18500, inputTyping: "I'm interested in full customization. Where can I read more?" },
+  { from: 'bot',  text: 'Great choice! You can explore all our plans and services here:', delay: 21000 },
+  { from: 'bot',  text: '__PRICING_BUTTON__', delay: 23200 },
+  { from: 'user', text: 'Ok, I\'ll check it out later.', delay: 26000, inputTyping: "Ok, I'll check it out later." },
+  { from: 'bot',  text: 'Sounds good! In the meantime — you can try your own AI Agent free for 14 days. Want to get started?', delay: 28000 },
+  { from: 'user', text: 'That could be interesting!', delay: 32500, inputTyping: 'That could be interesting!' },
+  { from: 'bot',  text: "Excellent! Just fill out a short form and we'll be in touch as soon as possible.", delay: 34500 },
+  { from: 'bot',  text: '__TRIAL_BUTTON__', delay: 37000 },
+  { from: 'user', text: "Ok, I'll leave my details. Thanks!", delay: 40000, inputTyping: "Ok, I'll leave my details. Thanks!" },
+  { from: 'bot',  text: "You're very welcome! Have a great rest of your day.", delay: 42000 },
+];
+
+function CustomizedChatLoop({ onGetStarted }) {
+  const theme = {
+    bg: '#1a1a1a',
+    headerBg: 'rgba(13,13,15,0.97)',
+    msgBg: '#2a2a2a',
+    userMsgBg: '#2f2f2f',
+    border: 'rgba(255,255,255,0.09)',
+    inputBg: '#222222',
+    chipColor: 'rgba(255,255,255,0.45)',
+    textColor: 'rgba(232,232,232,0.95)',
+    userTextColor: 'rgba(232,232,232,0.95)',
+    subtleText: 'rgba(255,255,255,0.22)',
+    accentDot: '#34d399',
+    sendArrow: 'rgba(255,255,255,0.6)',
+    scrollTrack: 'rgba(255,255,255,0.04)',
+    scrollThumb: 'rgba(255,255,255,0.12)',
+    chipBg: 'rgba(20,20,24,0.85)',
+    avatarSrc: '/lg-aw.avif',
+    name: 'Custom Dark',
+  };
+
+  const CHAT_PANEL_HEIGHT = 420;
+  const [phase, setPhase] = useState<'bubble' | 'chat'>('bubble');
+  const [visibleMessages, setVisibleMessages] = useState(0);
+  const [typingIdx, setTypingIdx] = useState(-1);
+  const [inputTypingText, setInputTypingText] = useState('');
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const inputIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const scrollToBottom = useCallback(() => {
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      rafRef.current = null;
+    });
+  }, []);
+
+  const addTimer = (fn: () => void, ms: number) => {
+    const t = setTimeout(fn, ms);
+    timersRef.current.push(t);
+    return t;
+  };
+  const clearAll = () => { timersRef.current.forEach(clearTimeout); timersRef.current = []; };
+
+  const runLoop = useCallback(() => {
+    clearAll();
+    if (inputIntervalRef.current) { clearInterval(inputIntervalRef.current); inputIntervalRef.current = null; }
+    setPhase('bubble');
+    setVisibleMessages(0);
+    setTypingIdx(-1);
+    setInputTypingText('');
+
+    addTimer(() => setPhase('chat'), 1400);
+
+    CUSTOM_CONVERSATION.forEach((msg, i) => {
+      const t = 1400 + msg.delay;
+      if (msg.from === 'bot') {
+        addTimer(() => setTypingIdx(i), t - 900);
+        addTimer(() => { setTypingIdx(-1); setVisibleMessages(v => v + 1); }, t);
+      } else {
+        if ((msg as any).inputTyping) {
+          const typingText = (msg as any).inputTyping;
+          const typingStart = t - 1200;
+          addTimer(() => {
+            setInputTypingText('');
+            let charIdx = 0;
+            if (inputIntervalRef.current) clearInterval(inputIntervalRef.current);
+            inputIntervalRef.current = setInterval(() => {
+              charIdx++;
+              setInputTypingText(typingText.slice(0, charIdx));
+              if (charIdx >= typingText.length) { clearInterval(inputIntervalRef.current!); inputIntervalRef.current = null; }
+            }, 38);
+          }, typingStart > 1400 ? typingStart : 1600);
+        }
+        addTimer(() => {
+          if (inputIntervalRef.current) { clearInterval(inputIntervalRef.current); inputIntervalRef.current = null; }
+          setInputTypingText('');
+          setVisibleMessages(v => v + 1);
+        }, t);
+      }
+    });
+
+    const lastDelay = 1400 + CUSTOM_CONVERSATION[CUSTOM_CONVERSATION.length - 1].delay;
+    addTimer(() => setPhase('bubble'), lastDelay + 4000);
+    addTimer(() => {
+      setVisibleMessages(0); setTypingIdx(-1); setInputTypingText('');
+      runLoop();
+    }, lastDelay + 4650);
+  }, []);
+
+  useEffect(() => { runLoop(); return clearAll; }, []);
+  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [visibleMessages, typingIdx]);
+
+  const customNavItems = ['About Synabs', 'Custom options', 'Pricing'];
+
+  return (
+    <div style={{ width: 320, position: 'relative', height: CHAT_PANEL_HEIGHT }}>
+      {/* Bubble */}
+      <div style={{ position: 'absolute', bottom: 0, right: 0, zIndex: 10 }}>
+        <AnimatePresence>
+          {phase === 'bubble' && (
+            <motion.div key="bubble"
+              initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 24 }}>
+              <div style={{ background: '#c8a96e', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', width: 52, height: 52 }}
+                className="rounded-full flex items-center justify-center relative cursor-pointer">
+                <MessageSquare style={{ color: '#fff' }} className="size-6" strokeWidth={1.5} />
+                <span style={{ background: '#34d399' }} className="absolute w-3 h-3 rounded-full top-0 right-0 border-2 border-[#1a1a1a] animate-pulse" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Chat widget */}
+      <div style={{ position: 'absolute', bottom: 0, right: 0, zIndex: 20 }}>
+        <AnimatePresence>
+          {phase === 'chat' && (
+            <motion.div key="chat"
+              initial={{ opacity: 0, scale: 0.9, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.88, y: 8 }}
+              transition={{ type: 'spring', stiffness: 280, damping: 26 }} style={{ transformOrigin: 'bottom right' }}>
+              <div style={{ background: '#1a1a1a', border: '1px solid rgba(200,169,110,0.25)', boxShadow: '0 8px 40px rgba(0,0,0,0.6)', width: 320, height: CHAT_PANEL_HEIGHT, display: 'flex', flexDirection: 'column' }}
+                className="rounded-[20px] overflow-hidden">
+
+                {/* Header — custom gold accent */}
+                <div style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2218 100%)', borderBottom: '1px solid rgba(200,169,110,0.2)' }}
+                  className="flex items-center justify-between px-4 py-3 flex-shrink-0">
+                  <div className="flex items-center gap-2.5">
+                    <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
+                      className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
+                      <img src="/lg-aw.avif" alt="Agent" className="w-full h-full object-contain p-0.5" />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span style={{ color: '#c8a96e' }} className="text-sm font-semibold">Synabs Agent</span>
+                      <span style={{ background: '#34d399' }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
+                    </div>
+                  </div>
+                  <div className="flex gap-2.5 items-center opacity-30">
+                    <div style={{ background: '#c8a96e' }} className="w-3 h-0.5 rounded-full" />
+                    <div style={{ border: '1px solid #c8a96e' }} className="w-3 h-3 rounded-sm" />
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div ref={scrollRef}
+                  className="flex flex-col gap-2.5 px-3 pt-3 pb-0 overflow-y-auto flex-1"
+                  style={{ background: 'transparent', scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.12) rgba(255,255,255,0.04)' }}>
+                  <AnimatePresence initial={false}>
+                    {CUSTOM_CONVERSATION.slice(0, visibleMessages).map((msg, i) => (
+                      <motion.div key={i}
+                        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                        className={`flex gap-1.5 ${msg.from === 'user' ? 'flex-row-reverse' : ''}`}>
+                        {msg.from === 'bot' && (
+                          <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
+                            className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
+                            <img src="/lg-aw.avif" alt="" className="w-full h-full object-contain p-0.5" />
+                          </div>
+                        )}
+                        {msg.text === '__PRICING_BUTTON__' ? (
+                          <a href="#pricing"
+                            style={{ background: '#c8a96e', color: '#1a1a1a' }}
+                            className="px-3 py-1.5 rounded-lg text-[10px] font-semibold cursor-pointer inline-flex items-center gap-1 hover:opacity-90 transition-opacity">
+                            View Pricing →
+                          </a>
+                        ) : msg.text === '__TRIAL_BUTTON__' ? (
+                          <div onClick={onGetStarted}
+                            style={{ background: '#34d399', color: '#0a1a12' }}
+                            className="px-3 py-1.5 rounded-lg text-[10px] font-semibold cursor-pointer inline-flex items-center gap-1 hover:opacity-90 transition-opacity">
+                            Start Free Trial →
+                          </div>
+                        ) : (
+                          <div style={{
+                            background: msg.from === 'bot' ? '#2a2a2a' : '#2f2f2f',
+                            border: msg.from === 'bot' ? '1px solid rgba(200,169,110,0.15)' : '1px solid rgba(255,255,255,0.09)',
+                            borderRadius: msg.from === 'bot' ? '2px 10px 10px 10px' : '10px 10px 2px 10px', maxWidth: '82%',
+                          }} className="px-2.5 py-1.5 text-[10px] leading-relaxed">
+                            {msg.from === 'bot' && i === visibleMessages - 1 ? (
+                              <TypedText text={msg.text} color="rgba(232,232,232,0.95)" onChar={scrollToBottom} />
+                            ) : (
+                              <span style={{ color: 'rgba(232,232,232,0.95)' }}>{msg.text}</span>
+                            )}
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+
+                    {/* Typing indicator */}
+                    {typingIdx >= 0 && (
+                      <motion.div key={typingIdx}
+                        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
+                        className="flex gap-1.5">
+                        <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
+                          className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
+                          <img src="/lg-aw.avif" alt="" className="w-full h-full object-contain p-0.5" />
+                        </div>
+                        <div style={{ background: '#2a2a2a', border: '1px solid rgba(200,169,110,0.15)', borderRadius: '2px 10px 10px 10px' }}
+                          className="flex items-center gap-1 px-2.5 py-2">
+                          {[0, 1, 2].map(d => (
+                            <motion.div key={d} style={{ background: 'rgba(255,255,255,0.22)' }} className="w-1 h-1 rounded-full"
+                              animate={{ y: [0, -3, 0], opacity: [0.4, 1, 0.4] }}
+                              transition={{ duration: 1, delay: d * 0.18, repeat: Infinity }} />
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <div style={{ height: 32, flexShrink: 0 }} />
+                </div>
+
+                {/* Chips */}
+                <div className="flex gap-1.5 flex-wrap px-3 pb-2 flex-shrink-0">
+                  {customNavItems.map(chip => (
+                    <span key={chip}
+                      style={{ color: '#c8a96e', border: '1px solid rgba(200,169,110,0.25)', background: 'rgba(200,169,110,0.08)' }}
+                      className="text-[10px] px-2.5 py-1 rounded-full whitespace-nowrap">{chip}</span>
+                  ))}
+                </div>
+
+                {/* Input */}
+                <div style={{ background: 'rgba(13,13,15,0.97)', borderTop: '1px solid rgba(200,169,110,0.15)' }} className="px-3 py-2.5 flex-shrink-0">
+                  <div style={{ background: '#222222', border: '1px solid rgba(200,169,110,0.2)' }}
+                    className="flex items-center gap-2 rounded-xl px-3 py-2">
+                    <span style={{ color: inputTypingText ? 'rgba(232,232,232,0.95)' : 'rgba(255,255,255,0.22)' }} className="text-[11px] flex-1 truncate">
+                      {inputTypingText || 'Send a message...'}
+                      {inputTypingText && <span style={{ opacity: 0.5 }}>|</span>}
+                    </span>
+                    <div style={{ background: '#c8a96e', border: '1px solid rgba(200,169,110,0.4)' }}
+                      className="w-6 h-6 rounded-lg flex items-center justify-center">
+                      <svg width="8" height="8" viewBox="0 0 10 16" fill="none">
+                        <polyline points="2,1 9,8 2,15" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+
 const SLIDES = [
   { src: '/pg-4.avif', label: 'Page 4' },
   { src: '/pg-3.avif', label: 'Page 3' },
@@ -719,14 +984,6 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
             <motion.div
               initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
-              className="flex-shrink-0 flex flex-col gap-3">
-              <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
-              <PaperStack isDark={isDark} ref={paperStackRef} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
               className="flex flex-col gap-3 items-start">
               <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
               <AnimatedChatLoop theme={theme} onGetStarted={() => {}} />
@@ -744,6 +1001,14 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
                   style={{ borderWidth: 2, borderStyle: 'solid' }}
                   className={`w-6 h-6 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
+              className="flex flex-col gap-3 items-start">
+              <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
+              <CustomizedChatLoop onGetStarted={() => {}} />
             </motion.div>
           </div>
         </div>
