@@ -90,7 +90,6 @@ export function EvolvingSection() {
         </div>
 
         </div>
-        </div>
 
       </div>
     </section>
