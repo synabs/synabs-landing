@@ -4,22 +4,22 @@ const CYCLE_STEPS = [
   {
     label: 'Collect',
     title: 'Every conversation is captured',
-    desc: 'All chat sessions are securely stored and indexed, covering topics, response quality, user intent, and session outcomes, ready for analysis.',
+    desc: 'All chats are securely stored, indexed, and ready for analysis in full compliance with GDPR.',
   },
   {
     label: 'Analyse',
     title: 'AI reads 75 quality signals',
-    desc: 'Each week, the AI analyses the full conversation dataset across 75 diagnostic criteria spanning lead behaviour, support patterns, and knowledge gaps.',
+    desc: 'Weekly AI analysis covers 75 diagnostic criteria across lead behaviour, support patterns, and knowledge gaps.',
   },
   {
     label: 'Improve',
     title: 'Over 200 targeted improvements',
-    desc: 'From the findings, more than 200 precision prompt updates are generated, each one sharpening a specific response pattern, tone, or knowledge gap.',
+    desc: 'Over 200 targeted prompt updates are generated weekly, each sharpening a response pattern, tone, or capability.',
   },
   {
     label: 'Deploy',
-    title: 'You approve, it goes live',
-    desc: 'Every proposed improvement is shown to you in the admin panel. One click deploys the new intelligence. Your AI Agent is measurably smarter than last week.',
+    title: 'We approve and secure',
+    desc: 'Every proposed improvement is verified by a human. Your AI Agent keeps getting smarter, week after week.',
   },
 ];
 
@@ -73,7 +73,7 @@ export function EvolvingSection() {
                   left: 0,
                   right: 0,
                   height: 1,
-                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 35%)',
+                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 30%, transparent 45%)',
                 }} />
               )}
               <span style={{
@@ -115,7 +115,7 @@ export function EvolvingSection() {
             position: 'absolute',
             top: 0, left: 0, right: 0,
             height: 1,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 35%)',
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 30%, transparent 45%)',
           }} />
           <div style={{
             display: 'grid',
