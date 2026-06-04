@@ -346,14 +346,16 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
                     {/* Reserved badge space — same as regular plans */}
                     <div style={{ height: RESERVED_BADGE_HEIGHT }} />
-                    {/* Same font sizes & margins as regular plan rows */}
+                    {/* Same font sizes & margins as regular plan rows — must match exactly:
+                        regular has: chatsPerDay (17px, mb 4) + messagesLimit (13px, mb 2) + overage (12px)
+                        custom must occupy identical vertical space */}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                       Tell us what you need,
                     </p>
-                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
+                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
                       we'll build it around you.
                     </p>
-                    <p style={{ color: c.muted, fontSize: 13, margin: 0, fontWeight: 300 }}>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>
                       From custom integrations to longer cooperation.
                     </p>
                   </div>
@@ -396,8 +398,9 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         <span style={{
                           fontSize: 10,
                           fontWeight: 500,
-                          color: c.faint,
-                          border: `0.5px solid ${c.border}`,
+                          color: '#000',
+                          background: '#fff',
+                          border: '0.5px solid rgba(0,0,0,0.15)',
                           borderRadius: 4,
                           padding: '2px 7px',
                           letterSpacing: '0.08em',
@@ -418,7 +421,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, columns: 2, gap: 24 }}>
                     {plan.features.map((f) => (
                       <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}>
-                        <Check size={13} color={c.text} strokeWidth={2} style={{ flexShrink: 0 }} />
+                        <Check size={13} color={c.green} strokeWidth={2} style={{ flexShrink: 0 }} />
                         {f}
                       </li>
                     ))}
@@ -532,7 +535,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
                   {isFormCustom
                     ? "Tell us what you need, we'll build it around you."
-                    : 'Fill in your details to get started.'}
+                    : 'First step toward your own AI agent.'}
                 </p>
               </div>
 
@@ -598,7 +601,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         <SelectorButton key={opt.id} active={active} onClick={() => { setFormAnalytics(opt.id); setFormError(''); }}>
                           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                             <span>{opt.label}</span>
-                            <span style={{ fontSize: 12, color: c.faint }}>{opt.price}</span>
+                            <span style={{ fontSize: 12, color: opt.id === 'advanced' ? c.green : c.faint }}>{opt.price}</span>
                           </span>
                         </SelectorButton>
                       );
@@ -660,7 +663,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                {isFormCustom ? 'Send contact request' : 'Get started'}
+                {isFormCustom ? 'Send Request' : 'Send Request'}
               </button>
 
             </motion.div>
