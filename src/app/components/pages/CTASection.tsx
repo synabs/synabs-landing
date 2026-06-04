@@ -48,7 +48,7 @@ export function CTASection({ activeTheme, onGetStarted }: CTASectionProps) {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="text-xl font-light text-zinc-400 max-w-lg mx-auto mb-10"
             >
-              Try next-gen AI support in minutes and decide later.
+              Let the results make the case.
             </motion.p>
 
             <motion.div
