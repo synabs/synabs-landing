@@ -333,11 +333,14 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 {/* Price row — same structure as regular, dashes instead */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, minHeight: 65 }}>
-                      <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9, alignSelf: 'flex-end' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, position: 'relative' }}>
+                      <span style={{ fontSize: 72, fontWeight: 200, color: 'transparent', letterSpacing: -3, lineHeight: 0.9, userSelect: 'none', pointerEvents: 'none' }}>
+                        249
+                      </span>
+                      <span style={{ fontSize: 22, color: 'transparent', fontWeight: 300, paddingBottom: 4, userSelect: 'none', pointerEvents: 'none' }}>€</span>
+                      <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9 }}>
                         —
                       </span>
-                      <span style={{ fontSize: 22, color: 'transparent', fontWeight: 300, paddingBottom: 4, userSelect: 'none' }}>€</span>
                     </div>
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
@@ -528,7 +531,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Form header */}
               <div style={{ marginBottom: 28 }}>
                 <h3 style={{ color: c.text, fontSize: 22, fontWeight: 300, margin: '0 0 6px', letterSpacing: -0.5 }}>
-                  {isFormCustom ? "Let's hear it" : 'First step toward your own AI agent'}
+                  {isFormCustom ? "Let's hear it" : 'Your next hire is AI'}
                 </h3>
               </div>
 
@@ -596,7 +599,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         <SelectorButton key={opt.id} active={active} onClick={() => { setFormAnalytics(opt.id); setFormError(''); }}>
                           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                             <span>{opt.label}</span>
-                            <span style={{ fontSize: 12, color: (opt.id === 'advanced' && active) ? c.green : c.faint }}>{opt.price}</span>
+                            <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.price}</span>
                           </span>
                         </SelectorButton>
                       );
