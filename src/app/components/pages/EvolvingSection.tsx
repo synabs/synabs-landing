@@ -17,20 +17,12 @@ export function EvolvingSection() {
         {/* Left image */}
         <div style={{ flex: '0 0 780px', marginLeft: '-180px' }}>
           <video
+            src="/bg-vs.mp4"
             autoPlay
+            loop
             muted
             playsInline
             style={{ width: '100%', height: 'auto', display: 'block' }}
-            ref={(el) => {
-              if (!el) return;
-              let playingForward = true;
-              el.src = '/bg-rd.mp4';
-              el.addEventListener('ended', () => {
-                playingForward = !playingForward;
-                el.src = playingForward ? '/bg-rd.mp4' : '/bg-rd-r.mp4';
-                el.play();
-              });
-            }}
           />
         </div>
 
