@@ -17,37 +17,20 @@ export function EvolvingSection() {
         {/* Left image */}
         <div style={{ flex: '0 0 780px', marginLeft: '-180px' }}>
           <video
-            ref={(el) => {
-              if (!el) return;
-              let forward = true;
-              let lastTime = performance.now();
-
-              const tick = (now: number) => {
-                const delta = (now - lastTime) / 1000;
-                lastTime = now;
-
-                if (el.readyState >= 2) {
-                  if (forward) {
-                    el.currentTime = Math.min(el.currentTime + delta, el.duration);
-                    if (el.currentTime >= el.duration) forward = false;
-                  } else {
-                    el.currentTime = Math.max(el.currentTime - delta, 0);
-                    if (el.currentTime <= 0) forward = true;
-                  }
-                }
-                requestAnimationFrame(tick);
-              };
-
-              el.pause();
-              el.currentTime = 0;
-              el.addEventListener('loadedmetadata', () => requestAnimationFrame(tick));
-              if (el.readyState >= 1) requestAnimationFrame(tick);
-            }}
-            src="/bg-rd.mp4"
             autoPlay
             muted
             playsInline
             style={{ width: '100%', height: 'auto', display: 'block' }}
+            ref={(el) => {
+              if (!el) return;
+              let playingForward = true;
+              el.src = '/bg-rd.mp4';
+              el.addEventListener('ended', () => {
+                playingForward = !playingForward;
+                el.src = playingForward ? '/bg-rd.mp4' : '/bg-rd-r.mp4';
+                el.play();
+              });
+            }}
           />
         </div>
 
