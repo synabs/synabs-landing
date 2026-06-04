@@ -5,7 +5,7 @@ import { LeadFormModal } from './common/LeadFormModal';
 import { HeroSection } from './pages/HeroSection';
 import { HowItWorks } from './pages/HowItWorks';
 import { FeaturesSection } from './pages/FeaturesSection';
-// import { EvolvingSection } from './pages/EvolvingSection'; // tulossa
+import { EvolvingSection } from './pages/EvolvingSection';
 import { PricingSection } from './pages/PricingSection';
 import { FAQSection } from './pages/FAQSection';
 import { CTASection } from './pages/CTASection';
