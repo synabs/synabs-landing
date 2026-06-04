@@ -83,7 +83,7 @@ function TypedText({ text, color, onDone = undefined, onChar = undefined }) {
 
 /* ─── CONVERSATION DATA ──────────────────────────────────────── */
 const CONVERSATION = [
-  { from: 'bot',  text: "Hello! I'm your Agent. How can I assist you today?", delay: 800 },
+  { from: 'bot',  text: "Hello! I'm your AI Agent. How can I assist you today?", delay: 800 },
   { from: 'user', text: 'How much does installation cost?', delay: 4000, inputTyping: 'How much does installation cost?' },
   { from: 'bot',  text: 'Plans start at 149/mo and go up to 699/mo depending on chat volume. How many customer chats do you estimate per day?', delay: 5800 },
   { from: 'user', text: 'Maybe around 10 max', delay: 9000, inputTyping: 'Maybe around 10 max' },
@@ -268,13 +268,12 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       <img src={theme.avatarSrc} alt="TIA" className="w-full h-full object-contain p-0.5" style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">SYNABS Agent</span>
+                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">SYNABS AI Agent</span>
                       <span style={{ background: theme.accentDot }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
                     </div>
                   </div>
                   <div className="flex gap-2.5 items-center opacity-30">
                     <div style={{ background: theme.textColor }} className="w-3 h-0.5 rounded-full" />
-                    <div style={{ border: `1px solid ${theme.textColor}` }} className="w-3 h-3 rounded-sm" />
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="1" y1="1" x2="9" y2="9" stroke={theme.textColor} strokeWidth="1.6" strokeLinecap="round"/><line x1="9" y1="1" x2="1" y2="9" stroke={theme.textColor} strokeWidth="1.6" strokeLinecap="round"/></svg>
                   </div>
                 </div>
@@ -496,9 +495,11 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
 
                 {/* Footer */}
                 <div style={{ background: theme.headerBg }} className="flex items-center gap-1 py-2 justify-center flex-shrink-0">
-                  <span style={{ color: theme.subtleText, fontSize: '9px', letterSpacing: '0.04em' }}>Powered by</span>
-                  <img src="/synabs-white.avif" alt="" className="h-2.5 opacity-50"
-                    style={{ filter: isLight ? 'invert(1)' : 'none' }} />
+                  <a href="https://synabs.fi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 no-underline hover:opacity-70 transition-opacity">
+                    <span style={{ color: theme.subtleText, fontSize: '9px', letterSpacing: '0.04em' }}>Powered by</span>
+                    <img src="/synabs-white.avif" alt="Synabs" className="h-2.5 opacity-50"
+                      style={{ filter: isLight ? 'invert(1)' : 'none' }} />
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -511,7 +512,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
 
 /* ─── CUSTOMIZED CHAT CONVERSATION ──────────────────────────── */
 const CUSTOM_CONVERSATION = [
-  { from: 'bot',  text: "Hello! I'm your Agent. This is a fully customized version: every element, from colors to content, is tailored to your brand.", delay: 800 },
+  { from: 'bot',  text: "Hello! I'm your AI Agent. This is a fully customized version: every element, from colors to content, is tailored to your brand.", delay: 800 },
   { from: 'user', text: 'Interesting, which parts can be customized?', delay: 5000, inputTyping: 'Interesting, which parts can be customized?' },
   { from: 'bot',  text: "Everything you see here: header colors, avatar, message bubbles, fonts, and the conversation flow itself. As you can tell from this chat.", delay: 7200 },
   { from: 'user', text: 'What does it cost?', delay: 11500, inputTyping: 'What does it cost?' },
@@ -635,7 +636,7 @@ function CustomizedChatLoop({ onGetStarted }) {
 
                 {/* Header — musta kuten ver2 */}
                 <div style={{ background: '#1a1a1a', height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 0 16px', flexShrink: 0 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>SYNABS Agent</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>SYNABS AI Agent</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
                       <svg width="3" height="14" viewBox="0 0 4 16" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/></svg>
