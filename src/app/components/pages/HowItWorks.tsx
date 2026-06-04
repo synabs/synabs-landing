@@ -109,7 +109,7 @@ export function HowItWorks() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            Choose AI and<br />never miss a lead
+            AI Agent for<br />lead generation
           </h2>
           <p style={{
             fontSize: 17,
@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            We feed your AI Agent on your business data, give single JavaScript code line to install it on your site, and keep it improving every week. No technical expertise needed. We handle everything for you.
+            We handle it all, training your AI agent on your business data and installing it on your website with a single line of code. It learns from every interaction, captures leads, answers questions, and helps grow your business.
           </p>
 
           <CmdStat />
