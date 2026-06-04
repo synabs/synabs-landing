@@ -109,7 +109,7 @@ export function HowItWorks() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            AI Agent for<br />lead generation
+            Not human, but <br />better where it counts
           </h2>
           <p style={{
             fontSize: 17,
@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            Our AI agent identifies and engages your ideal customers, provides instant answers based on your business data, and continuously improves with every interaction. Simply add one line of code to your website and let your AI agent work around the clock. No technical skills required.
+            Every website visitor is a potential customer, but most businesses miss opportunities because they can't respond fast enough. Our AI agent engages visitors instantly, answers their questions, and captures valuable lead information around the clock. Setup takes just one line of code. Let AI handle the rest.
           </p>
 
           <CmdStat />
