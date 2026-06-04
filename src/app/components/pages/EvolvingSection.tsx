@@ -16,9 +16,12 @@ export function EvolvingSection() {
 
         {/* Left image */}
         <div style={{ flex: '0 0 780px', marginLeft: '-180px' }}>
-          <img
+          <video
             src="/bg-rd.mp4"
-            alt=""
+            autoPlay
+            loop
+            muted
+            playsInline
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
         </div>
