@@ -108,42 +108,32 @@ export function EvolvingSection() {
         </div>
 
         {/* Stats row at bottom */}
-        <div
-          className="stats-row"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 0,
-            borderTop: '1px solid rgba(255,255,255,0.07)',
-            paddingTop: 40,
-          }}
-        >
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '8px 0',
+          borderTop: '1px solid rgba(255,255,255,0.07)',
+          paddingTop: 24,
+        }}>
           {STATS.map((stat, i) => (
             <div
               key={stat.label}
               style={{
-                paddingRight: 32,
-                borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
-                paddingLeft: i > 0 ? 32 : 0,
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: 8,
+                paddingRight: 20,
+                marginRight: 20,
+                borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
               }}
             >
-              <div style={{
-                fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
-                fontWeight: 300,
-                color: '#ffffff',
-                letterSpacing: '-0.03em',
-                lineHeight: 1,
-                marginBottom: 8,
-              }}>
+              <span style={{ fontSize: 14, fontWeight: 500, color: '#ffffff', lineHeight: 1 }}>
                 {stat.value}
-              </div>
-              <div style={{
-                fontSize: 13,
-                color: 'rgba(255,255,255,0.38)',
-                lineHeight: 1.5,
-              }}>
+              </span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', lineHeight: 1 }}>
                 {stat.label}
-              </div>
+              </span>
             </div>
           ))}
         </div>
