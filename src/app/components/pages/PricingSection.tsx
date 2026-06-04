@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 const SHARED_FEATURES = [
   'Trained on your content',
@@ -69,11 +69,30 @@ interface PricingSectionProps {
   onGetStarted: (id: string) => void;
 }
 
+interface ContactForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  company: string;
+  message: string;
+}
+
 export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProps) {
   const isDark = activeTheme === 'dark';
   const [planIdx, setPlanIdx] = useState<number>(0);
   const [selectedTheme, setSelectedTheme] = useState('');
   const [error, setError] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  // For the contact form (custom) or get-started form (regular plans)
+  const [formPlanOverride, setFormPlanOverride] = useState<string | null>(null);
+  const [contactForm, setContactForm] = useState<ContactForm>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    company: '',
+    message: '',
+  });
+  const [formError, setFormError] = useState('');
   const sectionRef = useRef<HTMLElement>(null);
 
   const plan = PLANS[planIdx];
@@ -104,6 +123,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
     errorBg: isDark ? 'rgba(239,68,68,0.08)' : 'rgba(239,68,68,0.06)',
     errorBorder: 'rgba(239,68,68,0.4)',
     errorText: '#f87171',
+    inputBg: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
   };
 
   const sectionLabel: React.CSSProperties = {
@@ -115,9 +135,26 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
     fontWeight: 400,
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: 8,
+    border: `0.5px solid ${c.border}`,
+    background: c.inputBg,
+    color: c.text,
+    fontSize: 14,
+    fontWeight: 300,
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit',
+    transition: 'border-color 0.2s',
+  };
+
   const handleGetStarted = () => {
     if (isCustom) {
-      onGetStarted('custom');
+      // Open form with Custom pre-selected
+      setFormPlanOverride('custom');
+      setShowForm(true);
       return;
     }
     const missing: string[] = [];
@@ -127,8 +164,43 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
       return;
     }
     setError('');
-    onGetStarted(plan.id);
+    setFormPlanOverride(plan.id);
+    setShowForm(true);
   };
+
+  const handleFormSubmit = () => {
+    const missing: string[] = [];
+    if (!contactForm.firstName.trim()) missing.push('first name');
+    if (!contactForm.lastName.trim()) missing.push('last name');
+    if (!contactForm.email.trim()) missing.push('email');
+    if (missing.length > 0) {
+      setFormError(`Please fill in: ${missing.join(', ')}.`);
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+    setFormError('');
+    onGetStarted(formPlanOverride ?? plan.id);
+    setShowForm(false);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setFormError('');
+    setFormPlanOverride(null);
+  };
+
+  const isFormCustom = formPlanOverride === 'custom';
+
+  // The form modal — same structure for both custom and regular plans
+  // Custom tab is pre-selected and bypasses logo/packet choices
+  const formSelectedPlanId = formPlanOverride;
+
+  // Fixed height content area: always show the same layout as plan M (popular),
+  // so all plans render identically sized. Badge space is always reserved.
+  const RESERVED_BADGE_HEIGHT = 26; // px — space for "Most popular" badge even when not shown
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -247,16 +319,50 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               </div>
             </div>
 
-            {/* Custom plan: contact prompt */}
+            {/* Plan content — always same height as M */}
             {isCustom ? (
-              <div style={{ marginBottom: 36 }}>
-                <p style={{ color: c.label, fontSize: 17, fontWeight: 300, margin: '0 0 6px' }}>
-                  Tell us what you need — we'll build it around you.
-                </p>
-                <p style={{ color: c.faint, fontSize: 14, fontWeight: 300, margin: 0 }}>
-                  Volume pricing, custom integrations, dedicated support.
-                </p>
-              </div>
+              /* Custom: show same structural height as regular plans but with custom copy */
+              <>
+                {/* Price + chats row — reserved height, empty for custom */}
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                      <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9 }}>
+                        —
+                      </span>
+                    </div>
+                    <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
+                  </div>
+                  <div style={{ textAlign: 'right', paddingBottom: 4 }}>
+                    {/* Reserved badge space */}
+                    <div style={{ height: RESERVED_BADGE_HEIGHT }} />
+                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
+                      Tell us what you need
+                    </p>
+                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
+                      we'll build it around you.
+                    </p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0 }}>
+                      From custom integrations to longer cooperation.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Features — reserved height with placeholder items */}
+                <div style={{ paddingTop: 24, borderTop: `0.5px solid ${c.border}`, marginBottom: 36 }}>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, columns: 2, gap: 24 }}>
+                    {SHARED_FEATURES.map((f) => (
+                      <li
+                        key={f}
+                        style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.faint, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
+                      >
+                        <Check size={13} color={c.faint} strokeWidth={2} style={{ flexShrink: 0 }} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
             ) : (
               <>
                 {/* Price + chats row */}
@@ -276,22 +382,24 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
-                    {plan.popular && (
-                      <span style={{
-                        display: 'inline-block',
-                        fontSize: 10,
-                        fontWeight: 500,
-                        color: c.faint,
-                        border: `0.5px solid ${c.border}`,
-                        borderRadius: 4,
-                        padding: '2px 7px',
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        marginBottom: 10,
-                      }}>
-                        Most popular
-                      </span>
-                    )}
+                    {/* Always reserve badge height so layout is identical across all plans */}
+                    <div style={{ height: RESERVED_BADGE_HEIGHT, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+                      {plan.popular && (
+                        <span style={{
+                          display: 'inline-block',
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: c.faint,
+                          border: `0.5px solid ${c.border}`,
+                          borderRadius: 4,
+                          padding: '2px 7px',
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                        }}>
+                          Most popular
+                        </span>
+                      )}
+                    </div>
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                       {plan.chatsPerDay}
                     </p>
@@ -380,6 +488,220 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
 
           </motion.div>
         </div>
+
+        {/* ─── Get Started / Contact Form Modal ─── */}
+        {showForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 100,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 24,
+              background: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(6px)',
+            }}
+            onClick={(e) => { if (e.target === e.currentTarget) handleCloseForm(); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              style={{
+                background: c.bg,
+                borderRadius: 12,
+                border: `0.5px solid ${c.border}`,
+                width: '100%',
+                maxWidth: 540,
+                padding: '36px 36px 32px',
+                position: 'relative',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+              }}
+            >
+              {/* Close */}
+              <button
+                onClick={handleCloseForm}
+                style={{
+                  position: 'absolute',
+                  top: 18,
+                  right: 18,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: c.faint,
+                  padding: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <X size={16} strokeWidth={1.5} />
+              </button>
+
+              {/* Form header */}
+              <div style={{ marginBottom: 28 }}>
+                <h3 style={{ color: c.text, fontSize: 22, fontWeight: 300, margin: '0 0 6px', letterSpacing: -0.5 }}>
+                  {isFormCustom ? 'Get in touch' : 'Get started'}
+                </h3>
+                <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
+                  {isFormCustom
+                    ? 'Tell us what you need — we\'ll build it around you.'
+                    : 'Fill in your details to get started.'}
+                </p>
+              </div>
+
+              {/* Plan selector tabs inside form — same tabs, Custom is pre-selected for custom flow */}
+              <div style={{ marginBottom: 28 }}>
+                <p style={sectionLabel}>Select message packet</p>
+                <div style={{ display: 'flex', gap: 0, borderBottom: `0.5px solid ${c.border}` }}>
+                  {PLANS.map((p, i) => {
+                    const isActive = isFormCustom
+                      ? p.id === 'custom'
+                      : p.id === formSelectedPlanId;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => {
+                          if (!isFormCustom) {
+                            setFormPlanOverride(p.id);
+                          } else if (p.id === 'custom') {
+                            // already custom, do nothing
+                          } else {
+                            // switching away from custom — allow it
+                            setFormPlanOverride(p.id);
+                          }
+                        }}
+                        style={{
+                          padding: '8px 24px 10px',
+                          fontSize: 14,
+                          fontWeight: 400,
+                          border: 'none',
+                          background: 'transparent',
+                          color: isActive ? c.tabActive : c.tabInactive,
+                          cursor: 'pointer',
+                          borderBottom: `1px solid ${isActive ? c.tabActive : 'transparent'}`,
+                          marginBottom: -1,
+                          transition: 'all 0.2s',
+                          letterSpacing: '0.03em',
+                        }}
+                      >
+                        {p.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Fields: name row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                <div>
+                  <p style={{ ...sectionLabel, marginBottom: 8 }}>First name</p>
+                  <input
+                    type="text"
+                    placeholder="Jane"
+                    value={contactForm.firstName}
+                    onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <p style={{ ...sectionLabel, marginBottom: 8 }}>Last name</p>
+                  <input
+                    type="text"
+                    placeholder="Smith"
+                    value={contactForm.lastName}
+                    onChange={(e) => setContactForm((f) => ({ ...f, lastName: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div style={{ marginBottom: 12 }}>
+                <p style={{ ...sectionLabel, marginBottom: 8 }}>Email</p>
+                <input
+                  type="email"
+                  placeholder="jane@company.com"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Company */}
+              <div style={{ marginBottom: 12 }}>
+                <p style={{ ...sectionLabel, marginBottom: 8 }}>Company</p>
+                <input
+                  type="text"
+                  placeholder="Acme Inc."
+                  value={contactForm.company}
+                  onChange={(e) => setContactForm((f) => ({ ...f, company: e.target.value }))}
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Message — shown for all, but labeled differently */}
+              <div style={{ marginBottom: 24 }}>
+                <p style={{ ...sectionLabel, marginBottom: 8 }}>
+                  {isFormCustom ? 'What do you need?' : 'Anything else? (optional)'}
+                </p>
+                <textarea
+                  placeholder={isFormCustom
+                    ? 'Describe your use case, integrations, volume, or anything else...'
+                    : 'Any questions or context...'}
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
+                  rows={4}
+                  style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
+                />
+              </div>
+
+              {/* Form error */}
+              {formError && (
+                <div style={{
+                  marginBottom: 16,
+                  padding: '12px 16px',
+                  borderRadius: 8,
+                  border: `0.5px solid ${c.errorBorder}`,
+                  background: c.errorBg,
+                }}>
+                  <p style={{ color: c.errorText, fontSize: 13, margin: 0, fontWeight: 300 }}>{formError}</p>
+                </div>
+              )}
+
+              {/* Submit */}
+              <button
+                onClick={handleFormSubmit}
+                style={{
+                  width: '100%',
+                  padding: '13px 28px',
+                  borderRadius: 6,
+                  background: c.text,
+                  color: c.bg,
+                  fontSize: 14,
+                  fontWeight: 400,
+                  border: 'none',
+                  cursor: 'pointer',
+                  letterSpacing: '0.03em',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
+                onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
+              >
+                {isFormCustom ? 'Send contact request' : 'Get started'}
+              </button>
+
+            </motion.div>
+          </motion.div>
+        )}
+
       </motion.section>
     </div>
   );
