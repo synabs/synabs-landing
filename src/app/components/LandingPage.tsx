@@ -9,6 +9,7 @@ import { FeaturesSection } from './pages/FeaturesSection';
 import { PricingSection } from './pages/PricingSection';
 import { FAQSection } from './pages/FAQSection';
 import { CTASection } from './pages/CTASection';
+import { SectionNav } from './common/SectionNav';
 
 export function LandingPage() {
   const activeTheme = 'dark';
@@ -23,6 +24,7 @@ export function LandingPage() {
   return (
     <>
       <style>{`html, body { background: #000000 !important; margin: 0; padding: 0; }`}</style>
+      <SectionNav />
       <div className="overflow-x-hidden bg-black" style={{ minHeight: '100vh', backgroundColor: '#000000' }}>
         {leadOpen && (
           <LeadFormModal

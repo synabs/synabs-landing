@@ -10,6 +10,7 @@ interface HeroSectionProps {
 export function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
     <section
+      id="hero"
       className="relative overflow-hidden"
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#000000' }}
     >
