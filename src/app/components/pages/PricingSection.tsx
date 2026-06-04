@@ -75,8 +75,7 @@ interface PricingSectionProps {
 }
 
 interface ContactForm {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   company: string;
   message: string;
@@ -86,15 +85,13 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   const isDark = activeTheme === 'dark';
   const [planIdx, setPlanIdx] = useState<number>(0);
   const [selectedTheme, setSelectedTheme] = useState('');
-  const [selectedAnalytics, setSelectedAnalytics] = useState('');
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [formPlanId, setFormPlanId] = useState<string>('S');
   const [formTheme, setFormTheme] = useState('');
   const [formAnalytics, setFormAnalytics] = useState('');
   const [contactForm, setContactForm] = useState<ContactForm>({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
     company: '',
     message: '',
@@ -158,14 +155,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   };
 
   const handleGetStarted = () => {
-    // For regular plans, validate logo selection
+    // For regular plans, validate logo selection only
     if (!isCustom) {
       if (!selectedTheme) {
         setError('Please select: SYNABS Logo.');
-        return;
-      }
-      if (!selectedAnalytics) {
-        setError('Please select: Analytics dashboard.');
         return;
       }
     }
@@ -173,7 +166,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
     // Open form, pre-populate with current selections
     setFormPlanId(plan.id);
     setFormTheme(selectedTheme);
-    setFormAnalytics(selectedAnalytics);
+    setFormAnalytics('');
     setShowForm(true);
   };
 
@@ -181,8 +174,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
 
   const handleFormSubmit = () => {
     const missing: string[] = [];
-    if (!contactForm.firstName.trim()) missing.push('first name');
-    if (!contactForm.lastName.trim()) missing.push('last name');
+    if (!contactForm.name.trim()) missing.push('name');
     if (!contactForm.email.trim()) missing.push('email');
     if (!contactForm.company.trim()) missing.push('company');
     // For non-custom, also require theme and analytics
@@ -269,7 +261,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             <div style={{ marginBottom: 36 }}>
               <p style={sectionLabel}>Initial costs</p>
               <div style={{
-                width: '100%',
+                width: '50%',
                 padding: '14px 16px',
                 borderRadius: 8,
                 border: `0.5px solid ${c.border}`,
@@ -305,23 +297,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               </div>
             </div>
 
-            {/* Analytics dashboard selector */}
-            <div style={{ marginBottom: 36 }}>
-              <p style={sectionLabel}>Analytics dashboard</p>
-              <div style={{ display: 'flex', gap: 10 }}>
-                {ANALYTICS_OPTIONS.map((opt) => {
-                  const active = selectedAnalytics === opt.id;
-                  return (
-                    <SelectorButton key={opt.id} active={active} onClick={() => { setSelectedAnalytics((v) => (v === opt.id ? '' : opt.id)); setError(''); }}>
-                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
-                        <span>{opt.label}</span>
-                        <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.price}</span>
-                      </span>
-                    </SelectorButton>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Analytics dashboard selector — removed from main page, lives in form only */}
 
             {/* Select message packet + tabs */}
             <div style={{ marginBottom: 36 }}>
@@ -372,7 +348,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <div style={{ height: RESERVED_BADGE_HEIGHT }} />
                     {/* Same font sizes & margins as regular plan rows */}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
-                      Tell us what you need —
+                      Tell us what you need,
                     </p>
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                       we'll build it around you.
@@ -555,7 +531,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </h3>
                 <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
                   {isFormCustom
-                    ? "Tell us what you need — we'll build it around you."
+                    ? "Tell us what you need, we'll build it around you."
                     : 'Fill in your details to get started.'}
                 </p>
               </div>
@@ -622,7 +598,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         <SelectorButton key={opt.id} active={active} onClick={() => { setFormAnalytics(opt.id); setFormError(''); }}>
                           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                             <span>{opt.label}</span>
-                            <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.price}</span>
+                            <span style={{ fontSize: 12, color: c.faint }}>{opt.price}</span>
                           </span>
                         </SelectorButton>
                       );
@@ -632,28 +608,21 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               )}
 
               {/* Personal info */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12, marginTop: isFormCustom ? 0 : 8 }}>
-                <div>
-                  <p style={{ ...sectionLabel, marginBottom: 8 }}>First name</p>
-                  <input type="text" placeholder="Jane" value={contactForm.firstName}
-                    onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))} style={inputStyle} />
-                </div>
-                <div>
-                  <p style={{ ...sectionLabel, marginBottom: 8 }}>Last name</p>
-                  <input type="text" placeholder="Smith" value={contactForm.lastName}
-                    onChange={(e) => setContactForm((f) => ({ ...f, lastName: e.target.value }))} style={inputStyle} />
-                </div>
+              <div style={{ marginBottom: 12, marginTop: isFormCustom ? 0 : 8 }}>
+                <p style={{ ...sectionLabel, marginBottom: 8 }}>Name</p>
+                <input type="text" placeholder="First Name" value={contactForm.name}
+                  onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))} style={inputStyle} />
               </div>
 
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Email</p>
-                <input type="email" placeholder="jane@company.com" value={contactForm.email}
+                <input type="email" placeholder="your@company.com" value={contactForm.email}
                   onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))} style={inputStyle} />
               </div>
 
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Company</p>
-                <input type="text" placeholder="Acme Inc." value={contactForm.company}
+                <input type="text" placeholder="Company Inc." value={contactForm.company}
                   onChange={(e) => setContactForm((f) => ({ ...f, company: e.target.value }))} style={inputStyle} />
               </div>
 
@@ -663,7 +632,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </p>
                 <textarea
                   placeholder={isFormCustom
-                    ? 'Describe your use case, integrations, volume, or anything else...'
+                    ? "We're happy to explore new fields, and any learning curve is reflected fairly in the pricing."
                     : 'Any questions or context...'}
                   value={contactForm.message}
                   onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
@@ -678,6 +647,11 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   <p style={{ color: c.errorText, fontSize: 13, margin: 0, fontWeight: 300 }}>{formError}</p>
                 </div>
               )}
+
+              {/* Pre-send note */}
+              <p style={{ color: c.faint, fontSize: 13, fontWeight: 300, margin: '0 0 14px', textAlign: 'center' }}>
+                We'll get back to you as soon as possible.
+              </p>
 
               {/* Submit */}
               <button
