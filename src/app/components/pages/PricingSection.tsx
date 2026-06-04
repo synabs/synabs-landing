@@ -1,39 +1,37 @@
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import { Check } from 'lucide-react';
+
+const SHARED_FEATURES = [
+  'Trained on your content',
+  'AI evolves weekly with new data',
+  'Analytics dashboard',
+  'Lead capture integration',
+  'Calendly integration',
+  'Email support',
+  'Priority support',
+];
 
 const PLANS = [
   {
     id: 'S',
     name: 'S',
     label: 'Core',
-    priceNum: 199,
-    chatsPerDay: '3–5 chats a day',
-    messagesLimit: '1,000 messages / month',
+    priceNum: 249,
+    chatsPerDay: '6–10 chats a day',
+    messagesLimit: '2,000 messages / month',
     additionalUsage: '€0.02 / message',
-    features: [
-      'Trained on your content',
-      'AI evolves weekly with new data',
-      'Analytics dashboard',
-      'Email support',
-      '48h setup',
-    ],
+    features: SHARED_FEATURES,
   },
   {
     id: 'M',
     name: 'M',
     label: 'Pro',
-    priceNum: 399,
-    chatsPerDay: '6–10 chats a day',
-    messagesLimit: '2,500 messages / month',
+    priceNum: 349,
+    chatsPerDay: '12–20 chats a day',
+    messagesLimit: '5,000 messages / month',
     additionalUsage: '€0.01 / message',
-    features: [
-      'Trained on your content',
-      'AI evolves weekly with new data',
-      'Analytics dashboard',
-      'Auto-detected and alert hot leads',
-      'Lead capture integration',
-      'Priority support',
-    ],
+    features: SHARED_FEATURES,
   },
   {
     id: 'L',
@@ -43,28 +41,19 @@ const PLANS = [
     chatsPerDay: '20–40 chats a day',
     messagesLimit: '10,000 messages / month',
     additionalUsage: '€0.01 / message',
-    features: [
-      'Trained on your content',
-      'AI evolves weekly with new data',
-      'Analytics dashboard',
-      'Auto-detected and alert hot leads',
-      'Lead capture integration',
-      'Priority support',
-    ],
+    features: SHARED_FEATURES,
   },
 ];
 
 const THEMES = [
   {
     id: 'synabs',
-    title: 'SYNABS Theme',
-    subtitle: 'White or Black',
+    title: 'On frontside',
     badge: '−20% forever',
   },
   {
     id: 'custom',
-    title: 'Custom Theme',
-    subtitle: 'Fully personalized',
+    title: 'On backside',
     badge: null,
   },
 ];
@@ -94,9 +83,9 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   const opacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
 
   const c = {
-    label: isDark ? '#a1a1aa' : '#52525b',   // features, tabs inactive
-    muted: isDark ? '#71717a' : '#71717a',   // secondary info
-    faint: isDark ? '#52525b' : '#a1a1aa',   // overage, trust line, labels
+    label: isDark ? '#a1a1aa' : '#52525b',
+    muted: isDark ? '#71717a' : '#71717a',
+    faint: isDark ? '#52525b' : '#a1a1aa',
     border: isDark ? '#27272a' : '#e4e4e7',
     borderActive: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.6)',
     text: isDark ? '#fff' : '#000',
@@ -107,19 +96,27 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
     green: '#4ade80',
   };
 
+  const sectionLabel: React.CSSProperties = {
+    color: c.faint,
+    fontSize: 12,
+    letterSpacing: '0.10em',
+    textTransform: 'uppercase',
+    margin: '0 0 12px',
+    fontWeight: 400,
+  };
+
   return (
     <div style={{ overflow: 'hidden' }}>
       <motion.section
         ref={sectionRef}
         id="pricing"
-        style={{ scale, filter: sectionFilter, opacity }}
-        className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-700 py-24 px-6 relative`}
         style={{
           scale,
           filter: sectionFilter,
           opacity,
           background: c.bg,
         }}
+        className="min-h-screen flex flex-col items-center justify-center transition-colors duration-700 py-24 px-6 relative"
       >
         <div className="max-w-2xl mx-auto w-full">
 
@@ -131,9 +128,6 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             transition={{ duration: 0.6, ease: 'easeOut' }}
             style={{ marginBottom: 48 }}
           >
-            <p style={{ color: c.faint, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 16px', fontWeight: 400 }}>
-              Pricing
-            </p>
             <h2 style={{ color: c.text, fontSize: 56, fontWeight: 300, margin: '0 0 12px', letterSpacing: -2, lineHeight: 1.05, whiteSpace: 'nowrap' }}>
               Hire Your AI Agent
             </h2>
@@ -149,11 +143,22 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.08 }}
           >
 
+            {/* Initial costs */}
+            <div style={{ marginBottom: 36 }}>
+              <p style={sectionLabel}>Initial costs</p>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                <span style={{ fontSize: 22, color: c.faint, textDecoration: 'line-through', fontWeight: 300 }}>
+                  499€
+                </span>
+                <span style={{ fontSize: 15, color: c.label, fontWeight: 300 }}>
+                  That's on us for now.
+                </span>
+              </div>
+            </div>
+
             {/* Theme selector */}
             <div style={{ marginBottom: 36 }}>
-              <p style={{ color: c.faint, fontSize: 12, letterSpacing: '0.10em', textTransform: 'uppercase', margin: '0 0 12px' }}>
-                Choose your theme
-              </p>
+              <p style={sectionLabel}>Select message packet</p>
               <div style={{ display: 'flex', gap: 10 }}>
                 {THEMES.map((opt) => {
                   const active = selectedTheme === opt.id;
@@ -172,13 +177,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         transition: 'all 0.2s',
                       }}
                     >
-                      <span style={{ display: 'block', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400, marginBottom: 3 }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                         {opt.title}
-                      </span>
-                      <span style={{ fontSize: 12, color: c.faint }}>
-                        {opt.subtitle}
                         {opt.badge && (
-                          <span style={{ marginLeft: 8, color: active ? c.green : c.faint }}>
+                          <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>
                             {opt.badge}
                           </span>
                         )}
@@ -249,8 +251,9 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 {plan.features.map((f) => (
                   <li
                     key={f}
-                    style={{ fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
                   >
+                    <Check size={13} color={c.text} strokeWidth={2} style={{ flexShrink: 0 }} />
                     {f}
                   </li>
                 ))}
