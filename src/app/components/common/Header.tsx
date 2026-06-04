@@ -54,7 +54,7 @@ export function Header({ isDark, onGetStarted }: HeaderProps) {
               transition={{ duration: 0.6 }}
             >
               <img
-                src={isDark ? '/logo.png' : '/logo-black.png'}
+                src={isDark ? '/synabs-white.avif' : '/synabs-white.avif'}
                 alt="TIA AI"
                 className="h-12 w-auto object-contain"
               />
