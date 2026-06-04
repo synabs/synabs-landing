@@ -94,16 +94,16 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   const opacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
 
   const c = {
-    label: isDark ? '#555' : '#999',
-    muted: isDark ? '#444' : '#aaa',
-    faint: isDark ? '#2a2a2a' : '#ccc',
-    border: isDark ? '#1e1e1e' : '#e5e5e5',
-    borderActive: isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.5)',
+    label: isDark ? '#a1a1aa' : '#52525b',   // features, tabs inactive
+    muted: isDark ? '#71717a' : '#71717a',   // secondary info
+    faint: isDark ? '#52525b' : '#a1a1aa',   // overage, trust line, labels
+    border: isDark ? '#27272a' : '#e4e4e7',
+    borderActive: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.6)',
     text: isDark ? '#fff' : '#000',
     bg: isDark ? '#000' : '#fff',
     tabActive: isDark ? '#fff' : '#000',
-    tabInactive: isDark ? '#444' : '#bbb',
-    cardBg: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+    tabInactive: isDark ? '#71717a' : '#a1a1aa',
+    cardBg: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
     green: '#4ade80',
   };
 
