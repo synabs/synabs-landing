@@ -64,6 +64,11 @@ const THEMES = [
   { id: 'synabs', title: 'On frontside', badge: '−20% forever' },
 ];
 
+const ANALYTICS_OPTIONS = [
+  { id: 'basic', label: 'Basic', price: '0€', note: null },
+  { id: 'advanced', label: 'Advanced', price: '+50€/month', note: null },
+];
+
 interface PricingSectionProps {
   activeTheme: string;
   onGetStarted: (id: string) => void;
@@ -81,10 +86,12 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   const isDark = activeTheme === 'dark';
   const [planIdx, setPlanIdx] = useState<number>(0);
   const [selectedTheme, setSelectedTheme] = useState('');
+  const [selectedAnalytics, setSelectedAnalytics] = useState('');
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  // For the contact form (custom) or get-started form (regular plans)
-  const [formPlanOverride, setFormPlanOverride] = useState<string | null>(null);
+  const [formPlanId, setFormPlanId] = useState<string>('S');
+  const [formTheme, setFormTheme] = useState('');
+  const [formAnalytics, setFormAnalytics] = useState('');
   const [contactForm, setContactForm] = useState<ContactForm>({
     firstName: '',
     lastName: '',
@@ -151,28 +158,38 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   };
 
   const handleGetStarted = () => {
-    if (isCustom) {
-      // Open form with Custom pre-selected
-      setFormPlanOverride('custom');
-      setShowForm(true);
-      return;
-    }
-    const missing: string[] = [];
-    if (!selectedTheme) missing.push('SYNABS Logo');
-    if (missing.length > 0) {
-      setError(`Please select: ${missing.join(' and ')}.`);
-      return;
+    // For regular plans, validate logo selection
+    if (!isCustom) {
+      if (!selectedTheme) {
+        setError('Please select: SYNABS Logo.');
+        return;
+      }
+      if (!selectedAnalytics) {
+        setError('Please select: Analytics dashboard.');
+        return;
+      }
     }
     setError('');
-    setFormPlanOverride(plan.id);
+    // Open form, pre-populate with current selections
+    setFormPlanId(plan.id);
+    setFormTheme(selectedTheme);
+    setFormAnalytics(selectedAnalytics);
     setShowForm(true);
   };
+
+  const isFormCustom = formPlanId === 'custom';
 
   const handleFormSubmit = () => {
     const missing: string[] = [];
     if (!contactForm.firstName.trim()) missing.push('first name');
     if (!contactForm.lastName.trim()) missing.push('last name');
     if (!contactForm.email.trim()) missing.push('email');
+    if (!contactForm.company.trim()) missing.push('company');
+    // For non-custom, also require theme and analytics
+    if (!isFormCustom) {
+      if (!formTheme) missing.push('SYNABS Logo');
+      if (!formAnalytics) missing.push('Analytics dashboard');
+    }
     if (missing.length > 0) {
       setFormError(`Please fill in: ${missing.join(', ')}.`);
       return;
@@ -182,25 +199,38 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
       return;
     }
     setFormError('');
-    onGetStarted(formPlanOverride ?? plan.id);
+    onGetStarted(formPlanId);
     setShowForm(false);
   };
 
   const handleCloseForm = () => {
     setShowForm(false);
     setFormError('');
-    setFormPlanOverride(null);
   };
 
-  const isFormCustom = formPlanOverride === 'custom';
+  // Fixed height: always reserve badge space so all plans are identical height
+  const RESERVED_BADGE_HEIGHT = 26;
 
-  // The form modal — same structure for both custom and regular plans
-  // Custom tab is pre-selected and bypasses logo/packet choices
-  const formSelectedPlanId = formPlanOverride;
-
-  // Fixed height content area: always show the same layout as plan M (popular),
-  // so all plans render identically sized. Badge space is always reserved.
-  const RESERVED_BADGE_HEIGHT = 26; // px — space for "Most popular" badge even when not shown
+  // Reusable selector button used in both main page and form
+  const SelectorButton = ({
+    active, onClick, children,
+  }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
+    <button
+      onClick={onClick}
+      style={{
+        flex: 1,
+        padding: '14px 16px',
+        borderRadius: 8,
+        border: `0.5px solid ${active ? c.borderActive : c.border}`,
+        background: active ? c.cardBg : 'transparent',
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'all 0.2s',
+      }}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <div style={{ overflow: 'hidden' }}>
@@ -260,20 +290,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 {THEMES.map((opt) => {
                   const active = selectedTheme === opt.id;
                   return (
-                    <button
-                      key={opt.id}
-                      onClick={() => { setSelectedTheme((v) => (v === opt.id ? '' : opt.id)); setError(''); }}
-                      style={{
-                        flex: 1,
-                        padding: '14px 16px',
-                        borderRadius: 8,
-                        border: `0.5px solid ${active ? c.borderActive : c.border}`,
-                        background: active ? c.cardBg : 'transparent',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        transition: 'all 0.2s',
-                      }}
-                    >
+                    <SelectorButton key={opt.id} active={active} onClick={() => { setSelectedTheme((v) => (v === opt.id ? '' : opt.id)); setError(''); }}>
                       <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                         {opt.title}
                         {opt.badge && (
@@ -282,7 +299,25 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                           </span>
                         )}
                       </span>
-                    </button>
+                    </SelectorButton>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Analytics dashboard selector */}
+            <div style={{ marginBottom: 36 }}>
+              <p style={sectionLabel}>Analytics dashboard</p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {ANALYTICS_OPTIONS.map((opt) => {
+                  const active = selectedAnalytics === opt.id;
+                  return (
+                    <SelectorButton key={opt.id} active={active} onClick={() => { setSelectedAnalytics((v) => (v === opt.id ? '' : opt.id)); setError(''); }}>
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
+                        <span>{opt.label}</span>
+                        <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.price}</span>
+                      </span>
+                    </SelectorButton>
                   );
                 })}
               </div>
@@ -319,11 +354,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               </div>
             </div>
 
-            {/* Plan content — always same height as M */}
+            {/* ── Plan content — IDENTICAL HEIGHT for all plans ── */}
             {isCustom ? (
-              /* Custom: show same structural height as regular plans but with custom copy */
               <>
-                {/* Price + chats row — reserved height, empty for custom */}
+                {/* Price row — same structure as regular, dashes instead */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
@@ -334,28 +368,26 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
-                    {/* Reserved badge space */}
+                    {/* Reserved badge space — same as regular plans */}
                     <div style={{ height: RESERVED_BADGE_HEIGHT }} />
+                    {/* Same font sizes & margins as regular plan rows */}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
-                      Tell us what you need
+                      Tell us what you need —
                     </p>
-                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
+                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                       we'll build it around you.
                     </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0 }}>
+                    <p style={{ color: c.muted, fontSize: 13, margin: 0, fontWeight: 300 }}>
                       From custom integrations to longer cooperation.
                     </p>
                   </div>
                 </div>
 
-                {/* Features — reserved height with placeholder items */}
+                {/* Features — same layout as regular, dimmed */}
                 <div style={{ paddingTop: 24, borderTop: `0.5px solid ${c.border}`, marginBottom: 36 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, columns: 2, gap: 24 }}>
                     {SHARED_FEATURES.map((f) => (
-                      <li
-                        key={f}
-                        style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.faint, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
-                      >
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.faint, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}>
                         <Check size={13} color={c.faint} strokeWidth={2} style={{ flexShrink: 0 }} />
                         {f}
                       </li>
@@ -382,11 +414,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
-                    {/* Always reserve badge height so layout is identical across all plans */}
+                    {/* Always reserve badge height — identical across all plans */}
                     <div style={{ height: RESERVED_BADGE_HEIGHT, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
                       {plan.popular && (
                         <span style={{
-                          display: 'inline-block',
                           fontSize: 10,
                           fontWeight: 500,
                           color: c.faint,
@@ -400,15 +431,9 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         </span>
                       )}
                     </div>
-                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
-                      {plan.chatsPerDay}
-                    </p>
-                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
-                      {plan.messagesLimit}
-                    </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0 }}>
-                      +{plan.additionalUsage} overage
-                    </p>
+                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>{plan.chatsPerDay}</p>
+                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>{plan.messagesLimit}</p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0 }}>+{plan.additionalUsage} overage</p>
                   </div>
                 </div>
 
@@ -416,10 +441,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 <div style={{ paddingTop: 24, borderTop: `0.5px solid ${c.border}`, marginBottom: 36 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, columns: 2, gap: 24 }}>
                     {plan.features.map((f) => (
-                      <li
-                        key={f}
-                        style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
-                      >
+                      <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}>
                         <Check size={13} color={c.text} strokeWidth={2} style={{ flexShrink: 0 }} />
                         {f}
                       </li>
@@ -431,39 +453,35 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
 
             {/* Error message */}
             {error && (
-              <div style={{
-                marginBottom: 16,
-                padding: '12px 16px',
-                borderRadius: 8,
-                border: `0.5px solid ${c.errorBorder}`,
-                background: c.errorBg,
-              }}>
+              <div style={{ marginBottom: 16, padding: '12px 16px', borderRadius: 8, border: `0.5px solid ${c.errorBorder}`, background: c.errorBg }}>
                 <p style={{ color: c.errorText, fontSize: 13, margin: 0, fontWeight: 300 }}>{error}</p>
               </div>
             )}
 
-            {/* CTA row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: isCustom ? 'flex-end' : 'space-between' }}>
-              {!isCustom && (
-                <div>
-                  <span style={{ fontSize: 15, color: c.text, fontWeight: 300 }}>
-                    {discountedPrice}€ / month
-                  </span>
-                  {selectedTheme === 'synabs' && (
-                    <span style={{ fontSize: 12, color: c.green, marginLeft: 10 }}>
-                      SYNABS discount applied
+            {/* CTA row — always space-between, same button style */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                {!isCustom && (
+                  <>
+                    <span style={{ fontSize: 15, color: c.text, fontWeight: 300 }}>
+                      {discountedPrice}€ / month
                     </span>
-                  )}
-                </div>
-              )}
+                    {selectedTheme === 'synabs' && (
+                      <span style={{ fontSize: 12, color: c.green, marginLeft: 10 }}>
+                        SYNABS discount applied
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
               <button
                 onClick={handleGetStarted}
                 style={{
-                  padding: isCustom ? '10px 22px' : '12px 28px',
+                  padding: '12px 28px',
                   borderRadius: 6,
                   background: c.text,
                   color: c.bg,
-                  fontSize: isCustom ? 13 : 14,
+                  fontSize: 14,
                   fontWeight: 400,
                   border: 'none',
                   cursor: 'pointer',
@@ -473,28 +491,25 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                {isCustom ? 'Send contact request' : 'Get started'}
+                Get started
               </button>
             </div>
 
             {/* Trust line */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginTop: 28, paddingTop: 24, borderTop: `0.5px solid ${c.border}` }}>
               {['GDPR-ready', 'Encrypted cloud storage', 'Data encrypted in transit', 'Data deletion on request'].map((item) => (
-                <span key={item} style={{ fontSize: 12, color: c.faint }}>
-                  {item}
-                </span>
+                <span key={item} style={{ fontSize: 12, color: c.faint }}>{item}</span>
               ))}
             </div>
 
           </motion.div>
         </div>
 
-        {/* ─── Get Started / Contact Form Modal ─── */}
+        {/* ─── Form Modal ─── */}
         {showForm && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             style={{
               position: 'fixed',
@@ -528,19 +543,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Close */}
               <button
                 onClick={handleCloseForm}
-                style={{
-                  position: 'absolute',
-                  top: 18,
-                  right: 18,
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: c.faint,
-                  padding: 4,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                style={{ position: 'absolute', top: 18, right: 18, background: 'transparent', border: 'none', cursor: 'pointer', color: c.faint, padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 <X size={16} strokeWidth={1.5} />
               </button>
@@ -552,32 +555,21 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </h3>
                 <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
                   {isFormCustom
-                    ? 'Tell us what you need — we\'ll build it around you.'
+                    ? "Tell us what you need — we'll build it around you."
                     : 'Fill in your details to get started.'}
                 </p>
               </div>
 
-              {/* Plan selector tabs inside form — same tabs, Custom is pre-selected for custom flow */}
+              {/* Message packet tabs — pre-populated */}
               <div style={{ marginBottom: 28 }}>
                 <p style={sectionLabel}>Select message packet</p>
                 <div style={{ display: 'flex', gap: 0, borderBottom: `0.5px solid ${c.border}` }}>
-                  {PLANS.map((p, i) => {
-                    const isActive = isFormCustom
-                      ? p.id === 'custom'
-                      : p.id === formSelectedPlanId;
+                  {PLANS.map((p) => {
+                    const isActive = p.id === formPlanId;
                     return (
                       <button
                         key={p.id}
-                        onClick={() => {
-                          if (!isFormCustom) {
-                            setFormPlanOverride(p.id);
-                          } else if (p.id === 'custom') {
-                            // already custom, do nothing
-                          } else {
-                            // switching away from custom — allow it
-                            setFormPlanOverride(p.id);
-                          }
-                        }}
+                        onClick={() => { setFormPlanId(p.id); setFormError(''); }}
                         style={{
                           padding: '8px 24px 10px',
                           fontSize: 14,
@@ -599,58 +591,75 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </div>
               </div>
 
-              {/* Fields: name row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+              {/* SYNABS Logo — only for non-custom, pre-populated */}
+              {!isFormCustom && (
+                <div style={{ marginBottom: 20 }}>
+                  <p style={sectionLabel}>SYNABS Logo</p>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    {THEMES.map((opt) => {
+                      const active = formTheme === opt.id;
+                      return (
+                        <SelectorButton key={opt.id} active={active} onClick={() => { setFormTheme(opt.id); setFormError(''); }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
+                            {opt.title}
+                            {opt.badge && <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.badge}</span>}
+                          </span>
+                        </SelectorButton>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Analytics dashboard — only for non-custom, pre-populated */}
+              {!isFormCustom && (
+                <div style={{ marginBottom: 20 }}>
+                  <p style={sectionLabel}>Analytics dashboard</p>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    {ANALYTICS_OPTIONS.map((opt) => {
+                      const active = formAnalytics === opt.id;
+                      return (
+                        <SelectorButton key={opt.id} active={active} onClick={() => { setFormAnalytics(opt.id); setFormError(''); }}>
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
+                            <span>{opt.label}</span>
+                            <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.price}</span>
+                          </span>
+                        </SelectorButton>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Personal info */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12, marginTop: isFormCustom ? 0 : 8 }}>
                 <div>
                   <p style={{ ...sectionLabel, marginBottom: 8 }}>First name</p>
-                  <input
-                    type="text"
-                    placeholder="Jane"
-                    value={contactForm.firstName}
-                    onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))}
-                    style={inputStyle}
-                  />
+                  <input type="text" placeholder="Jane" value={contactForm.firstName}
+                    onChange={(e) => setContactForm((f) => ({ ...f, firstName: e.target.value }))} style={inputStyle} />
                 </div>
                 <div>
                   <p style={{ ...sectionLabel, marginBottom: 8 }}>Last name</p>
-                  <input
-                    type="text"
-                    placeholder="Smith"
-                    value={contactForm.lastName}
-                    onChange={(e) => setContactForm((f) => ({ ...f, lastName: e.target.value }))}
-                    style={inputStyle}
-                  />
+                  <input type="text" placeholder="Smith" value={contactForm.lastName}
+                    onChange={(e) => setContactForm((f) => ({ ...f, lastName: e.target.value }))} style={inputStyle} />
                 </div>
               </div>
 
-              {/* Email */}
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Email</p>
-                <input
-                  type="email"
-                  placeholder="jane@company.com"
-                  value={contactForm.email}
-                  onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
-                  style={inputStyle}
-                />
+                <input type="email" placeholder="jane@company.com" value={contactForm.email}
+                  onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))} style={inputStyle} />
               </div>
 
-              {/* Company */}
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Company</p>
-                <input
-                  type="text"
-                  placeholder="Acme Inc."
-                  value={contactForm.company}
-                  onChange={(e) => setContactForm((f) => ({ ...f, company: e.target.value }))}
-                  style={inputStyle}
-                />
+                <input type="text" placeholder="Acme Inc." value={contactForm.company}
+                  onChange={(e) => setContactForm((f) => ({ ...f, company: e.target.value }))} style={inputStyle} />
               </div>
 
-              {/* Message — shown for all, but labeled differently */}
               <div style={{ marginBottom: 24 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>
-                  {isFormCustom ? 'What do you need?' : 'Anything else? (optional)'}
+                  {isFormCustom ? 'What do you need?' : 'Anything else?'}
                 </p>
                 <textarea
                   placeholder={isFormCustom
@@ -658,20 +667,14 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     : 'Any questions or context...'}
                   value={contactForm.message}
                   onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
-                  rows={4}
+                  rows={isFormCustom ? 4 : 3}
                   style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
                 />
               </div>
 
               {/* Form error */}
               {formError && (
-                <div style={{
-                  marginBottom: 16,
-                  padding: '12px 16px',
-                  borderRadius: 8,
-                  border: `0.5px solid ${c.errorBorder}`,
-                  background: c.errorBg,
-                }}>
+                <div style={{ marginBottom: 16, padding: '12px 16px', borderRadius: 8, border: `0.5px solid ${c.errorBorder}`, background: c.errorBg }}>
                   <p style={{ color: c.errorText, fontSize: 13, margin: 0, fontWeight: 300 }}>{formError}</p>
                 </div>
               )}
@@ -679,19 +682,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Submit */}
               <button
                 onClick={handleFormSubmit}
-                style={{
-                  width: '100%',
-                  padding: '13px 28px',
-                  borderRadius: 6,
-                  background: c.text,
-                  color: c.bg,
-                  fontSize: 14,
-                  fontWeight: 400,
-                  border: 'none',
-                  cursor: 'pointer',
-                  letterSpacing: '0.03em',
-                  transition: 'opacity 0.2s',
-                }}
+                style={{ width: '100%', padding: '13px 28px', borderRadius: 6, background: c.text, color: c.bg, fontSize: 14, fontWeight: 400, border: 'none', cursor: 'pointer', letterSpacing: '0.03em', transition: 'opacity 0.2s' }}
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
