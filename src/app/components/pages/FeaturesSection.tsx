@@ -928,44 +928,56 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
   const [isUserControlled, setIsUserControlled] = useState(false);
   const [chatTheme, setChatTheme] = useState('dark');
   const dragStartX = useRef(0);
-  const dragStartAngle = useRef(0);
+  const dragAccum = useRef(0);
+  const lastSnappedIdx = useRef(0);
   const [angle, setAngle] = useState(0);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const userTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const currentAngleRef = useRef(0);
   const targetAngleRef = useRef(0);
-  const isAnimatingRef = useRef(false);
   const N = CAROUSEL_ITEMS.length;
   const STEP = 360 / N;
+  const SNAP_THRESHOLD = 60; // px drag to snap to next
 
-  // smooth lerp animation
+  // continuous lerp loop
   useEffect(() => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const tick = () => {
       const diff = targetAngleRef.current - currentAngleRef.current;
-      if (Math.abs(diff) > 0.01) {
-        currentAngleRef.current = lerp(currentAngleRef.current, targetAngleRef.current, 0.06);
+      if (Math.abs(diff) > 0.04) {
+        currentAngleRef.current = lerp(currentAngleRef.current, targetAngleRef.current, 0.1);
         setAngle(currentAngleRef.current);
-        animFrameRef.current = requestAnimationFrame(tick);
       } else {
         currentAngleRef.current = targetAngleRef.current;
         setAngle(targetAngleRef.current);
-        isAnimatingRef.current = false;
       }
+      animFrameRef.current = requestAnimationFrame(tick);
     };
     animFrameRef.current = requestAnimationFrame(tick);
     return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
   }, []);
 
-  const startAutoRotate = () => {
+  const snapTo = useCallback((idx: number) => {
+    const normalised = ((idx % N) + N) % N;
+    // find shortest rotation from current target
+    const currentStep = Math.round(-targetAngleRef.current / STEP);
+    const delta = normalised - ((currentStep % N) + N) % N;
+    let shortDelta = delta;
+    if (shortDelta > N / 2) shortDelta -= N;
+    if (shortDelta < -N / 2) shortDelta += N;
+    targetAngleRef.current = targetAngleRef.current - shortDelta * STEP;
+    setActiveIdx(normalised);
+    lastSnappedIdx.current = normalised;
+  }, [N, STEP]);
+
+  const startAutoRotate = useCallback(() => {
     if (autoRef.current) clearInterval(autoRef.current);
     autoRef.current = setInterval(() => {
-      targetAngleRef.current -= STEP;
-      const newIdx = ((Math.round(-targetAngleRef.current / STEP) % N) + N) % N;
-      setActiveIdx(newIdx);
+      const nextIdx = (lastSnappedIdx.current + 1) % N;
+      snapTo(nextIdx);
     }, 3800);
-  };
+  }, [N, snapTo]);
 
   const stopAutoRotate = () => {
     if (autoRef.current) { clearInterval(autoRef.current); autoRef.current = null; }
@@ -974,38 +986,40 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
   useEffect(() => {
     startAutoRotate();
     return stopAutoRotate;
-  }, []);
+  }, [startAutoRotate]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    // don't start drag on interactive children
+    if ((e.target as HTMLElement).closest('button, a, input')) return;
     setIsDragging(true);
     setIsUserControlled(true);
     stopAutoRotate();
     if (userTimerRef.current) clearTimeout(userTimerRef.current);
     dragStartX.current = e.clientX;
-    dragStartAngle.current = currentAngleRef.current;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    dragAccum.current = 0;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const dx = e.clientX - dragStartX.current;
-    const newAngle = dragStartAngle.current + dx * 0.45;
-    targetAngleRef.current = newAngle;
-    currentAngleRef.current = newAngle;
-    setAngle(newAngle);
-    const newIdx = ((Math.round(-newAngle / STEP) % N) + N) % N;
-    setActiveIdx(newIdx);
+    dragAccum.current = dx;
+
+    // snap when threshold crossed
+    const steps = Math.floor(Math.abs(dx) / SNAP_THRESHOLD);
+    const dir = dx < 0 ? 1 : -1;
+    const targetStep = (lastSnappedIdx.current + dir * steps + N * 100) % N;
+
+    if (targetStep !== activeIdx) {
+      snapTo(targetStep);
+    }
   };
 
   const handlePointerUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    // snap to nearest
-    const nearest = Math.round(targetAngleRef.current / STEP) * STEP;
-    targetAngleRef.current = nearest;
-    const newIdx = ((Math.round(-nearest / STEP) % N) + N) % N;
-    setActiveIdx(newIdx);
-    // resume auto after 4s
+    // ensure snapped
+    snapTo(lastSnappedIdx.current);
     userTimerRef.current = setTimeout(() => {
       setIsUserControlled(false);
       startAutoRotate();
@@ -1016,18 +1030,14 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
     stopAutoRotate();
     setIsUserControlled(true);
     if (userTimerRef.current) clearTimeout(userTimerRef.current);
-    const delta = idx - activeIdx;
-    let shortestDelta = delta;
-    if (Math.abs(delta) > N / 2) shortestDelta = delta > 0 ? delta - N : delta + N;
-    targetAngleRef.current = currentAngleRef.current - shortestDelta * STEP;
-    setActiveIdx(idx);
+    snapTo(idx);
     userTimerRef.current = setTimeout(() => {
       setIsUserControlled(false);
       startAutoRotate();
     }, 4000);
   };
 
-  const RADIUS = 520;
+  const RADIUS = 500;
 
   return (
     <div className="flex flex-col items-center gap-8 select-none w-full">
@@ -1039,36 +1049,36 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
       >
-        <div style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {CAROUSEL_ITEMS.map((item, i) => {
             const itemAngle = angle + i * STEP;
             const rad = (itemAngle * Math.PI) / 180;
             const x = Math.sin(rad) * RADIUS;
             const z = Math.cos(rad) * RADIUS;
-            // normalised depth: 1 = front, 0 = back
-            const depth = (z + RADIUS) / (2 * RADIUS);
+            const depth = (z + RADIUS) / (2 * RADIUS); // 0=back, 1=front
             const isActive = i === activeIdx;
-            const scale = 0.68 + depth * 0.32;
-            const blurAmount = isActive ? 0 : (1 - depth) * 6 + (!isActive ? 3 : 0);
-            const opacity = 0.3 + depth * 0.7;
+            // blur: active always 0, others based on how far back they are
+            const blurAmount = isActive ? 0 : 3 + (1 - depth) * 5;
+            const opacity = isActive ? 1 : 0.38 + depth * 0.42;
 
             return (
               <div
                 key={item.id}
-                onClick={() => !isDragging && goTo(i)}
                 style={{
                   position: 'absolute',
                   left: '50%',
                   top: '50%',
-                  transform: `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) scale(${scale})`,
-                  transformStyle: 'preserve-3d',
-                  transition: isDragging ? 'none' : 'filter 0.5s ease',
+                  transform: `translate(-50%, -50%) translateX(${x}px) translateY(${(1 - depth) * 30}px)`,
                   filter: `blur(${blurAmount}px)`,
                   opacity,
                   zIndex: Math.round(depth * 100),
-                  cursor: isActive ? 'default' : 'pointer',
+                  cursor: isActive ? 'grab' : 'pointer',
                   pointerEvents: isDragging ? 'none' : 'auto',
+                  // smooth blur/opacity transitions
+                  transition: 'filter 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.6s cubic-bezier(0.4,0,0.2,1)',
+                  willChange: 'filter, opacity, transform',
                 }}
+                onClick={() => { if (!isDragging && !isActive) goTo(i); }}
               >
                 <div style={{
                   background: 'rgba(255,255,255,0.03)',
@@ -1079,7 +1089,7 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
                     ? '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.1)'
                     : '0 16px 40px rgba(0,0,0,0.4)',
                   backdropFilter: 'blur(8px)',
-                  transition: 'border 0.5s ease, box-shadow 0.5s ease',
+                  transition: 'border 0.6s ease, box-shadow 0.6s ease',
                   width: 360,
                 }}>
                   {/* Card header */}
@@ -1126,7 +1136,7 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
       {/* Dots + label */}
       <div className="flex flex-col items-center gap-3">
         <div className="flex items-center gap-3">
-          {CAROUSEL_ITEMS.map((item, i) => (
+          {CAROUSEL_ITEMS.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
@@ -1144,11 +1154,6 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
         <p className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.14em' }}>
           {CAROUSEL_ITEMS[activeIdx].label} · {activeIdx + 1} / {N}
         </p>
-        {!isUserControlled && (
-          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.18)', letterSpacing: '0.06em' }}>
-            Drag to explore · Click to focus
-          </p>
-        )}
       </div>
     </div>
   );
