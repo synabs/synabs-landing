@@ -15,7 +15,7 @@ export function EvolvingSection() {
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ marginBottom: 64 }}>
+        <div style={{ marginBottom: 64, textAlign: 'right' }}>
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3.25rem)',
             fontWeight: 300,
@@ -32,7 +32,7 @@ export function EvolvingSection() {
             color: 'rgba(255,255,255,0.45)',
             maxWidth: 560,
             lineHeight: 1.65,
-            margin: 0,
+            margin: '0 0 0 auto',
           }}>
             Your AI Agent gets smarter every week. Every conversation is captured, analysed across 75 quality signals, and turned into over 200 targeted improvements. All verified by a human before deployment.
           </p>
@@ -44,13 +44,14 @@ export function EvolvingSection() {
             position: 'absolute',
             top: 0, left: 0, right: 0,
             height: 1,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 30%, transparent 45%)',
+            background: 'linear-gradient(90deg, transparent 55%, rgba(255,255,255,0.07) 70%, rgba(255,255,255,0.07) 100%)',
           }} />
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, auto)',
-            justifyContent: 'start',
+            justifyContent: 'end',
             gap: '0 40px',
+            textAlign: 'right',
           }}>
             {STATS.map((stat) => (
               <div key={stat.label}>
