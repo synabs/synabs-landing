@@ -528,26 +528,6 @@ const CUSTOM_CONVERSATION = [
 ];
 
 function CustomizedChatLoop({ onGetStarted }) {
-  const theme = {
-    bg: '#1a1a1a',
-    headerBg: 'rgba(13,13,15,0.97)',
-    msgBg: '#2a2a2a',
-    userMsgBg: '#2f2f2f',
-    border: 'rgba(255,255,255,0.09)',
-    inputBg: '#222222',
-    chipColor: 'rgba(255,255,255,0.45)',
-    textColor: 'rgba(232,232,232,0.95)',
-    userTextColor: 'rgba(232,232,232,0.95)',
-    subtleText: 'rgba(255,255,255,0.22)',
-    accentDot: '#34d399',
-    sendArrow: 'rgba(255,255,255,0.6)',
-    scrollTrack: 'rgba(255,255,255,0.04)',
-    scrollThumb: 'rgba(255,255,255,0.12)',
-    chipBg: 'rgba(20,20,24,0.85)',
-    avatarSrc: '/lg-aw.avif',
-    name: 'Custom Dark',
-  };
-
   const CHAT_PANEL_HEIGHT = 420;
   const [phase, setPhase] = useState<'bubble' | 'chat'>('bubble');
   const [visibleMessages, setVisibleMessages] = useState(0);
@@ -622,7 +602,7 @@ function CustomizedChatLoop({ onGetStarted }) {
   useEffect(() => { runLoop(); return clearAll; }, []);
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [visibleMessages, typingIdx]);
 
-  const customNavItems = ['About Synabs', 'Custom options', 'Pricing'];
+  const customChips = ['About Synabs', 'Custom options', 'Pricing'];
 
   return (
     <div style={{ width: 320, position: 'relative', height: CHAT_PANEL_HEIGHT }}>
@@ -633,10 +613,10 @@ function CustomizedChatLoop({ onGetStarted }) {
             <motion.div key="bubble"
               initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
               transition={{ type: 'spring', stiffness: 320, damping: 24 }}>
-              <div style={{ background: '#c8a96e', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', width: 52, height: 52 }}
+              <div style={{ background: '#1a1a1a', boxShadow: '0 4px 24px rgba(0,0,0,0.25)', width: 52, height: 52 }}
                 className="rounded-full flex items-center justify-center relative cursor-pointer">
                 <MessageSquare style={{ color: '#fff' }} className="size-6" strokeWidth={1.5} />
-                <span style={{ background: '#34d399' }} className="absolute w-3 h-3 rounded-full top-0 right-0 border-2 border-[#1a1a1a] animate-pulse" />
+                <span style={{ background: '#34d399' }} className="absolute w-3 h-3 rounded-full top-0 right-0 border-2 border-white animate-pulse" />
               </div>
             </motion.div>
           )}
@@ -650,117 +630,94 @@ function CustomizedChatLoop({ onGetStarted }) {
             <motion.div key="chat"
               initial={{ opacity: 0, scale: 0.9, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.88, y: 8 }}
               transition={{ type: 'spring', stiffness: 280, damping: 26 }} style={{ transformOrigin: 'bottom right' }}>
-              <div style={{ background: '#1a1a1a', border: '1px solid rgba(200,169,110,0.25)', boxShadow: '0 8px 40px rgba(0,0,0,0.6)', width: 320, height: CHAT_PANEL_HEIGHT, display: 'flex', flexDirection: 'column' }}
-                className="rounded-[20px] overflow-hidden">
+              <div style={{ background: '#f0efeb', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.3)', width: 320, height: CHAT_PANEL_HEIGHT, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
-                {/* Header — custom gold accent */}
-                <div style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2218 100%)', borderBottom: '1px solid rgba(200,169,110,0.2)' }}
-                  className="flex items-center justify-between px-4 py-3 flex-shrink-0">
-                  <div className="flex items-center gap-2.5">
-                    <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
-                      className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
-                      <img src="/lg-aw.avif" alt="Agent" className="w-full h-full object-contain p-0.5" />
+                {/* Header — musta kuten ver2 */}
+                <div style={{ background: '#1a1a1a', height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 0 16px', flexShrink: 0 }}>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>Synabs Agent</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
+                      <svg width="3" height="14" viewBox="0 0 4 16" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/></svg>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <span style={{ color: '#c8a96e' }} className="text-sm font-semibold">Synabs Agent</span>
-                      <span style={{ background: '#34d399' }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
+                    <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
+                      <svg width="18" height="3" viewBox="0 0 12 2" fill="none"><line x1="0" y1="1" x2="12" y2="1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
                     </div>
-                  </div>
-                  <div className="flex gap-2.5 items-center opacity-30">
-                    <div style={{ background: '#c8a96e' }} className="w-3 h-0.5 rounded-full" />
-                    <div style={{ border: '1px solid #c8a96e' }} className="w-3 h-3 rounded-sm" />
+                    <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
+                      <svg width="16" height="16" viewBox="0 0 10 10" fill="none"><line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                    </div>
                   </div>
                 </div>
 
-                {/* Messages */}
-                <div ref={scrollRef}
-                  className="flex flex-col gap-2.5 px-3 pt-3 pb-0 overflow-y-auto flex-1"
-                  style={{ background: 'transparent', scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.12) rgba(255,255,255,0.04)' }}>
-                  <AnimatePresence initial={false}>
-                    {CUSTOM_CONVERSATION.slice(0, visibleMessages).map((msg, i) => (
-                      <motion.div key={i}
-                        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                        className={`flex gap-1.5 ${msg.from === 'user' ? 'flex-row-reverse' : ''}`}>
-                        {msg.from === 'bot' && (
-                          <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
-                            className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                            <img src="/lg-aw.avif" alt="" className="w-full h-full object-contain p-0.5" />
+                {/* Messages area — valkoinen */}
+                <div style={{ background: '#ffffff', display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+                  <div ref={scrollRef} style={{ overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10, flex: 1, scrollbarWidth: 'none' }}>
+                    <AnimatePresence initial={false}>
+                      {CUSTOM_CONVERSATION.slice(0, visibleMessages).map((msg, i) => (
+                        <motion.div key={i}
+                          initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.25 }}
+                          style={{ display: 'flex', gap: 8, flexDirection: msg.from === 'user' ? 'row-reverse' : 'row' }}>
+                          {msg.from === 'bot' && (
+                            <div style={{ width: 34, height: 34, borderRadius: '50%', flexShrink: 0, marginTop: 2, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                              <img src="/lg-aw.avif" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4 }} />
+                            </div>
+                          )}
+                          {msg.text === '__PRICING_BUTTON__' ? (
+                            <a href="#pricing" style={{ background: '#0f0f0f', color: '#fff', padding: '8px 18px', borderRadius: 20, fontSize: 13, fontWeight: 500, fontFamily: 'system-ui,sans-serif', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
+                              View Pricing →
+                            </a>
+                          ) : msg.text === '__TRIAL_BUTTON__' ? (
+                            <div onClick={onGetStarted} style={{ background: '#0f0f0f', color: '#fff', padding: '8px 18px', borderRadius: 20, fontSize: 13, fontWeight: 500, fontFamily: 'system-ui,sans-serif', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+                              Start Free Trial →
+                            </div>
+                          ) : (
+                            <div style={{ maxWidth: 175, padding: '10px 14px', fontSize: 13, lineHeight: 1.55, fontFamily: 'system-ui,sans-serif', fontWeight: 300, color: '#e8e8e8', background: msg.from === 'bot' ? '#2a2a2a' : '#2f2f2f', borderRadius: msg.from === 'bot' ? '2px 8px 8px 8px' : '8px 8px 2px 8px' }}>
+                              {msg.from === 'bot' && i === visibleMessages - 1
+                                ? <TypedText text={msg.text} color="#e8e8e8" onChar={scrollToBottom} />
+                                : msg.text}
+                            </div>
+                          )}
+                        </motion.div>
+                      ))}
+
+                      {/* Typing indicator */}
+                      {typingIdx >= 0 && (
+                        <motion.div key="typing"
+                          initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
+                          style={{ display: 'flex', gap: 8 }}>
+                          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2, overflow: 'hidden' }}>
+                            <img src="/lg-aw.avif" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4 }} />
                           </div>
-                        )}
-                        {msg.text === '__PRICING_BUTTON__' ? (
-                          <a href="#pricing"
-                            style={{ background: '#c8a96e', color: '#1a1a1a' }}
-                            className="px-3 py-1.5 rounded-lg text-[10px] font-semibold cursor-pointer inline-flex items-center gap-1 hover:opacity-90 transition-opacity">
-                            View Pricing →
-                          </a>
-                        ) : msg.text === '__TRIAL_BUTTON__' ? (
-                          <div onClick={onGetStarted}
-                            style={{ background: '#34d399', color: '#0a1a12' }}
-                            className="px-3 py-1.5 rounded-lg text-[10px] font-semibold cursor-pointer inline-flex items-center gap-1 hover:opacity-90 transition-opacity">
-                            Start Free Trial →
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '10px 14px', background: '#2a2a2a', borderRadius: '14px 14px 14px 8px' }}>
+                            {[0, 1, 2].map(d => (
+                              <motion.span key={d} style={{ width: 5, height: 5, borderRadius: '50%', background: '#555', display: 'block' }}
+                                animate={{ y: [0, -5, 0] }} transition={{ duration: 1.2, delay: d * 0.2, repeat: Infinity }} />
+                            ))}
                           </div>
-                        ) : (
-                          <div style={{
-                            background: msg.from === 'bot' ? '#2a2a2a' : '#2f2f2f',
-                            border: msg.from === 'bot' ? '1px solid rgba(200,169,110,0.15)' : '1px solid rgba(255,255,255,0.09)',
-                            borderRadius: msg.from === 'bot' ? '2px 10px 10px 10px' : '10px 10px 2px 10px', maxWidth: '82%',
-                          }} className="px-2.5 py-1.5 text-[10px] leading-relaxed">
-                            {msg.from === 'bot' && i === visibleMessages - 1 ? (
-                              <TypedText text={msg.text} color="rgba(232,232,232,0.95)" onChar={scrollToBottom} />
-                            ) : (
-                              <span style={{ color: 'rgba(232,232,232,0.95)' }}>{msg.text}</span>
-                            )}
-                          </div>
-                        )}
-                      </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Chips */}
+                  <div style={{ padding: '0 16px 10px', display: 'flex', gap: 6, flexWrap: 'wrap' as const }}>
+                    {customChips.map(chip => (
+                      <span key={chip} style={{ padding: '5px 12px', borderRadius: 20, border: '1px solid #d0d0d0', background: '#f5f5f5', fontSize: 12, color: '#333', fontFamily: 'system-ui,sans-serif', cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
+                        {chip}
+                      </span>
                     ))}
-
-                    {/* Typing indicator */}
-                    {typingIdx >= 0 && (
-                      <motion.div key={typingIdx}
-                        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
-                        className="flex gap-1.5">
-                        <div style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#000000' }}
-                          className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                          <img src="/lg-aw.avif" alt="" className="w-full h-full object-contain p-0.5" />
-                        </div>
-                        <div style={{ background: '#2a2a2a', border: '1px solid rgba(200,169,110,0.15)', borderRadius: '2px 10px 10px 10px' }}
-                          className="flex items-center gap-1 px-2.5 py-2">
-                          {[0, 1, 2].map(d => (
-                            <motion.div key={d} style={{ background: 'rgba(255,255,255,0.22)' }} className="w-1 h-1 rounded-full"
-                              animate={{ y: [0, -3, 0], opacity: [0.4, 1, 0.4] }}
-                              transition={{ duration: 1, delay: d * 0.18, repeat: Infinity }} />
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <div style={{ height: 32, flexShrink: 0 }} />
-                </div>
-
-                {/* Chips */}
-                <div className="flex gap-1.5 flex-wrap px-3 pb-2 flex-shrink-0">
-                  {customNavItems.map(chip => (
-                    <span key={chip}
-                      style={{ color: '#c8a96e', border: '1px solid rgba(200,169,110,0.25)', background: 'rgba(200,169,110,0.08)' }}
-                      className="text-[10px] px-2.5 py-1 rounded-full whitespace-nowrap">{chip}</span>
-                  ))}
+                  </div>
                 </div>
 
                 {/* Input */}
-                <div style={{ background: 'rgba(13,13,15,0.97)', borderTop: '1px solid rgba(200,169,110,0.15)' }} className="px-3 py-2.5 flex-shrink-0">
-                  <div style={{ background: '#222222', border: '1px solid rgba(200,169,110,0.2)' }}
-                    className="flex items-center gap-2 rounded-xl px-3 py-2">
-                    <span style={{ color: inputTypingText ? 'rgba(232,232,232,0.95)' : 'rgba(255,255,255,0.22)' }} className="text-[11px] flex-1 truncate">
-                      {inputTypingText || 'Send a message...'}
+                <div style={{ position: 'relative', background: '#f0efeb', padding: '6px 8px' }}>
+                  <div style={{ background: '#ffffff', border: '1.5px solid #d0d0d0', borderRadius: 6, display: 'flex', alignItems: 'center', padding: '6px 10px', gap: 8 }}>
+                    <span style={{ flex: 1, fontSize: 13, color: inputTypingText ? '#222' : '#aaa', fontFamily: 'system-ui,sans-serif', overflow: 'hidden', whiteSpace: 'nowrap' as const }}>
+                      {inputTypingText || 'Kirjoita viesti tähän'}
                       {inputTypingText && <span style={{ opacity: 0.5 }}>|</span>}
                     </span>
-                    <div style={{ background: '#c8a96e', border: '1px solid rgba(200,169,110,0.4)' }}
-                      className="w-6 h-6 rounded-lg flex items-center justify-center">
-                      <svg width="8" height="8" viewBox="0 0 10 16" fill="none">
-                        <polyline points="2,1 9,8 2,15" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                    <div style={{ color: '#aaa', display: 'flex', alignItems: 'center' }}>
+                      <svg width="11" height="11" viewBox="0 0 10 16" fill="none"><polyline points="2,1 9,8 2,15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                   </div>
                 </div>
@@ -772,6 +729,7 @@ function CustomizedChatLoop({ onGetStarted }) {
     </div>
   );
 }
+
 
 
 const SLIDES = [
@@ -980,35 +938,47 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
             <p className="text-lg font-light text-zinc-400">Built on the world's most advanced AI and a comprehensive analytics dashboard.</p>
           </motion.div>
 
-          <div className="flex flex-col lg:flex-row items-start gap-16 lg:gap-20">
+          <div className="flex flex-col gap-16">
+            {/* Row 1: two chats side by side */}
+            <div className="flex flex-col lg:flex-row items-start gap-16 lg:gap-20">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
+                className="flex flex-col gap-3 items-start">
+                <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
+                <AnimatedChatLoop theme={theme} onGetStarted={() => {}} />
+                <div className="flex items-center gap-2 mt-1">
+                  <motion.button
+                    onClick={() => setChatTheme('dark')}
+                    animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#09090b', '#d4d4d8'] } : { borderColor: '#71717a' }}
+                    transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
+                    style={{ borderWidth: 2, borderStyle: 'solid' }}
+                    className={`w-6 h-6 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
+                  <motion.button
+                    onClick={() => setChatTheme('light')}
+                    animate={chatTheme !== 'light' ? { borderColor: ['#e4e4e7', '#52525b', '#e4e4e7'] } : { borderColor: '#a1a1aa' }}
+                    transition={chatTheme !== 'light' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
+                    style={{ borderWidth: 2, borderStyle: 'solid' }}
+                    className={`w-6 h-6 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
+                className="flex flex-col gap-3 items-start">
+                <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
+                <CustomizedChatLoop onGetStarted={() => {}} />
+              </motion.div>
+            </div>
+
+            {/* Row 2: dashboard */}
             <motion.div
               initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
-              className="flex flex-col gap-3 items-start">
-              <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
-              <AnimatedChatLoop theme={theme} onGetStarted={() => {}} />
-              <div className="flex items-center gap-2 mt-1">
-                <motion.button
-                  onClick={() => setChatTheme('dark')}
-                  animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#09090b', '#d4d4d8'] } : { borderColor: '#71717a' }}
-                  transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
-                  style={{ borderWidth: 2, borderStyle: 'solid' }}
-                  className={`w-6 h-6 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
-                <motion.button
-                  onClick={() => setChatTheme('light')}
-                  animate={chatTheme !== 'light' ? { borderColor: ['#e4e4e7', '#52525b', '#e4e4e7'] } : { borderColor: '#a1a1aa' }}
-                  transition={chatTheme !== 'light' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
-                  style={{ borderWidth: 2, borderStyle: 'solid' }}
-                  className={`w-6 h-6 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
-              className="flex flex-col gap-3 items-start">
-              <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
-              <CustomizedChatLoop onGetStarted={() => {}} />
+              className="flex-shrink-0 flex flex-col gap-3">
+              <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
+              <PaperStack isDark={isDark} ref={paperStackRef} />
             </motion.div>
           </div>
         </div>
