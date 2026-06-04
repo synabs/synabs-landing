@@ -17,7 +17,7 @@ export function EvolvingSection() {
         {/* Left image */}
         <div style={{ flex: '0 0 780px', marginLeft: '-180px' }}>
           <img
-            src="/bg-nd.avif"
+            src="/bg-rd.mp4"
             alt=""
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
