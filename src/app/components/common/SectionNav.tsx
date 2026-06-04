@@ -41,11 +41,12 @@ export function SectionNav() {
     <nav
       style={{
         position: 'fixed',
-        left: 'max(8px, calc(50% - 720px))',
-        top: 80,
+        left: 24,
+        top: '50%',
+        transform: 'translateY(-50%)',
         zIndex: 100,
         fontFamily: '"Courier New", Courier, monospace',
-        fontSize: 13,
+        fontSize: 15,
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
