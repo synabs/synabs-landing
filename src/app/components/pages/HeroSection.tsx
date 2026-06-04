@@ -14,7 +14,23 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       className="relative overflow-hidden"
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#000000' }}
     >
-      <div className="absolute inset-0 bg-black" />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
+        }}
+      >
+        <source src="/bg-vd.mp4" type="video/mp4" />
+      </video>
+
+      <div className="absolute inset-0 bg-black/40" style={{ zIndex: 0 }} />
       <ParticleField count={20} />
 
       <img
