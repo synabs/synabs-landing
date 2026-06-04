@@ -308,8 +308,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     key={p.id}
                     onClick={() => { setPlanIdx(i); setError(''); }}
                     style={{
-                      flex: 1,
-                      padding: '8px 0 10px',
+                      padding: '8px 24px 10px',
                       fontSize: 14,
                       fontWeight: 400,
                       border: 'none',
@@ -320,10 +319,6 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       marginBottom: -1,
                       transition: 'all 0.2s',
                       letterSpacing: '0.03em',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
                     }}
                   >
                     {p.name}
@@ -352,12 +347,14 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         regular has: chatsPerDay (17px, mb 4) + messagesLimit (13px, mb 2) + overage (12px)
                         custom must occupy identical vertical space */}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>
-                      Tell us what you need, we'll build it around you.
+                      Tell us what you need,
                     </p>
                     <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      we'll build it around you.
+                    </p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300, whiteSpace: 'nowrap' }}>
                       From custom integrations to longer cooperation.
                     </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
                   </div>
                 </div>
 
@@ -536,7 +533,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </h3>
                 <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
                   {isFormCustom
-                    ? "Tell us what you need, we'll build it around you."
+                    ? "Let's hear it."
                     : 'First step toward your own AI agent.'}
                 </p>
               </div>
