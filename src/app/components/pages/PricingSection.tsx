@@ -241,28 +241,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       gap: 8,
                     }}
                   >
-                    <span style={{ position: 'relative' }}>
-                      {p.name}
-                      {p.popular && (
-                        <span style={{
-                          position: 'absolute',
-                          top: -18,
-                          right: -52,
-                          fontSize: 9,
-                          fontWeight: 500,
-                          color: i === planIdx ? c.bg : c.faint,
-                          background: i === planIdx ? c.tabActive : 'transparent',
-                          border: `0.5px solid ${i === planIdx ? c.tabActive : c.faint}`,
-                          borderRadius: 4,
-                          padding: '1px 5px',
-                          letterSpacing: '0.06em',
-                          textTransform: 'uppercase',
-                          whiteSpace: 'nowrap',
-                        }}>
-                          Most popular
-                        </span>
-                      )}
-                    </span>
+                    {p.name}
                   </button>
                 ))}
               </div>
@@ -272,7 +251,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {isCustom ? (
               <div style={{ marginBottom: 36 }}>
                 <p style={{ color: c.label, fontSize: 17, fontWeight: 300, margin: '0 0 6px' }}>
-                  Tell us what you need we'll build it around you.
+                  Tell us what you need — we'll build it around you.
                 </p>
                 <p style={{ color: c.faint, fontSize: 14, fontWeight: 300, margin: 0 }}>
                   Volume pricing, custom integrations, dedicated support.
@@ -297,6 +276,22 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
+                    {plan.popular && (
+                      <span style={{
+                        display: 'inline-block',
+                        fontSize: 10,
+                        fontWeight: 500,
+                        color: c.faint,
+                        border: `0.5px solid ${c.border}`,
+                        borderRadius: 4,
+                        padding: '2px 7px',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        marginBottom: 10,
+                      }}>
+                        Most popular
+                      </span>
+                    )}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                       {plan.chatsPerDay}
                     </p>
