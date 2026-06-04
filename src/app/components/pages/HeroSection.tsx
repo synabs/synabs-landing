@@ -74,7 +74,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               <img
                 src="/cortex-1.04.avif"
                 alt="AI Engine"
-                style={{ width: '44px', height: '60px', objectFit: 'contain' }}
+                style={{ width: '66px', height: '90px', objectFit: 'contain' }}
               />
             </motion.div>
 
