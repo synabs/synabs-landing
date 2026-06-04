@@ -33,10 +33,7 @@ export function EvolvingSection() {
   return (
     <section
       id="evolving"
-      style={{
-        background: '#09090b',
-        padding: '96px 24px',
-      }}
+      style={{ background: '#09090b', padding: '96px 24px' }}
     >
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
@@ -64,16 +61,21 @@ export function EvolvingSection() {
           </p>
         </div>
 
-        {/* Steps: full width, no phase numbers */}
+        {/* Steps with fading dividers */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 64 }}>
           {CYCLE_STEPS.map((step, i) => (
-            <div
-              key={step.label}
-              style={{
-                padding: '24px 0',
-                borderBottom: i < CYCLE_STEPS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
-              }}
-            >
+            <div key={step.label} style={{ position: 'relative', padding: '24px 0' }}>
+              {/* Fading bottom border */}
+              {i < CYCLE_STEPS.length - 1 && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 1,
+                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 40%, transparent 100%)',
+                }} />
+              )}
               <span style={{
                 fontSize: 10,
                 fontWeight: 600,
@@ -107,54 +109,45 @@ export function EvolvingSection() {
           ))}
         </div>
 
-        {/* Stats row at bottom */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          gap: '8px 0',
-          borderTop: '1px solid rgba(255,255,255,0.07)',
-          paddingTop: 24,
-        }}>
-          {STATS.map((stat, i) => (
-            <div
-              key={stat.label}
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: 8,
-                paddingRight: 20,
-                marginRight: 20,
-                borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-              }}
-            >
-              <span style={{ fontSize: 14, fontWeight: 500, color: '#ffffff', lineHeight: 1 }}>
-                {stat.value}
-              </span>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', lineHeight: 1 }}>
-                {stat.label}
-              </span>
-            </div>
-          ))}
+        {/* Stats row — fading top border, tightly packed grid */}
+        <div style={{ position: 'relative', paddingTop: 32 }}>
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0,
+            height: 1,
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 40%, transparent 100%)',
+          }} />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, auto)',
+            justifyContent: 'start',
+            gap: '0 40px',
+          }}>
+            {STATS.map((stat) => (
+              <div key={stat.label}>
+                <div style={{
+                  fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+                  fontWeight: 300,
+                  color: '#ffffff',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                  marginBottom: 6,
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{
+                  fontSize: 13,
+                  color: 'rgba(255,255,255,0.38)',
+                  lineHeight: 1.5,
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
-
-      <style>{`
-        @media (max-width: 600px) {
-          .stats-row {
-            grid-template-columns: 1fr !important;
-            gap: 28px !important;
-          }
-          .stats-row > div {
-            border-right: none !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            padding-bottom: 28px;
-          }
-        }
-      `}</style>
     </section>
   );
 }
