@@ -265,16 +265,21 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                   <div className="flex items-center gap-2.5">
                     <div style={{ border: `1px solid ${theme.border}`, background: theme.msgBg }}
                       className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
-                      <img src={theme.avatarSrc} alt="TIA" className="w-full h-full object-contain p-0.5" />
+                      <img src={theme.avatarSrc} alt="Agent" className="w-full h-full object-contain p-0.5"
+                        style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">Agent</span>
+                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">Synabs Agent</span>
                       <span style={{ background: theme.accentDot }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
                     </div>
                   </div>
                   <div className="flex gap-2.5 items-center opacity-30">
                     <div style={{ background: theme.textColor }} className="w-3 h-0.5 rounded-full" />
                     <div style={{ border: `1px solid ${theme.textColor}` }} className="w-3 h-3 rounded-sm" />
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                      <line x1="1" y1="1" x2="9" y2="9" stroke={theme.textColor} strokeWidth="1.6" strokeLinecap="round"/>
+                      <line x1="9" y1="1" x2="1" y2="9" stroke={theme.textColor} strokeWidth="1.6" strokeLinecap="round"/>
+                    </svg>
                   </div>
                 </div>
 
@@ -291,7 +296,8 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                         {msg.from === 'bot' && (
                           <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                             className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                            <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                            <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5"
+                              style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                           </div>
                         )}
                         <div style={{
@@ -314,9 +320,9 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                         className="flex gap-1.5">
                         <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                           className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5"
+                            style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                         </div>
-                        <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}`, borderRadius: '2px 10px 10px 10px' }}
                           className="flex items-center gap-1 px-2.5 py-2">
                           {[0, 1, 2].map(d => (
                             <motion.div key={d} style={{ background: theme.subtleText }} className="w-1 h-1 rounded-full"
@@ -336,7 +342,8 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       {msg.from === 'bot' && (
                         <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                           className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5"
+                            style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                         </div>
                       )}
                       <div style={{
@@ -355,7 +362,8 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       className="flex gap-1.5">
                       <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                         className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                        <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                        <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5"
+                          style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                       </div>
                       <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}`, borderRadius: '2px 10px 10px 10px' }}
                         className="flex items-center gap-1 px-2.5 py-2">
@@ -713,7 +721,7 @@ function CustomizedChatLoop({ onGetStarted }) {
                 <div style={{ position: 'relative', background: '#f0efeb', padding: '6px 8px' }}>
                   <div style={{ background: '#ffffff', border: '1.5px solid #d0d0d0', borderRadius: 6, display: 'flex', alignItems: 'center', padding: '6px 10px', gap: 8 }}>
                     <span style={{ flex: 1, fontSize: 13, color: inputTypingText ? '#222' : '#aaa', fontFamily: 'system-ui,sans-serif', overflow: 'hidden', whiteSpace: 'nowrap' as const }}>
-                      {inputTypingText || 'Kirjoita viesti tähän'}
+                      {inputTypingText || 'Send a message...'}
                       {inputTypingText && <span style={{ opacity: 0.5 }}>|</span>}
                     </span>
                     <div style={{ color: '#aaa', display: 'flex', alignItems: 'center' }}>
@@ -938,15 +946,16 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
             <p className="text-lg font-light text-zinc-400">Built on the world's most advanced AI and a comprehensive analytics dashboard.</p>
           </motion.div>
 
-          <div className="flex flex-col gap-16">
-            {/* Row 1: two chats side by side */}
-            <div className="flex flex-col lg:flex-row items-start gap-16 lg:gap-20">
+          <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-14">
               <motion.div
                 initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
                 className="flex flex-col gap-3 items-start">
-                <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
-                <AnimatedChatLoop theme={theme} onGetStarted={() => {}} />
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
+                  <span style={{ background: '#00BC7D', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, letterSpacing: '0.03em' }}>-20% forever</span>
+                </div>
+                <AnimatedChatLoop theme={theme} onGetStarted={() => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} />
                 <div className="flex items-center gap-2 mt-1">
                   <motion.button
                     onClick={() => setChatTheme('dark')}
@@ -968,18 +977,16 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
                 viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
                 className="flex flex-col gap-3 items-start">
                 <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
-                <CustomizedChatLoop onGetStarted={() => {}} />
+                <CustomizedChatLoop onGetStarted={() => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} />
               </motion.div>
-            </div>
 
-            {/* Row 2: dashboard */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
-              className="flex-shrink-0 flex flex-col gap-3">
-              <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
-              <PaperStack isDark={isDark} ref={paperStackRef} />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7, delay: 0.1 }}
+                className="flex-shrink-0 flex flex-col gap-3">
+                <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
+                <PaperStack isDark={isDark} ref={paperStackRef} />
+              </motion.div>
           </div>
         </div>
       </motion.section>
