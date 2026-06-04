@@ -39,7 +39,7 @@ export function EvolvingSection() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            Evolves every week,<br />gets smarter constantly
+            Evolves every week,<br />outplays competitors.
           </h2>
           <p style={{
             fontSize: 17,
@@ -49,7 +49,7 @@ export function EvolvingSection() {
             lineHeight: 1.65,
             margin: '0 0 0 auto',
           }}>
-            Your AI Agent gets smarter every week. Every conversation is captured, analysed across 75 quality signals, and turned into over 200 targeted improvements. All verified by a human before deployment.
+            Your AI Agent gets smarter every week. Every conversation is captured, analysed across 75 quality signals, and turned into over 200 targeted improvements.
           </p>
         </div>
 
