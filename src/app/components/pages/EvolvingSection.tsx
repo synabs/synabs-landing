@@ -5,7 +5,7 @@ const CHECKS = [
   'Average 40% increase in lead capture by early testers on third month',
 ];
 
-export function HowItWorks() {
+export function EvolvingSection() {
   return (
     <section
       id="how-it-works"
