@@ -57,25 +57,25 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row items-start gap-3 mb-6"
+              className="flex flex-col sm:flex-row items-center gap-3 mb-6"
             >
               <button
                 onClick={onGetStarted}
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
               >
-                Start free trial <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
+                Start_free_trial <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <a
                 href="#tia-in-action"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
+                className="px-8 py-4 rounded-full text-base font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
               >
-                <img
-                  src="/cortex-1.04.avif"
-                  alt="AI Engine"
-                  style={{ width: '24px', height: '24px', objectFit: 'contain' }}
-                />
-                See it live
+                See_it_live
               </a>
+              <img
+                src="/cortex-1.04.avif"
+                alt="AI Engine"
+                style={{ width: '44px', height: '60px', objectFit: 'contain' }}
+              />
             </motion.div>
 
             <motion.div
