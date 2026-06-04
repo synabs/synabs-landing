@@ -931,12 +931,11 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
         style={{ rotateX, scale, opacity, y }}
         className="min-h-screen flex items-center justify-center bg-black py-20 px-6 relative overflow-hidden"
       >
-        <video src="/dots.mp4" autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-80" />
-        <div className="absolute inset-0 bg-black/20" />
+
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.4 }} className="mb-14">
+            viewport={{ once: false, amount: 0.4 }} className="mb-14 text-center">
             <h2 className="text-5xl md:text-6xl font-light mb-3 text-white">The brain behind AI Agent</h2>
             <p className="text-lg font-light text-zinc-400">Built on the world's most advanced AI and a comprehensive analytics dashboard.</p>
           </motion.div>
@@ -945,8 +944,8 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
             {/* Row 1: chats + analytics side by side */}
             <div className="flex flex-col lg:flex-row items-start justify-center gap-16 lg:gap-12">
               <motion.div
-                initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
+                initial={{ opacity: 0, x: -80 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
                 className="flex flex-col gap-3 items-start">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-lg font-semibold text-white tracking-tight">Standard theme</span>
@@ -970,8 +969,8 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
+                initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
                 className="flex flex-col gap-3 items-start">
                 <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
                 <CustomizedChatLoop onGetStarted={scrollToForm} />
@@ -979,8 +978,8 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
 
               {/* Analytics dashboard — moved to right of chats */}
               <motion.div
-                initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7, delay: 0.1 }}
+                initial={{ opacity: 0, x: 80 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut', delay: 0.1 }}
                 className="flex-shrink-0 flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
                 <PaperStack isDark={isDark} ref={paperStackRef} />
@@ -997,8 +996,7 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
               onClick={scrollToForm}
               className="group inline-flex items-center gap-3 px-10 py-4 rounded-full text-base font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
             >
-              Get Started Free
-              <svg className="size-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              Get started free
             </button>
           </motion.div>
         </div>
