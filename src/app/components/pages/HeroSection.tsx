@@ -74,41 +74,44 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row items-center gap-4 mb-7"
+              className="flex flex-row items-end gap-4 mb-7"
             >
-              <a
-                href="#tia-in-action"
-                className="rounded-full font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
-                style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
-              >
-                See it live
-              </a>
-              <button
-                onClick={onGetStarted}
-                className="inline-flex items-center rounded-full font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
-                style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
-              >
-                Start free trial
-              </button>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-row items-center gap-4">
+                  <a
+                    href="#tia-in-action"
+                    className="rounded-full font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
+                    style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
+                  >
+                    See it live
+                  </a>
+                  <button
+                    onClick={onGetStarted}
+                    className="inline-flex items-center rounded-full font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
+                    style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
+                  >
+                    Start free trial
+                  </button>
+                </div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.35 }}
+                  className="flex items-center gap-5"
+                >
+                  {['No credit card req.', 'Setup in 48 h', 'Cancel anytime'].map(item => (
+                    <span key={item} className="flex items-center gap-2 text-white/40" style={{ fontSize: '0.85rem' }}>
+                      <Check className="size-3.5" style={{ color: '#00BC7D' }} />
+                      {item}
+                    </span>
+                  ))}
+                </motion.div>
+              </div>
               <img
                 src="/cortex-1.04.avif"
                 alt="AI Engine"
                 style={{ width: '110px', height: '150px', objectFit: 'contain' }}
               />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.35 }}
-              className="flex items-center gap-7 flex-wrap"
-            >
-              {['No credit card required', 'Setup in 48 hours', 'Cancel anytime'].map(item => (
-                <span key={item} className="flex items-center gap-2 text-white/40" style={{ fontSize: '0.95rem' }}>
-                  <Check className="size-4" style={{ color: '#00BC7D' }} />
-                  {item}
-                </span>
-              ))}
             </motion.div>
           </motion.div>
         </div>
