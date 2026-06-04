@@ -753,7 +753,7 @@ function LightboxModal({ slide, onClose, onPrev, onNext }) {
     return () => window.removeEventListener('keydown', handler);
   }, [onClose, onPrev, onNext]);
 
-  return createPortal(
+  return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
@@ -782,23 +782,45 @@ function LightboxModal({ slide, onClose, onPrev, onNext }) {
           <img src={slide.src} alt={slide.label} style={{ maxWidth: '85vw', maxHeight: '85vh', display: 'block', borderRadius: 16 }} draggable={false} />
         </motion.div>
       </motion.div>
-    </AnimatePresence>,
-    document.body
+    </AnimatePresence>
   );
 }
 
-const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boolean }>(
-  function PaperStack({ isDark }, ref) {
+const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boolean; onLightboxChange?: (open: boolean, slide: typeof SLIDES[0] | null, onClose: () => void, onPrev: () => void, onNext: () => void) => void }>(
+  function PaperStack({ isDark, onLightboxChange }, ref) {
     const [activeIdx, setActiveIdx] = useState(0);
     const [direction, setDirection] = useState(1);
     const [isAnimating, setIsAnimating] = useState(false);
     const [lightboxOpen, setLightboxOpen] = useState(false);
 
-    React.useImperativeHandle(ref, () => ({ closeLightbox: () => setLightboxOpen(false) }));
+    const closeLightbox = useCallback(() => {
+      setLightboxOpen(false);
+      onLightboxChange?.(false, null, () => {}, () => {}, () => {});
+    }, [onLightboxChange]);
 
-    const closeLightbox = () => setLightboxOpen(false);
-    const prevLightbox = () => { setDirection(-1); setActiveIdx(i => (i - 1 + SLIDES.length) % SLIDES.length); };
-    const nextLightbox = () => { setDirection(1); setActiveIdx(i => (i + 1) % SLIDES.length); };
+    const prevLightbox = useCallback(() => {
+      setDirection(-1);
+      setActiveIdx(i => {
+        const next = (i - 1 + SLIDES.length) % SLIDES.length;
+        return next;
+      });
+    }, []);
+
+    const nextLightbox = useCallback(() => {
+      setDirection(1);
+      setActiveIdx(i => {
+        const next = (i + 1) % SLIDES.length;
+        return next;
+      });
+    }, []);
+
+    React.useImperativeHandle(ref, () => ({ closeLightbox }));
+
+    useEffect(() => {
+      if (lightboxOpen) {
+        onLightboxChange?.(true, SLIDES[activeIdx], closeLightbox, prevLightbox, nextLightbox);
+      }
+    }, [lightboxOpen, activeIdx]);
 
     useEffect(() => {
       if (lightboxOpen) return;
@@ -883,10 +905,6 @@ const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boo
         <p className={`text-xs font-light tracking-widest uppercase ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
           {SLIDES[activeIdx].label} · {activeIdx + 1} / {SLIDES.length}
         </p>
-
-        {lightboxOpen && (
-          <LightboxModal slide={SLIDES[activeIdx]} onClose={closeLightbox} onPrev={prevLightbox} onNext={nextLightbox} />
-        )}
       </div>
     );
   }
@@ -899,13 +917,14 @@ const CAROUSEL_ITEMS = [
   { id: 'analytics',      label: 'Analytics dashboard',     sublabel: null,               badge: null },
 ];
 
-function CarouselCard({ item, chatTheme, setChatTheme, scrollToForm, paperStackRef, isDark }: {
+function CarouselCard({ item, chatTheme, setChatTheme, scrollToForm, paperStackRef, isDark, onLightboxChange }: {
   item: typeof CAROUSEL_ITEMS[0];
   chatTheme: string;
   setChatTheme: (t: string) => void;
   scrollToForm: () => void;
   paperStackRef: React.Ref<{ closeLightbox: () => void }>;
   isDark: boolean;
+  onLightboxChange?: (open: boolean, slide: typeof SLIDES[0] | null, onClose: () => void, onPrev: () => void, onNext: () => void) => void;
 }) {
   const theme = CHAT_THEMES[chatTheme];
   return (
@@ -917,7 +936,7 @@ function CarouselCard({ item, chatTheme, setChatTheme, scrollToForm, paperStackR
         <CustomizedChatLoop onGetStarted={scrollToForm} />
       )}
       {item.id === 'analytics' && (
-        <PaperStack isDark={isDark} ref={paperStackRef} />
+        <PaperStack isDark={isDark} ref={paperStackRef} onLightboxChange={onLightboxChange} />
       )}
     </div>
   );
@@ -928,6 +947,12 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
   const [chatTheme, setChatTheme] = useState('dark');
   const N = CAROUSEL_ITEMS.length;
   const STEP = 360 / N;
+
+  // lightbox state lifted here so portal renders outside filter/transform stacking contexts
+  const [lightboxData, setLightboxData] = useState<{ slide: typeof SLIDES[0]; onClose: () => void; onPrev: () => void; onNext: () => void } | null>(null);
+  const handleLightboxChange = useCallback((open: boolean, slide: typeof SLIDES[0] | null, onClose: () => void, onPrev: () => void, onNext: () => void) => {
+    setLightboxData(open && slide ? { slide, onClose, onPrev, onNext } : null);
+  }, []);
 
   // angle state — drives all positions
   const angleRef = useRef(0);           // current rendered angle
@@ -991,8 +1016,8 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
     if (!isDraggingRef.current) return;
     const dx = e.clientX - dragStartXRef.current;
     if (Math.abs(dx) > 4) hasDraggedRef.current = true;
-    // map px to degrees: full card width ≈ 200px = 1 step
-    const degreesPerPx = STEP / 200;
+    // map px to degrees: ~350px = 1 full step (less sensitive)
+    const degreesPerPx = STEP / 350;
     targetAngleRef.current = dragBaseAngleRef.current + dx * degreesPerPx;
     // update active index as we drag
     const snapped = ((Math.round(-targetAngleRef.current / STEP) % N) + N) % N;
@@ -1099,7 +1124,7 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
                   )}
 
                   <div style={{ pointerEvents: isActive ? 'auto' : 'none' }}>
-                    <CarouselCard item={item} chatTheme={chatTheme} setChatTheme={setChatTheme} scrollToForm={scrollToForm} paperStackRef={paperStackRef} isDark={isDark} />
+                    <CarouselCard item={item} chatTheme={chatTheme} setChatTheme={setChatTheme} scrollToForm={scrollToForm} paperStackRef={paperStackRef} isDark={isDark} onLightboxChange={handleLightboxChange} />
                   </div>
                 </div>
               </div>
@@ -1120,6 +1145,12 @@ function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () 
           {CAROUSEL_ITEMS[activeIdx].label} · {activeIdx + 1} / {N}
         </p>
       </div>
+
+      {/* Lightbox portal — outside any filter/transform stacking context */}
+      {lightboxData && createPortal(
+        <LightboxModal slide={lightboxData.slide} onClose={lightboxData.onClose} onPrev={lightboxData.onPrev} onNext={lightboxData.onNext} />,
+        document.body
+      )}
     </div>
   );
 }
