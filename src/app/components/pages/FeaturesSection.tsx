@@ -603,7 +603,7 @@ function CustomizedChatLoop({ onGetStarted }) {
   useEffect(() => { runLoop(); return clearAll; }, []);
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [visibleMessages, typingIdx]);
 
-  const customChips = ['About SYNABS', 'Custom options', 'Pricing'];
+  const customChips = ['About', 'Custom options', 'Pricing'];
 
   return (
     <div style={{ width: 320, position: 'relative', height: CHAT_PANEL_HEIGHT }}>
@@ -734,10 +734,10 @@ function CustomizedChatLoop({ onGetStarted }) {
 
 
 const SLIDES = [
-  { src: '/pg-4.avif', label: 'Page 4' },
-  { src: '/pg-3.avif', label: 'Page 3' },
-  { src: '/pg-2.avif', label: 'Page 2' },
-  { src: '/pg-1.avif', label: 'Page 1' },
+  { src: '/db-1.avif', label: 'Page 1' },
+  { src: '/db-2.avif', label: 'Page 2' },
+  { src: '/db-3.avif', label: 'Page 3' },
+  { src: '/db-4.avif', label: 'Page 4' },
 ];
 
 function LightboxModal({ slide, onClose, onPrev, onNext }) {
@@ -991,7 +991,7 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center mt-16">
+            className="flex justify-center mt-10">
             <button
               onClick={scrollToForm}
               className="group inline-flex items-center gap-3 px-10 py-4 rounded-full text-base font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
