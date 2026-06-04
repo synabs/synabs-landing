@@ -40,7 +40,6 @@ export function SectionNav() {
   }, []);
 
   const scrollTo = (id: string) => {
-    setActive(id);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
