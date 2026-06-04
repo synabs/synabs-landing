@@ -333,10 +333,11 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 {/* Price row — same structure as regular, dashes instead */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                      <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9 }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, minHeight: 65 }}>
+                      <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9, alignSelf: 'flex-end' }}>
                         —
                       </span>
+                      <span style={{ fontSize: 22, color: 'transparent', fontWeight: 300, paddingBottom: 4, userSelect: 'none' }}>€</span>
                     </div>
                     <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
