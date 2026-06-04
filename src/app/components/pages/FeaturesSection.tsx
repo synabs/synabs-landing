@@ -268,7 +268,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       <img src={theme.avatarSrc} alt="TIA" className="w-full h-full object-contain p-0.5" style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">Synabs Agent</span>
+                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">SYNABS Agent</span>
                       <span style={{ background: theme.accentDot }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
                     </div>
                   </div>
@@ -337,7 +337,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       {msg.from === 'bot' && (
                         <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                           className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                          <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                         </div>
                       )}
                       <div style={{
@@ -356,7 +356,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       className="flex gap-1.5">
                       <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}` }}
                         className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 mt-0.5">
-                        <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" />
+                        <img src={theme.avatarSrc} alt="" className="w-full h-full object-contain p-0.5" style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                       </div>
                       <div style={{ background: theme.msgBg, border: `1px solid ${theme.border}`, borderRadius: '2px 10px 10px 10px' }}
                         className="flex items-center gap-1 px-2.5 py-2">
@@ -497,8 +497,8 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                 {/* Footer */}
                 <div style={{ background: theme.headerBg }} className="flex items-center gap-1 py-2 justify-center flex-shrink-0">
                   <span style={{ color: theme.subtleText, fontSize: '9px', letterSpacing: '0.04em' }}>Powered by</span>
-                  <img src="/logo-white.avif" alt="" className="h-2.5 opacity-50"
-                    style={{ filter: isLight ? 'brightness(0)' : 'brightness(2)' }} />
+                  <img src="/synabs-white.avif" alt="" className="h-2.5 opacity-50"
+                    style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                 </div>
               </div>
             </motion.div>
@@ -511,16 +511,16 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
 
 /* ─── CUSTOMIZED CHAT CONVERSATION ──────────────────────────── */
 const CUSTOM_CONVERSATION = [
-  { from: 'bot',  text: "Hello! I'm your Agent. This is a fully customized version — every element, from colors to content, is tailored to your brand.", delay: 800 },
+  { from: 'bot',  text: "Hello! I'm your Agent. This is a fully customized version: every element, from colors to content, is tailored to your brand.", delay: 800 },
   { from: 'user', text: 'Interesting, which parts can be customized?', delay: 5000, inputTyping: 'Interesting, which parts can be customized?' },
-  { from: 'bot',  text: "Everything you see here — header colors, avatar, message bubbles, fonts, and the conversation flow itself. As you can tell from this chat.", delay: 7200 },
+  { from: 'bot',  text: "Everything you see here: header colors, avatar, message bubbles, fonts, and the conversation flow itself. As you can tell from this chat.", delay: 7200 },
   { from: 'user', text: 'What does it cost?', delay: 11500, inputTyping: 'What does it cost?' },
   { from: 'bot',  text: 'Full customization is included in all plans. If you prefer our standard look (with a link to our site in the footer), you get a 20% discount — unlimited.', delay: 13500 },
   { from: 'user', text: "I'm interested in full customization. Where can I read more?", delay: 18500, inputTyping: "I'm interested in full customization. Where can I read more?" },
   { from: 'bot',  text: 'Great choice! You can explore all our plans and services here:', delay: 21000 },
   { from: 'bot',  text: '__PRICING_BUTTON__', delay: 23200 },
   { from: 'user', text: 'Ok, I\'ll check it out later.', delay: 26000, inputTyping: "Ok, I'll check it out later." },
-  { from: 'bot',  text: 'Sounds good! In the meantime — you can try your own AI Agent free for 14 days. Want to get started?', delay: 28000 },
+  { from: 'bot',  text: 'Sounds good! In the meantime, you can try your own AI Agent free for 14 days. Want to get started?', delay: 28000 },
   { from: 'user', text: 'That could be interesting!', delay: 32500, inputTyping: 'That could be interesting!' },
   { from: 'bot',  text: "Excellent! Just fill out a short form and we'll be in touch as soon as possible.", delay: 34500 },
   { from: 'bot',  text: '__TRIAL_BUTTON__', delay: 37000 },
@@ -603,7 +603,7 @@ function CustomizedChatLoop({ onGetStarted }) {
   useEffect(() => { runLoop(); return clearAll; }, []);
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [visibleMessages, typingIdx]);
 
-  const customChips = ['About Synabs', 'Custom options', 'Pricing'];
+  const customChips = ['About SYNABS', 'Custom options', 'Pricing'];
 
   return (
     <div style={{ width: 320, position: 'relative', height: CHAT_PANEL_HEIGHT }}>
@@ -635,7 +635,7 @@ function CustomizedChatLoop({ onGetStarted }) {
 
                 {/* Header — musta kuten ver2 */}
                 <div style={{ background: '#1a1a1a', height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 0 16px', flexShrink: 0 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>Synabs Agent</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>SYNABS Agent</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
                       <svg width="3" height="14" viewBox="0 0 4 16" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/></svg>
@@ -659,7 +659,7 @@ function CustomizedChatLoop({ onGetStarted }) {
                           transition={{ duration: 0.25 }}
                           style={{ display: 'flex', gap: 8, flexDirection: msg.from === 'user' ? 'row-reverse' : 'row' }}>
                           {msg.from === 'bot' && (
-                            <div style={{ width: 34, height: 34, borderRadius: '50%', flexShrink: 0, marginTop: 2, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                            <div style={{ width: 34, height: 34, borderRadius: '50%', flexShrink: 0, marginTop: 2, background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                               <img src="/lg-aw.avif" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4 }} />
                             </div>
                           )}
@@ -686,7 +686,7 @@ function CustomizedChatLoop({ onGetStarted }) {
                         <motion.div key="typing"
                           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
                           style={{ display: 'flex', gap: 8 }}>
-                          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2, overflow: 'hidden' }}>
+                          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2, overflow: 'hidden' }}>
                             <img src="/lg-aw.avif" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 4 }} />
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '10px 14px', background: '#2a2a2a', borderRadius: '14px 14px 14px 8px' }}>
@@ -942,7 +942,7 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
 
           <div className="flex flex-col gap-16">
             {/* Row 1: chats + analytics side by side */}
-            <div className="flex flex-col lg:flex-row items-start gap-16 lg:gap-12">
+            <div className="flex flex-col lg:flex-row items-start justify-center gap-16 lg:gap-12">
               <motion.div
                 initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
