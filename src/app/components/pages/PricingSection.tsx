@@ -283,8 +283,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   const active = selectedTheme === opt.id;
                   return (
                     <SelectorButton key={opt.id} active={active} onClick={() => { setSelectedTheme((v) => (v === opt.id ? '' : opt.id)); setError(''); }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
-                        {opt.title}
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
+                        <span>{opt.title}</span>
                         {opt.badge && (
                           <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>
                             {opt.badge}
@@ -308,7 +308,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     key={p.id}
                     onClick={() => { setPlanIdx(i); setError(''); }}
                     style={{
-                      padding: '8px 24px 10px',
+                      flex: 1,
+                      padding: '8px 0 10px',
                       fontSize: 14,
                       fontWeight: 400,
                       border: 'none',
@@ -321,6 +322,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       letterSpacing: '0.03em',
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: 8,
                     }}
                   >
@@ -349,8 +351,11 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     {/* Same font sizes & margins as regular plan rows — must match exactly:
                         regular has: chatsPerDay (17px, mb 4) + messagesLimit (13px, mb 2) + overage (12px)
                         custom must occupy identical vertical space */}
-                    <p style={{ color: c.muted, fontSize: 14, margin: '0 0 4px', fontWeight: 300, maxWidth: 260, textAlign: 'right', lineHeight: 1.5 }}>
-                      Tell us what you need, we'll build it around you. From custom integrations to longer cooperation.
+                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      Tell us what you need, we'll build it around you.
+                    </p>
+                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      From custom integrations to longer cooperation.
                     </p>
                     <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
                   </div>
@@ -512,6 +517,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 position: 'relative',
                 maxHeight: '90vh',
                 overflowY: 'auto',
+                scrollbarWidth: 'thin',
+                scrollbarColor: `${isDark ? '#3f3f46' : '#d4d4d8'} transparent`,
               }}
             >
               {/* Close */}
@@ -545,7 +552,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         key={p.id}
                         onClick={() => { setFormPlanId(p.id); setFormError(''); }}
                         style={{
-                          padding: '8px 24px 10px',
+                          flex: 1,
+                          padding: '8px 0 10px',
                           fontSize: 14,
                           fontWeight: 400,
                           border: 'none',
@@ -556,6 +564,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                           marginBottom: -1,
                           transition: 'all 0.2s',
                           letterSpacing: '0.03em',
+                          textAlign: 'center',
                         }}
                       >
                         {p.name}
@@ -574,8 +583,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       const active = formTheme === opt.id;
                       return (
                         <SelectorButton key={opt.id} active={active} onClick={() => { setFormTheme(opt.id); setFormError(''); }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
-                            {opt.title}
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
+                            <span>{opt.title}</span>
                             {opt.badge && <span style={{ fontSize: 12, color: active ? c.green : c.faint }}>{opt.badge}</span>}
                           </span>
                         </SelectorButton>
@@ -608,19 +617,19 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Personal info */}
               <div style={{ marginBottom: 12, marginTop: isFormCustom ? 0 : 8 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Name</p>
-                <input type="text" placeholder="First Name" value={contactForm.name}
+                <input type="text" placeholder="" value={contactForm.name}
                   onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))} style={inputStyle} />
               </div>
 
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Email</p>
-                <input type="email" placeholder="your@company.com" value={contactForm.email}
+                <input type="email" placeholder="" value={contactForm.email}
                   onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))} style={inputStyle} />
               </div>
 
               <div style={{ marginBottom: 12 }}>
                 <p style={{ ...sectionLabel, marginBottom: 8 }}>Company</p>
-                <input type="text" placeholder="Company Inc." value={contactForm.company}
+                <input type="text" placeholder="" value={contactForm.company}
                   onChange={(e) => setContactForm((f) => ({ ...f, company: e.target.value }))} style={inputStyle} />
               </div>
 
