@@ -60,8 +60,8 @@ const PLANS = [
 ];
 
 const THEMES = [
-  { id: 'synabs', title: 'On frontside', badge: '−20% forever' },
   { id: 'backside', title: 'On backside', badge: null },
+  { id: 'synabs', title: 'On frontside', badge: '−20% forever' },
 ];
 
 interface PricingSectionProps {
@@ -241,22 +241,28 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       gap: 8,
                     }}
                   >
-                    {p.name}
-                    {p.popular && (
-                      <span style={{
-                        fontSize: 10,
-                        fontWeight: 500,
-                        color: i === planIdx ? c.bg : c.tabInactive,
-                        background: i === planIdx ? c.tabActive : 'transparent',
-                        border: `0.5px solid ${i === planIdx ? c.tabActive : c.tabInactive}`,
-                        borderRadius: 4,
-                        padding: '1px 6px',
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                      }}>
-                        Most popular
-                      </span>
-                    )}
+                    <span style={{ position: 'relative' }}>
+                      {p.name}
+                      {p.popular && (
+                        <span style={{
+                          position: 'absolute',
+                          top: -18,
+                          right: -52,
+                          fontSize: 9,
+                          fontWeight: 500,
+                          color: i === planIdx ? c.bg : c.faint,
+                          background: i === planIdx ? c.tabActive : 'transparent',
+                          border: `0.5px solid ${i === planIdx ? c.tabActive : c.faint}`,
+                          borderRadius: 4,
+                          padding: '1px 5px',
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          whiteSpace: 'nowrap',
+                        }}>
+                          Most popular
+                        </span>
+                      )}
+                    </span>
                   </button>
                 ))}
               </div>
