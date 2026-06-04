@@ -12,7 +12,19 @@ export function EvolvingSection() {
       id="evolving"
       style={{ background: '#09090b', padding: '96px 24px' }}
     >
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 64 }}>
+
+        {/* Left image */}
+        <div style={{ flex: '0 0 420px' }}>
+          <img
+            src="/bg-nd.avif"
+            alt=""
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
+
+        {/* Right content */}
+        <div style={{ flex: 1 }}>
 
         {/* Header */}
         <div style={{ marginBottom: 64, textAlign: 'right' }}>
@@ -75,6 +87,9 @@ export function EvolvingSection() {
               </div>
             ))}
           </div>
+        </div>
+
+        </div>
         </div>
 
       </div>
