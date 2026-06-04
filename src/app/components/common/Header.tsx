@@ -56,7 +56,7 @@ export function Header({ isDark, onGetStarted }: HeaderProps) {
               <img
                 src={isDark ? '/synabs-white.avif' : '/synabs-white.avif'}
                 alt="TIA AI"
-                className="h-12 w-auto object-contain"
+                className="h-8 w-auto object-contain"
               />
             </motion.div>
             <nav className="hidden md:flex items-center gap-0.5">
