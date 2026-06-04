@@ -31,6 +31,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       </video>
 
       <div className="absolute inset-0 bg-black/85" style={{ zIndex: 0 }} />
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: '220px', background: 'linear-gradient(to bottom, transparent, #000000)', zIndex: 2 }} />
       <ParticleField count={20} />
 
       <img
