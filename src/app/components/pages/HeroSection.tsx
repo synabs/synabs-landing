@@ -17,7 +17,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       <ParticleField count={20} />
 
       <img
-        src="/bg-nd.avif"
+        src="/bg-st.avif"
         alt=""
         className="absolute pointer-events-none select-none"
         style={{
