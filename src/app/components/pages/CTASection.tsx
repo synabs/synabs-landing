@@ -27,26 +27,7 @@ export function CTASection({ activeTheme, onGetStarted }: CTASectionProps) {
         <div className="absolute inset-0 bg-black" />
         <ParticleField count={20} />
 
-        <img
-          src="/bg-nd.avif"
-          alt=""
-          className="absolute pointer-events-none select-none"
-          style={{
-            right: '5%',
-            bottom: '8%',
-            width: '68%',
-            maxWidth: '980px',
-            minWidth: '420px',
-            height: 'auto',
-            maxHeight: '92vh',
-            objectFit: 'contain',
-            objectPosition: 'bottom right',
-            opacity: 0.9,
-            maskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)',
-            zIndex: 1,
-          }}
-        />
+
 
         <div className="relative z-10 flex items-center justify-center text-center" style={{ minHeight: '100vh' }}>
           <div className="max-w-3xl mx-auto w-full px-6">
