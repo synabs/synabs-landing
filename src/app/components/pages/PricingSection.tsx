@@ -121,7 +121,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
           background: c.bg,
         }}
       >
-        <div className="max-w-xl mx-auto w-full">
+        <div className="max-w-2xl mx-auto w-full">
 
           {/* Header */}
           <motion.div
@@ -131,13 +131,13 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             transition={{ duration: 0.6, ease: 'easeOut' }}
             style={{ marginBottom: 48 }}
           >
-            <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 12px', fontWeight: 400 }}>
+            <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 16px', fontWeight: 400 }}>
               Pricing
             </p>
-            <h2 style={{ color: c.text, fontSize: 38, fontWeight: 300, margin: '0 0 10px', letterSpacing: -1, lineHeight: 1.1 }}>
-              Hire Your<br />AI Agent
+            <h2 style={{ color: c.text, fontSize: 56, fontWeight: 300, margin: '0 0 12px', letterSpacing: -2, lineHeight: 1.05, whiteSpace: 'nowrap' }}>
+              Hire Your AI Agent
             </h2>
-            <p style={{ color: c.muted, fontSize: 14, margin: 0, fontWeight: 300 }}>
+            <p style={{ color: c.label, fontSize: 15, margin: 0, fontWeight: 300 }}>
               Save thousands every month with AI automation.
             </p>
           </motion.div>
