@@ -330,43 +330,24 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {/* ── Plan content — IDENTICAL HEIGHT for all plans ── */}
             {isCustom ? (
               <>
-                {/* Price row — same structure as regular, dashes instead */}
+                {/* Price row */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
-                  <div style={{ position: 'relative' }}>
-                    {/* Ghost — invisible, sets exact height of regular price block */}
-                    <div style={{ visibility: 'hidden' }}>
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <span style={{ fontSize: 72, fontWeight: 200, letterSpacing: -3, lineHeight: 0.9 }}>699</span>
-                        <span style={{ fontSize: 22, fontWeight: 300, paddingBottom: 4 }}>€</span>
-                      </div>
-                      <p style={{ fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
+                  <div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ display: 'block', fontSize: 72, fontWeight: 200, color: 'transparent', letterSpacing: -3, lineHeight: 0.9, userSelect: 'none' }}>0</span>
+                      <span style={{ display: 'block', fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0, marginTop: -65 }}>—</span>
                     </div>
-                    {/* Real content overlaid */}
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                        <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9 }}>—</span>
-                      </div>
-                      <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
-                    </div>
+                    <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
                   </div>
-                  <div style={{ textAlign: 'right', paddingBottom: 4, position: 'relative' }}>
-                    {/* Ghost layer — invisible, sets exact dimensions matching L plan */}
-                    <div style={{ visibility: 'hidden' }}>
-                      <div style={{ height: RESERVED_BADGE_HEIGHT }} />
-                      <p style={{ fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>~20–40 chats a day</p>
-                      <p style={{ fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>10,000 messages / month</p>
-                      <p style={{ fontSize: 12, margin: 0, fontWeight: 300, whiteSpace: 'nowrap' }}>+€0.06 / message overage</p>
-                    </div>
-                    {/* Real content — overlaid absolutely */}
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end', paddingBottom: 4 }}>
-                      <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>
-                        Tell us what you need
-                      </p>
-                      <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
-                        From custom integrations to longer cooperation.
-                      </p>
-                      <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300, whiteSpace: 'nowrap' }}>&nbsp;</p>
-                    </div>
+                  <div style={{ textAlign: 'right', paddingBottom: 4 }}>
+                    <div style={{ height: RESERVED_BADGE_HEIGHT, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }} />
+                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      Tell us what you need
+                    </p>
+                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      From custom integrations to longer cooperation.
+                    </p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
                   </div>
                 </div>
 
