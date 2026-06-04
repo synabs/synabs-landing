@@ -41,15 +41,14 @@ export function SectionNav() {
     <nav
       style={{
         position: 'fixed',
-        left: 24,
-        top: '50%',
-        transform: 'translateY(-50%)',
+        left: 'max(24px, calc(50% - 680px))',
+        top: 80,
         zIndex: 100,
         fontFamily: '"Courier New", Courier, monospace',
-        fontSize: 11,
+        fontSize: 13,
         display: 'flex',
         flexDirection: 'column',
-        gap: 6,
+        gap: 8,
         userSelect: 'none',
       }}
     >
@@ -67,20 +66,19 @@ export function SectionNav() {
               textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
-              color: isActive ? '#00BC7D' : 'rgba(255,255,255,0.25)',
+              gap: 7,
+              color: isActive ? '#ffffff' : 'rgba(255,255,255,0.22)',
               transition: 'color 0.2s',
               letterSpacing: '0.03em',
             }}
           >
-            <span style={{ width: 10, display: 'inline-block', color: isActive ? '#00BC7D' : 'transparent' }}>
+            <span style={{ width: 14, display: 'inline-block', color: isActive ? '#ffffff' : 'transparent' }}>
               {isActive ? '~$' : '>'}
             </span>
             <span>{label}</span>
           </button>
         );
       })}
-
     </nav>
   );
 }
