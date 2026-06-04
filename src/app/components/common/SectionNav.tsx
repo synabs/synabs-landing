@@ -7,7 +7,7 @@ const sections = [
   { id: 'features',    label: 'features' },
   { id: 'pricing',     label: 'pricing' },
   { id: 'faq',         label: 'faq' },
-  { id: 'cta',         label: 'cta' },
+  { id: 'cta',         label: 'free_trial' },
 ];
 
 export function SectionNav() {
@@ -41,7 +41,7 @@ export function SectionNav() {
     <nav
       style={{
         position: 'fixed',
-        left: 'max(24px, calc(50% - 680px))',
+        left: 'max(8px, calc(50% - 720px))',
         top: 80,
         zIndex: 100,
         fontFamily: '"Courier New", Courier, monospace',
