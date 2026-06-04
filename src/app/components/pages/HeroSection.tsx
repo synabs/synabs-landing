@@ -76,20 +76,20 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               transition={{ delay: 0.2 }}
               className="flex flex-col sm:flex-row items-center gap-4 mb-7"
             >
-              <button
-                onClick={onGetStarted}
-                className="group inline-flex items-center gap-3 rounded-full font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
-                style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
-              >
-                Start_free_trial <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
-              </button>
               <a
                 href="#tia-in-action"
-                className="rounded-full font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
+                className="rounded-full font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
                 style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
               >
-                See_it_live
+                See it live
               </a>
+              <button
+                onClick={onGetStarted}
+                className="inline-flex items-center rounded-full font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
+                style={{ padding: '1rem 2.2rem', fontSize: '1.05rem' }}
+              >
+                Start free trial
+              </button>
               <img
                 src="/cortex-1.04.avif"
                 alt="AI Engine"
