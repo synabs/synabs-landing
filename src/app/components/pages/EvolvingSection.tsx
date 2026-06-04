@@ -128,7 +128,7 @@ export function EvolvingSection() {
               }}
             >
               <div style={{
-                fontSize: 'clamp(2rem, 3vw, 2.75rem)',
+                fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
                 fontWeight: 300,
                 color: '#ffffff',
                 letterSpacing: '-0.03em',
