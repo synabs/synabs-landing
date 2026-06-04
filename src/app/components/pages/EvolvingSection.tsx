@@ -17,9 +17,22 @@ export function EvolvingSection() {
         {/* Left image */}
         <div style={{ flex: '0 0 780px', marginLeft: '-180px' }}>
           <video
+            ref={(el) => {
+              if (!el) return;
+              let forward = true;
+              el.addEventListener('ended', () => {
+                if (forward) {
+                  el.playbackRate = -1;
+                  forward = false;
+                } else {
+                  el.playbackRate = 1;
+                  forward = true;
+                }
+                el.play();
+              });
+            }}
             src="/bg-rd.mp4"
             autoPlay
-            loop
             muted
             playsInline
             style={{ width: '100%', height: 'auto', display: 'block' }}
