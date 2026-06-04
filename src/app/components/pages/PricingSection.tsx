@@ -242,7 +242,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             transition={{ duration: 0.6, ease: 'easeOut' }}
             style={{ marginBottom: 48 }}
           >
-            <h2 style={{ color: c.text, fontSize: 56, fontWeight: 300, margin: '0 0 12px', letterSpacing: -2, lineHeight: 1.05, whiteSpace: 'nowrap' }}>
+            <h2 style={{ color: c.text, fontSize: 'clamp(32px, 7vw, 56px)', fontWeight: 300, margin: '0 0 12px', letterSpacing: -2, lineHeight: 1.05 }}>
               Hire Your AI Agent
             </h2>
             <p style={{ color: c.label, fontSize: 18, margin: 0, fontWeight: 300 }}>
@@ -349,15 +349,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     {/* Same font sizes & margins as regular plan rows — must match exactly:
                         regular has: chatsPerDay (17px, mb 4) + messagesLimit (13px, mb 2) + overage (12px)
                         custom must occupy identical vertical space */}
-                    <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
-                      Tell us what you need,
+                    <p style={{ color: c.muted, fontSize: 14, margin: '0 0 4px', fontWeight: 300, maxWidth: 260, textAlign: 'right', lineHeight: 1.5 }}>
+                      Tell us what you need, we'll build it around you. From custom integrations to longer cooperation.
                     </p>
-                    <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
-                      we'll build it around you.
-                    </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>
-                      From custom integrations to longer cooperation.
-                    </p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
                   </div>
                 </div>
 
@@ -470,7 +465,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                Get started
+                {isCustom ? 'Send request' : 'Get started'}
               </button>
             </div>
 
@@ -601,7 +596,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         <SelectorButton key={opt.id} active={active} onClick={() => { setFormAnalytics(opt.id); setFormError(''); }}>
                           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400 }}>
                             <span>{opt.label}</span>
-                            <span style={{ fontSize: 12, color: opt.id === 'advanced' ? c.green : c.faint }}>{opt.price}</span>
+                            <span style={{ fontSize: 12, color: (opt.id === 'advanced' && active) ? c.green : c.faint }}>{opt.price}</span>
                           </span>
                         </SelectorButton>
                       );
@@ -635,8 +630,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 </p>
                 <textarea
                   placeholder={isFormCustom
-                    ? "We're happy to explore new fields, and any learning curve is reflected fairly in the pricing."
-                    : 'Any questions or context...'}
+                    ? "We're happy to explore new fields, and any learning curve is reflected fairly in the pricing"
+                    : 'Share your thoughts, and we\'ll be happy to answer'}
                   value={contactForm.message}
                   onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
                   rows={isFormCustom ? 4 : 3}
