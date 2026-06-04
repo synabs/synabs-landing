@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            We handle it all, training your AI agent on your business data and installing it on your website with a single line of code. It learns from every interaction, captures leads, answers questions, and helps grow your business.
+            Our AI agent identifies and engages your ideal customers, provides instant answers based on your business data, and continuously improves with every interaction. Simply add one line of code to your website and let your AI agent work around the clock. No technical skills required.
           </p>
 
           <CmdStat />
