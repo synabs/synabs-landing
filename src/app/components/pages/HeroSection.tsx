@@ -37,7 +37,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
         }}
       />
 
-      <div className="relative z-10 flex items-center" style={{ minHeight: '100vh' }}>
+      <div className="relative z-10 flex items-start" style={{ minHeight: '100vh', paddingTop: '18vh' }}>
         <div className="max-w-6xl mx-auto w-full px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
