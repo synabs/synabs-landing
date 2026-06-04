@@ -2,7 +2,7 @@ import React from 'react';
 
 const STATS = [
   { value: '200+', label: 'Prompt improvements per week' },
-  { value: '75', label: 'Quality signals analysed per cycle' },
+  { value: '75', label: 'Quality signals analysed' },
   { value: '7 days', label: 'Between each evolution cycle' },
 ];
 
