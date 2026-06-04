@@ -1,16 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Check } from 'lucide-react';
-import { ParticleField } from '../common/ParticleField';
 
 const PLANS = [
   {
-    id: 'M',
+    id: 'S',
     name: 'S',
     label: 'Core',
-    price: '149€',
-    priceNum: 149,
-    period: '/month',
+    priceNum: 199,
     chatsPerDay: '3–5 chats a day',
     messagesLimit: '1,000 messages / month',
     additionalUsage: '€0.02 / message',
@@ -21,15 +17,12 @@ const PLANS = [
       'Email support',
       '48h setup',
     ],
-    highlight: false,
   },
   {
-    id: 'L',
+    id: 'M',
     name: 'M',
     label: 'Pro',
-    price: '299€',
-    priceNum: 299,
-    period: '/month',
+    priceNum: 399,
     chatsPerDay: '6–10 chats a day',
     messagesLimit: '2,500 messages / month',
     additionalUsage: '€0.01 / message',
@@ -41,15 +34,12 @@ const PLANS = [
       'Lead capture integration',
       'Priority support',
     ],
-    highlight: true,
   },
   {
-    id: 'XL',
+    id: 'L',
     name: 'L',
     label: 'Enterprise',
-    price: '699€',
     priceNum: 699,
-    period: '/month',
     chatsPerDay: '20–40 chats a day',
     messagesLimit: '10,000 messages / month',
     additionalUsage: '€0.01 / message',
@@ -61,7 +51,21 @@ const PLANS = [
       'Lead capture integration',
       'Priority support',
     ],
-    highlight: false,
+  },
+];
+
+const THEMES = [
+  {
+    id: 'synabs',
+    title: 'SYNABS Theme',
+    subtitle: 'White or Black',
+    badge: '−20% forever',
+  },
+  {
+    id: 'custom',
+    title: 'Custom Theme',
+    subtitle: 'Fully personalized',
+    badge: null,
   },
 ];
 
@@ -72,48 +76,35 @@ interface PricingSectionProps {
 
 export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProps) {
   const isDark = activeTheme === 'dark';
-  const [planIdx, setPlanIdx] = useState(0);
-  const [addonBotSetup, setAddonBotSetup] = useState('');
-  const plan = PLANS[planIdx];
-  const discountedPrice = addonBotSetup === 'tia' ? Math.round(plan.priceNum * 0.80) : plan.priceNum;
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
+  const [planIdx, setPlanIdx] = useState(1);
+  const [selectedTheme, setSelectedTheme] = useState('');
   const sectionRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start 0.9', 'center center'] });
+  const plan = PLANS[planIdx];
+  const discountedPrice =
+    selectedTheme === 'synabs' ? Math.round(plan.priceNum * 0.8) : plan.priceNum;
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 0.9', 'center center'],
+  });
   const scale = useTransform(scrollYProgress, [0, 1], [0.88, 1]);
   const blurVal = useTransform(scrollYProgress, [0, 0.6], [10, 0]);
-  const sectionFilter = useTransform(blurVal, b => `blur(${b}px)`);
+  const sectionFilter = useTransform(blurVal, (b) => `blur(${b}px)`);
   const opacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
 
-  const trackBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const fillColor = isDark ? '#ffffff' : '#000000';
-  const fillPct = (planIdx / (PLANS.length - 1)) * 100;
-
-  const getPctFromEvent = (clientX: number) => {
-    const rect = trackRef.current!.getBoundingClientRect();
-    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-  };
-
-  const snapToNearest = (pct: number) => {
-    setPlanIdx(Math.round(pct * (PLANS.length - 1)));
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    isDragging.current = true;
-    e.preventDefault();
-    const move = (e: MouseEvent) => { if (!isDragging.current) return; snapToNearest(getPctFromEvent(e.clientX)); };
-    const up = () => { isDragging.current = false; window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    isDragging.current = true;
-    const move = (e: TouchEvent) => { if (!isDragging.current) return; snapToNearest(getPctFromEvent(e.touches[0].clientX)); };
-    const end = () => { isDragging.current = false; window.removeEventListener('touchmove', move); window.removeEventListener('touchend', end); };
-    window.addEventListener('touchmove', move);
-    window.addEventListener('touchend', end);
+  const c = {
+    label: isDark ? '#555' : '#999',
+    muted: isDark ? '#444' : '#aaa',
+    faint: isDark ? '#2a2a2a' : '#ccc',
+    border: isDark ? '#1e1e1e' : '#e5e5e5',
+    borderActive: isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.5)',
+    text: isDark ? '#fff' : '#000',
+    bg: isDark ? '#000' : '#fff',
+    tabActive: isDark ? '#fff' : '#000',
+    tabInactive: isDark ? '#444' : '#bbb',
+    cardBg: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+    green: '#4ade80',
   };
 
   return (
@@ -122,172 +113,192 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
         ref={sectionRef}
         id="pricing"
         style={{ scale, filter: sectionFilter, opacity }}
-        className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-700 ${isDark ? 'bg-black' : 'bg-white'} py-16 px-6 relative overflow-hidden`}
+        className={`min-h-screen flex flex-col items-center justify-center transition-colors duration-700 py-24 px-6 relative`}
+        style={{
+          scale,
+          filter: sectionFilter,
+          opacity,
+          background: c.bg,
+        }}
       >
-        <ParticleField count={isDark ? 10 : 0} />
-        <div className="max-w-2xl mx-auto w-full relative z-10">
+        <div className="max-w-xl mx-auto w-full">
+
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.4 }} className="text-center mb-10">
-            <h2 className="text-5xl md:text-6xl font-light mb-3 text-white">
-              Hire Your <span style={{ color: '#ffffff' }}>AI Agent</span>
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.4 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            style={{ marginBottom: 48 }}
+          >
+            <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 12px', fontWeight: 400 }}>
+              Pricing
+            </p>
+            <h2 style={{ color: c.text, fontSize: 38, fontWeight: 300, margin: '0 0 10px', letterSpacing: -1, lineHeight: 1.1 }}>
+              Hire Your<br />AI Agent
             </h2>
-            <p className="text-lg font-light text-zinc-500">Save thousands every month with AI automation.</p>
+            <p style={{ color: c.muted, fontSize: 14, margin: 0, fontWeight: 300 }}>
+              Save thousands every month with AI automation.
+            </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.88 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ type: 'spring', stiffness: 220, damping: 26, delay: 0.1 }}
-            className={`rounded-2xl p-8 relative border transition-colors duration-300 ${isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-50 border-zinc-200'}`}
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.08 }}
           >
-            {/* Plan selector */}
-            <div className={`mb-6 pb-6 border-b ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-              <div className="flex justify-between mb-3">
-                {PLANS.map((p, i) => (
-                  <button key={p.id} onClick={() => setPlanIdx(i)}
-                    className={`flex flex-col items-center gap-0.5 transition-colors ${
-                      i === planIdx
-                        ? isDark ? 'text-white' : 'text-zinc-950'
-                        : isDark ? 'text-zinc-600 hover:text-zinc-400' : 'text-zinc-400 hover:text-zinc-600'
-                    }`}>
-                    <span className="text-xs font-semibold">{p.name}</span>
-                  </button>
-                ))}
-              </div>
-              <div
-                ref={trackRef}
-                className="relative h-4 rounded-full cursor-pointer select-none"
-                style={{ background: trackBg }}
-                onClick={e => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  setPlanIdx(Math.round(((e.clientX - rect.left) / rect.width) * (PLANS.length - 1)));
-                }}
-              >
-                <div className="absolute left-0 top-0 h-full rounded-full transition-all duration-200"
-                  style={{ width: `${fillPct}%`, background: fillColor }} />
-                <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 rounded-full cursor-grab active:cursor-grabbing"
-                  style={{
-                    left: `${fillPct}%`,
-                    background: fillColor,
-                    border: `3px solid ${isDark ? '#3f3f46' : '#e4e4e7'}`,
-                    boxShadow: isDark
-                      ? '0 0 0 2px rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.5)'
-                      : '0 0 0 2px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.2)',
-                    transition: 'left 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  }}
-                  whileHover={{ scale: 1.25 }}
-                  whileTap={{ scale: 1.15 }}
-                  onMouseDown={handleMouseDown}
-                  onTouchStart={handleTouchStart}
-                />
-              </div>
-            </div>
 
-            {/* Bot Setup */}
-            <div className={`mb-6 pb-6 border-b ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-              <p className={`text-xs font-semibold mb-3 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Bot Setup</p>
-              <div className="flex flex-col gap-2">
-                {[
-                  { id: 'tia', title: 'TIA Theme', subtitle: 'White or Black', badge: '−20% forever', badgeColor: 'text-emerald-400' },
-                  { id: 'custom', title: 'Custom Theme', subtitle: 'Fully personalized', badge: null, badgeColor: '' },
-                ].map(opt => {
-                  const active = addonBotSetup === opt.id;
+            {/* Theme selector */}
+            <div style={{ marginBottom: 36 }}>
+              <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.10em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+                Choose your theme
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {THEMES.map((opt) => {
+                  const active = selectedTheme === opt.id;
                   return (
-                    <button key={opt.id}
-                      onClick={() => setAddonBotSetup(v => v === opt.id ? '' : opt.id)}
-                      className={`flex items-start gap-3 w-full text-left px-4 py-3.5 rounded-xl border transition-all ${
-                        active
-                          ? isDark ? 'border-white bg-white/10' : 'border-zinc-950 bg-zinc-950'
-                          : isDark ? 'border-zinc-700 hover:border-zinc-500' : 'border-zinc-200 hover:border-zinc-400'
-                      }`}>
-                      <div className={`mt-0.5 w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center border transition-all ${
-                        active ? 'bg-white border-white' : isDark ? 'border-zinc-600' : 'border-zinc-300'
-                      }`}>
-                        {active && <div className="w-1.5 h-1.5 rounded-full bg-zinc-950" />}
-                      </div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className={`text-xs font-semibold ${active ? 'text-white' : isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                          {opt.title}
-                          <span className={`ml-1.5 font-normal ${active ? 'opacity-70' : isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                            {opt.subtitle}
-                          </span>
-                        </p>
+                    <button
+                      key={opt.id}
+                      onClick={() => setSelectedTheme((v) => (v === opt.id ? '' : opt.id))}
+                      style={{
+                        flex: 1,
+                        padding: '14px 16px',
+                        borderRadius: 8,
+                        border: `0.5px solid ${active ? c.borderActive : c.border}`,
+                        background: active ? c.cardBg : 'transparent',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <span style={{ display: 'block', fontSize: 13, color: active ? c.text : c.label, fontWeight: 400, marginBottom: 3 }}>
+                        {opt.title}
+                      </span>
+                      <span style={{ fontSize: 11, color: c.faint }}>
+                        {opt.subtitle}
                         {opt.badge && (
-                          <span className={`text-xs font-medium ${active ? opt.badgeColor : isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                          <span style={{ marginLeft: 8, color: active ? c.green : c.faint }}>
                             {opt.badge}
                           </span>
                         )}
-                      </div>
+                      </span>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Size badge + price */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className={`text-6xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-zinc-950'}`}>{plan.name}</span>
-                <span className={`text-2xl font-light ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>{plan.label}</span>
-                {plan.highlight && (
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${isDark ? 'bg-zinc-800 text-zinc-300 border border-zinc-700' : 'bg-zinc-200 text-zinc-700'}`}>
-                    Most popular
+            {/* Plan tabs */}
+            <div style={{ display: 'flex', gap: 0, marginBottom: 36, borderBottom: `0.5px solid ${c.border}` }}>
+              {PLANS.map((p, i) => (
+                <button
+                  key={p.id}
+                  onClick={() => setPlanIdx(i)}
+                  style={{
+                    padding: '8px 28px 10px',
+                    fontSize: 13,
+                    fontWeight: 400,
+                    border: 'none',
+                    background: 'transparent',
+                    color: i === planIdx ? c.tabActive : c.tabInactive,
+                    cursor: 'pointer',
+                    borderBottom: `1px solid ${i === planIdx ? c.tabActive : 'transparent'}`,
+                    marginBottom: -1,
+                    transition: 'all 0.2s',
+                    letterSpacing: '0.03em',
+                  }}
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Price + chats row */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                  {selectedTheme === 'synabs' && (
+                    <span style={{ fontSize: 18, color: c.faint, textDecoration: 'line-through', marginRight: 6 }}>
+                      {plan.priceNum}€
+                    </span>
+                  )}
+                  <span style={{ fontSize: 72, fontWeight: 200, color: c.text, letterSpacing: -3, lineHeight: 0.9 }}>
+                    {discountedPrice}
+                  </span>
+                  <span style={{ fontSize: 22, color: c.muted, fontWeight: 300, paddingBottom: 4 }}>€</span>
+                </div>
+                <p style={{ color: c.faint, fontSize: 12, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
+              </div>
+              <div style={{ textAlign: 'right', paddingBottom: 4 }}>
+                <p style={{ color: c.text, fontSize: 15, margin: '0 0 4px', fontWeight: 300 }}>
+                  {plan.chatsPerDay}
+                </p>
+                <p style={{ color: c.muted, fontSize: 12, margin: '0 0 2px', fontWeight: 300 }}>
+                  {plan.messagesLimit}
+                </p>
+                <p style={{ color: c.faint, fontSize: 11, margin: 0 }}>
+                  +{plan.additionalUsage} overage
+                </p>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div style={{ paddingTop: 24, borderTop: `0.5px solid ${c.border}`, marginBottom: 36 }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, columns: 2, gap: 24 }}>
+                {plan.features.map((f) => (
+                  <li
+                    key={f}
+                    style={{ fontSize: 13, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
+                  >
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* CTA row */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontSize: 14, color: c.text, fontWeight: 300 }}>
+                  {discountedPrice}€ / month
+                </span>
+                {selectedTheme === 'synabs' && (
+                  <span style={{ fontSize: 11, color: c.green, marginLeft: 10 }}>
+                    SYNABS discount applied
                   </span>
                 )}
               </div>
-              <div className="text-right">
-                {addonBotSetup === 'tia' ? (
-                  <div className="flex flex-col items-end">
-                    <div className={`text-sm line-through ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{plan.price}</div>
-                    <div className={`text-4xl font-light ${isDark ? 'text-white' : 'text-zinc-950'}`}>{discountedPrice}€</div>
-                  </div>
-                ) : (
-                  <div className={`text-4xl font-light ${isDark ? 'text-white' : 'text-zinc-950'}`}>{plan.price}</div>
-                )}
-                <div className={`text-sm ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{plan.period}</div>
-              </div>
+              <button
+                onClick={() => onGetStarted(plan.id)}
+                style={{
+                  padding: '12px 28px',
+                  borderRadius: 6,
+                  background: c.text,
+                  color: c.bg,
+                  fontSize: 13,
+                  fontWeight: 400,
+                  border: 'none',
+                  cursor: 'pointer',
+                  letterSpacing: '0.03em',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
+                onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
+              >
+                Get started
+              </button>
             </div>
 
-            {/* Messages */}
-            <div className="mb-1 flex flex-col gap-0">
-              <div className="flex items-baseline gap-0">
-                <span style={{ color: '#00BC7D' }} className="text-xs font-bold">≈ </span>
-                <span className="text-xs font-bold" style={{ color: '#00BC7D' }}>{plan.chatsPerDay}</span>
-              </div>
-              <p className={`text-xs font-medium mb-1 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>{plan.messagesLimit}</p>
-            </div>
-            <p className={`text-xs mb-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Additional usage: {plan.additionalUsage}</p>
-
-            <ul className="mb-8" style={{ height: 180, overflow: 'hidden' }}>
-              {plan.features.map(f => (
-                <li key={f} className={`flex items-center gap-3 text-sm mb-2.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  <Check className="size-4 shrink-0" style={{ color: '#00BC7D' }} />
-                  {f}
-                </li>
+            {/* Trust line */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginTop: 28, paddingTop: 24, borderTop: `0.5px solid ${c.border}` }}>
+              {['GDPR-ready', 'Encrypted cloud storage', 'Data encrypted in transit', 'Data deletion on request'].map((item) => (
+                <span key={item} style={{ fontSize: 11, color: c.faint }}>
+                  {item}
+                </span>
               ))}
-            </ul>
+            </div>
 
-            <button
-              onClick={() => onGetStarted(plan.id)}
-              className={`w-full py-3 rounded-xl text-sm font-semibold transition-all ${isDark ? 'bg-white text-zinc-950 hover:bg-zinc-100' : 'bg-zinc-950 text-white hover:bg-zinc-800'}`}>
-              Get Started
-            </button>
-            <p className={`text-xs text-center mt-2 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>Cancel anytime</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }} transition={{ delay: 0.15 }}
-            className="flex items-center justify-center gap-5 mt-5 flex-wrap">
-            {['GDPR-ready', 'Encrypted cloud storage', 'Data encrypted in transit and at rest', 'Data deletion on request'].map(item => (
-              <span key={item} className={`flex items-center gap-1.5 text-xs font-light whitespace-nowrap ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                <Check className="size-3 shrink-0" style={{ color: '#00BC7D' }} />
-                {item}
-              </span>
-            ))}
           </motion.div>
         </div>
       </motion.section>
