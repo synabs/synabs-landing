@@ -73,7 +73,7 @@ export function EvolvingSection() {
                   left: 0,
                   right: 0,
                   height: 1,
-                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 100%)',
+                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 35%)',
                 }} />
               )}
               <span style={{
@@ -115,7 +115,7 @@ export function EvolvingSection() {
             position: 'absolute',
             top: 0, left: 0, right: 0,
             height: 1,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 100%)',
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 35%)',
           }} />
           <div style={{
             display: 'grid',
