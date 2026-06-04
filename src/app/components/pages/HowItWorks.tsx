@@ -7,8 +7,8 @@ export function HowItWorks() {
     {
       number: '01',
       icon: Globe,
-      title: 'We train TIA on your business',
-      desc: 'Share your website URL, product pages, FAQs, and pricing. TIA learns your entire knowledge base in minutes — no manual input required.',
+      title: 'We train AI Agent on your business',
+      desc: 'Share your website URL, product pages, FAQs, and pricing. AI Agent learns your entire knowledge base in minutes  no manual input required.',
       detail: 'Supports any URL, PDF, or document',
     },
     {
@@ -21,15 +21,15 @@ export function HowItWorks() {
     {
       number: '03',
       icon: Target,
-      title: 'TIA starts converting visitors',
-      desc: 'From the moment it goes live, TIA greets visitors, answers questions, qualifies leads, and captures contact details — 24/7, in any language.',
+      title: 'AI Agent starts converting visitors',
+      desc: 'From the moment it goes live, AI Agent greets visitors, answers questions, qualifies leads, and captures contact details  24/7, in any language.',
       detail: 'Average 40% increase in lead capture',
     },
     {
       number: '04',
       icon: RefreshCw,
-      title: 'TIA gets smarter every week',
-      desc: 'The AI learns from every conversation. You review insights on your analytics dashboard and TIA continuously improves its responses.',
+      title: 'AI Agent gets smarter every week',
+      desc: 'The AI learns from every conversation. You review insights on your analytics dashboard and AI Agent continuously improves its responses.',
       detail: 'Weekly AI evolution cycle',
     },
   ];
@@ -51,7 +51,7 @@ export function HowItWorks() {
             From zero to live<br />in 48 hours
           </h2>
           <p className="text-lg font-light text-zinc-500 max-w-xl">
-            No technical expertise needed. We do everything — you just get more leads.
+            No technical expertise needed. We do everything  you just get more leads.
           </p>
         </motion.div>
 
