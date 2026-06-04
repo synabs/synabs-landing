@@ -342,19 +342,17 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   </div>
                   <div style={{ textAlign: 'right', paddingBottom: 4 }}>
                     {/* Reserved badge space — same as regular plans */}
-                    <div style={{ height: RESERVED_BADGE_HEIGHT }} />
+                    <div style={{ height: RESERVED_BADGE_HEIGHT, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }} />
                     {/* Same font sizes & margins as regular plan rows — must match exactly:
                         regular has: chatsPerDay (17px, mb 4) + messagesLimit (13px, mb 2) + overage (12px)
                         custom must occupy identical vertical space */}
                     <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300, whiteSpace: 'nowrap' }}>
-                      Tell us what you need,
+                      Tell us what you need
                     </p>
                     <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
-                      we'll build it around you.
-                    </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300, whiteSpace: 'nowrap' }}>
                       From custom integrations to longer cooperation.
                     </p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
                   </div>
                 </div>
 
@@ -467,7 +465,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
                 onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                {isCustom ? 'Send request' : 'Get started'}
+                {isCustom ? 'Get started' : 'Get started'}
               </button>
             </div>
 
@@ -529,13 +527,8 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Form header */}
               <div style={{ marginBottom: 28 }}>
                 <h3 style={{ color: c.text, fontSize: 22, fontWeight: 300, margin: '0 0 6px', letterSpacing: -0.5 }}>
-                  {isFormCustom ? 'Get in touch' : 'Get started'}
+                  {isFormCustom ? "Let's hear it." : 'First step toward your own AI agent.'}
                 </h3>
-                <p style={{ color: c.label, fontSize: 14, margin: 0, fontWeight: 300 }}>
-                  {isFormCustom
-                    ? "Let's hear it."
-                    : 'First step toward your own AI agent.'}
-                </p>
               </div>
 
               {/* Message packet tabs — pre-populated */}
