@@ -20,16 +20,28 @@ export function EvolvingSection() {
             ref={(el) => {
               if (!el) return;
               let forward = true;
-              el.playbackRate = 1;
-              el.addEventListener('timeupdate', () => {
-                if (forward && el.currentTime >= el.duration - 0.05) {
-                  forward = false;
-                  el.playbackRate = -1;
-                } else if (!forward && el.currentTime <= 0.05) {
-                  forward = true;
-                  el.playbackRate = 1;
+              let lastTime = performance.now();
+
+              const tick = (now: number) => {
+                const delta = (now - lastTime) / 1000;
+                lastTime = now;
+
+                if (el.readyState >= 2) {
+                  if (forward) {
+                    el.currentTime = Math.min(el.currentTime + delta, el.duration);
+                    if (el.currentTime >= el.duration) forward = false;
+                  } else {
+                    el.currentTime = Math.max(el.currentTime - delta, 0);
+                    if (el.currentTime <= 0) forward = true;
+                  }
                 }
-              });
+                requestAnimationFrame(tick);
+              };
+
+              el.pause();
+              el.currentTime = 0;
+              el.addEventListener('loadedmetadata', () => requestAnimationFrame(tick));
+              if (el.readyState >= 1) requestAnimationFrame(tick);
             }}
             src="/bg-rd.mp4"
             autoPlay
