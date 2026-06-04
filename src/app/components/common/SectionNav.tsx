@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const sections = [
   { id: 'hero',         label: 'hero' },
@@ -12,6 +12,8 @@ const sections = [
 
 export function SectionNav() {
   const [active, setActive] = useState('hero');
+  const lockedRef = useRef(false);
+  const lockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -22,7 +24,9 @@ export function SectionNav() {
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActive(id);
+          if (entry.isIntersecting && !lockedRef.current) {
+            setActive(id);
+          }
         },
         { threshold: 0.3 }
       );
@@ -34,6 +38,16 @@ export function SectionNav() {
   }, []);
 
   const scrollTo = (id: string) => {
+    // Set active immediately on click
+    setActive(id);
+
+    // Lock observer updates for ~1s while smooth scroll completes
+    lockedRef.current = true;
+    if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+    lockTimerRef.current = setTimeout(() => {
+      lockedRef.current = false;
+    }, 1000);
+
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
