@@ -20,15 +20,15 @@ export function EvolvingSection() {
             ref={(el) => {
               if (!el) return;
               let forward = true;
-              el.addEventListener('ended', () => {
-                if (forward) {
-                  el.playbackRate = -1;
+              el.playbackRate = 1;
+              el.addEventListener('timeupdate', () => {
+                if (forward && el.currentTime >= el.duration - 0.05) {
                   forward = false;
-                } else {
-                  el.playbackRate = 1;
+                  el.playbackRate = -1;
+                } else if (!forward && el.currentTime <= 0.05) {
                   forward = true;
+                  el.playbackRate = 1;
                 }
-                el.play();
               });
             }}
             src="/bg-rd.mp4"
