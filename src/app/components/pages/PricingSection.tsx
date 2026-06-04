@@ -21,6 +21,7 @@ const PLANS = [
     chatsPerDay: '~6–10 chats a day',
     messagesLimit: '2,000 messages / month',
     additionalUsage: '€0.06 / message',
+    popular: false,
     features: SHARED_FEATURES,
   },
   {
@@ -31,6 +32,7 @@ const PLANS = [
     chatsPerDay: '~12–20 chats a day',
     messagesLimit: '5,000 messages / month',
     additionalUsage: '€0.06 / message',
+    popular: true,
     features: SHARED_FEATURES,
   },
   {
@@ -41,13 +43,25 @@ const PLANS = [
     chatsPerDay: '~20–40 chats a day',
     messagesLimit: '10,000 messages / month',
     additionalUsage: '€0.06 / message',
+    popular: false,
     features: SHARED_FEATURES,
+  },
+  {
+    id: 'custom',
+    name: 'Custom',
+    label: 'Custom',
+    priceNum: null,
+    chatsPerDay: null,
+    messagesLimit: null,
+    additionalUsage: null,
+    popular: false,
+    features: [],
   },
 ];
 
 const THEMES = [
   { id: 'synabs', title: 'On frontside', badge: '−20% forever' },
-  { id: 'custom', title: 'On backside', badge: null },
+  { id: 'backside', title: 'On backside', badge: null },
 ];
 
 interface PricingSectionProps {
@@ -57,14 +71,17 @@ interface PricingSectionProps {
 
 export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProps) {
   const isDark = activeTheme === 'dark';
-  const [planIdx, setPlanIdx] = useState<number | null>(null);
+  const [planIdx, setPlanIdx] = useState<number>(0);
   const [selectedTheme, setSelectedTheme] = useState('');
   const [error, setError] = useState('');
   const sectionRef = useRef<HTMLElement>(null);
 
-  const plan = planIdx !== null ? PLANS[planIdx] : null;
+  const plan = PLANS[planIdx];
+  const isCustom = plan.id === 'custom';
   const discountedPrice =
-    plan && selectedTheme === 'synabs' ? Math.round(plan.priceNum * 0.8) : plan?.priceNum ?? null;
+    !isCustom && plan.priceNum && selectedTheme === 'synabs'
+      ? Math.round(plan.priceNum * 0.8)
+      : plan.priceNum;
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start 0.9', 'center center'] });
   const scale = useTransform(scrollYProgress, [0, 1], [0.88, 1]);
@@ -99,15 +116,18 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
   };
 
   const handleGetStarted = () => {
+    if (isCustom) {
+      onGetStarted('custom');
+      return;
+    }
     const missing: string[] = [];
     if (!selectedTheme) missing.push('SYNABS Logo');
-    if (planIdx === null) missing.push('message packet (S / M / L)');
     if (missing.length > 0) {
       setError(`Please select: ${missing.join(' and ')}.`);
       return;
     }
     setError('');
-    onGetStarted(PLANS[planIdx!].id);
+    onGetStarted(plan.id);
   };
 
   return (
@@ -146,23 +166,19 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {/* Initial costs */}
             <div style={{ marginBottom: 36 }}>
               <p style={sectionLabel}>Initial costs</p>
-              <button
-                style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: 8,
-                  border: `0.5px solid ${c.border}`,
-                  background: 'transparent',
-                  cursor: 'default',
-                  textAlign: 'left',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                }}
-              >
+              <div style={{
+                width: '100%',
+                padding: '14px 16px',
+                borderRadius: 8,
+                border: `0.5px solid ${c.border}`,
+                background: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
                 <span style={{ fontSize: 16, color: c.faint, textDecoration: 'line-through', fontWeight: 300 }}>499€</span>
                 <span style={{ fontSize: 14, color: c.label, fontWeight: 300 }}>That's on us for now.</span>
-              </button>
+              </div>
             </div>
 
             {/* SYNABS Logo selector */}
@@ -200,7 +216,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               </div>
             </div>
 
-            {/* Select message packet label + Plan tabs */}
+            {/* Select message packet + tabs */}
             <div style={{ marginBottom: 36 }}>
               <p style={sectionLabel}>Select message packet</p>
               <div style={{ display: 'flex', gap: 0, borderBottom: `0.5px solid ${c.border}` }}>
@@ -209,7 +225,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     key={p.id}
                     onClick={() => { setPlanIdx(i); setError(''); }}
                     style={{
-                      padding: '8px 28px 10px',
+                      padding: '8px 24px 10px',
                       fontSize: 14,
                       fontWeight: 400,
                       border: 'none',
@@ -220,17 +236,45 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                       marginBottom: -1,
                       transition: 'all 0.2s',
                       letterSpacing: '0.03em',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
                     }}
                   >
                     {p.name}
+                    {p.popular && (
+                      <span style={{
+                        fontSize: 10,
+                        fontWeight: 500,
+                        color: i === planIdx ? c.bg : c.tabInactive,
+                        background: i === planIdx ? c.tabActive : 'transparent',
+                        border: `0.5px solid ${i === planIdx ? c.tabActive : c.tabInactive}`,
+                        borderRadius: 4,
+                        padding: '1px 6px',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                      }}>
+                        Most popular
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Price + chats row — only shown when plan selected */}
-            {plan && (
+            {/* Custom plan: contact prompt */}
+            {isCustom ? (
+              <div style={{ marginBottom: 36 }}>
+                <p style={{ color: c.label, fontSize: 17, fontWeight: 300, margin: '0 0 6px' }}>
+                  Tell us what you need — we'll build it around you.
+                </p>
+                <p style={{ color: c.faint, fontSize: 14, fontWeight: 300, margin: 0 }}>
+                  Volume pricing, custom integrations, dedicated support.
+                </p>
+              </div>
+            ) : (
               <>
+                {/* Price + chats row */}
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40 }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
@@ -290,41 +334,38 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             )}
 
             {/* CTA row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div>
-                {plan && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: isCustom ? 'flex-end' : 'space-between' }}>
+              {!isCustom && (
+                <div>
                   <span style={{ fontSize: 15, color: c.text, fontWeight: 300 }}>
                     {discountedPrice}€ / month
                   </span>
-                )}
-                {selectedTheme === 'synabs' && plan && (
-                  <span style={{ fontSize: 12, color: c.green, marginLeft: 10 }}>
-                    SYNABS discount applied
-                  </span>
-                )}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <span style={{ fontSize: 13, color: c.faint, fontWeight: 300 }}>Cancel anytime</span>
-                <button
-                  onClick={handleGetStarted}
-                  style={{
-                    padding: '12px 28px',
-                    borderRadius: 6,
-                    background: c.text,
-                    color: c.bg,
-                    fontSize: 14,
-                    fontWeight: 400,
-                    border: 'none',
-                    cursor: 'pointer',
-                    letterSpacing: '0.03em',
-                    transition: 'opacity 0.2s',
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
-                  onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
-                >
-                  Get started
-                </button>
-              </div>
+                  {selectedTheme === 'synabs' && (
+                    <span style={{ fontSize: 12, color: c.green, marginLeft: 10 }}>
+                      SYNABS discount applied
+                    </span>
+                  )}
+                </div>
+              )}
+              <button
+                onClick={handleGetStarted}
+                style={{
+                  padding: isCustom ? '10px 22px' : '12px 28px',
+                  borderRadius: 6,
+                  background: c.text,
+                  color: c.bg,
+                  fontSize: isCustom ? 13 : 14,
+                  fontWeight: 400,
+                  border: 'none',
+                  cursor: 'pointer',
+                  letterSpacing: '0.03em',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.opacity = '0.85')}
+                onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
+              >
+                {isCustom ? 'Send contact request' : 'Get started'}
+              </button>
             </div>
 
             {/* Trust line */}
