@@ -60,7 +60,7 @@ const PLANS = [
 ];
 
 const THEMES = [
-  { id: 'backside', title: 'On backside', badge: null },
+  { id: 'backside', title: 'On backside', badge: '0€' },
   { id: 'synabs', title: 'On frontside', badge: '−20% forever' },
 ];
 
@@ -352,7 +352,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                     <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300, whiteSpace: 'nowrap' }}>
                       From custom integrations to longer cooperation.
                     </p>
-                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>&nbsp;</p>
+                    <p style={{ color: c.faint, fontSize: 12, margin: 0, fontWeight: 300 }}>ㅤ</p>
                   </div>
                 </div>
 
@@ -527,7 +527,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
               {/* Form header */}
               <div style={{ marginBottom: 28 }}>
                 <h3 style={{ color: c.text, fontSize: 22, fontWeight: 300, margin: '0 0 6px', letterSpacing: -0.5 }}>
-                  {isFormCustom ? "Let's hear it." : 'First step toward your own AI agent.'}
+                  {isFormCustom ? "Let's hear it" : 'First step toward your own AI agent'}
                 </h3>
               </div>
 
