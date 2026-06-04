@@ -268,7 +268,7 @@ export function AnimatedChatLoop({ theme, onGetStarted }) {
                       <img src={theme.avatarSrc} alt="TIA" className="w-full h-full object-contain p-0.5" style={{ filter: isLight ? 'invert(1)' : 'none' }} />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">SYNABS AI Agent</span>
+                      <span style={{ color: theme.textColor }} className="text-sm font-semibold">AI Agent</span>
                       <span style={{ background: theme.accentDot }} className="w-1.5 h-1.5 rounded-full animate-pulse" />
                     </div>
                   </div>
@@ -636,7 +636,7 @@ function CustomizedChatLoop({ onGetStarted }) {
 
                 {/* Header — musta kuten ver2 */}
                 <div style={{ background: '#1a1a1a', height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 0 16px', flexShrink: 0 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>SYNABS AI Agent</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'system-ui,sans-serif' }}>AI Agent</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', cursor: 'pointer' }}>
                       <svg width="3" height="14" viewBox="0 0 4 16" fill="currentColor"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14" r="1.5"/></svg>
@@ -891,6 +891,269 @@ const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boo
   }
 );
 
+/* ─── 3D CAROUSEL GALLERY ─────────────────────────────────────── */
+const CAROUSEL_ITEMS = [
+  { id: 'standard-dark',  label: 'Standard theme',         sublabel: 'Logo frontside',  badge: '-20% forever', badgeColor: '#34d399', badgeBg: 'rgba(52,211,153,0.15)', badgeBorder: 'rgba(52,211,153,0.4)' },
+  { id: 'customized',     label: 'Fully customized',        sublabel: 'Logo backside',   badge: null },
+  { id: 'analytics',      label: 'Analytics dashboard',     sublabel: null,               badge: null },
+];
+
+function CarouselCard({ item, chatTheme, setChatTheme, scrollToForm, paperStackRef, isDark }: {
+  item: typeof CAROUSEL_ITEMS[0];
+  chatTheme: string;
+  setChatTheme: (t: string) => void;
+  scrollToForm: () => void;
+  paperStackRef: React.Ref<{ closeLightbox: () => void }>;
+  isDark: boolean;
+}) {
+  const theme = CHAT_THEMES[chatTheme];
+  return (
+    <div className="flex flex-col items-center gap-3">
+      {item.id === 'standard-dark' && (
+        <AnimatedChatLoop theme={theme} onGetStarted={scrollToForm} />
+      )}
+      {item.id === 'customized' && (
+        <CustomizedChatLoop onGetStarted={scrollToForm} />
+      )}
+      {item.id === 'analytics' && (
+        <PaperStack isDark={isDark} ref={paperStackRef} />
+      )}
+    </div>
+  );
+}
+
+function Carousel3D({ scrollToForm, isDark, paperStackRef }: { scrollToForm: () => void; isDark: boolean; paperStackRef: React.Ref<{ closeLightbox: () => void }> }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUserControlled, setIsUserControlled] = useState(false);
+  const [chatTheme, setChatTheme] = useState('dark');
+  const dragStartX = useRef(0);
+  const dragStartAngle = useRef(0);
+  const [angle, setAngle] = useState(0);
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const userTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const currentAngleRef = useRef(0);
+  const targetAngleRef = useRef(0);
+  const isAnimatingRef = useRef(false);
+  const N = CAROUSEL_ITEMS.length;
+  const STEP = 360 / N;
+
+  // smooth lerp animation
+  useEffect(() => {
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const tick = () => {
+      const diff = targetAngleRef.current - currentAngleRef.current;
+      if (Math.abs(diff) > 0.01) {
+        currentAngleRef.current = lerp(currentAngleRef.current, targetAngleRef.current, 0.06);
+        setAngle(currentAngleRef.current);
+        animFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        currentAngleRef.current = targetAngleRef.current;
+        setAngle(targetAngleRef.current);
+        isAnimatingRef.current = false;
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(tick);
+    return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
+  }, []);
+
+  const startAutoRotate = () => {
+    if (autoRef.current) clearInterval(autoRef.current);
+    autoRef.current = setInterval(() => {
+      targetAngleRef.current -= STEP;
+      const newIdx = ((Math.round(-targetAngleRef.current / STEP) % N) + N) % N;
+      setActiveIdx(newIdx);
+    }, 3800);
+  };
+
+  const stopAutoRotate = () => {
+    if (autoRef.current) { clearInterval(autoRef.current); autoRef.current = null; }
+  };
+
+  useEffect(() => {
+    startAutoRotate();
+    return stopAutoRotate;
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setIsDragging(true);
+    setIsUserControlled(true);
+    stopAutoRotate();
+    if (userTimerRef.current) clearTimeout(userTimerRef.current);
+    dragStartX.current = e.clientX;
+    dragStartAngle.current = currentAngleRef.current;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStartX.current;
+    const newAngle = dragStartAngle.current + dx * 0.45;
+    targetAngleRef.current = newAngle;
+    currentAngleRef.current = newAngle;
+    setAngle(newAngle);
+    const newIdx = ((Math.round(-newAngle / STEP) % N) + N) % N;
+    setActiveIdx(newIdx);
+  };
+
+  const handlePointerUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    // snap to nearest
+    const nearest = Math.round(targetAngleRef.current / STEP) * STEP;
+    targetAngleRef.current = nearest;
+    const newIdx = ((Math.round(-nearest / STEP) % N) + N) % N;
+    setActiveIdx(newIdx);
+    // resume auto after 4s
+    userTimerRef.current = setTimeout(() => {
+      setIsUserControlled(false);
+      startAutoRotate();
+    }, 4000);
+  };
+
+  const goTo = (idx: number) => {
+    stopAutoRotate();
+    setIsUserControlled(true);
+    if (userTimerRef.current) clearTimeout(userTimerRef.current);
+    const delta = idx - activeIdx;
+    let shortestDelta = delta;
+    if (Math.abs(delta) > N / 2) shortestDelta = delta > 0 ? delta - N : delta + N;
+    targetAngleRef.current = currentAngleRef.current - shortestDelta * STEP;
+    setActiveIdx(idx);
+    userTimerRef.current = setTimeout(() => {
+      setIsUserControlled(false);
+      startAutoRotate();
+    }, 4000);
+  };
+
+  const RADIUS = 520;
+
+  return (
+    <div className="flex flex-col items-center gap-8 select-none w-full">
+      {/* 3D stage */}
+      <div
+        style={{ width: '100%', height: 560, position: 'relative', perspective: '1400px', cursor: isDragging ? 'grabbing' : 'grab' }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+      >
+        <div style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {CAROUSEL_ITEMS.map((item, i) => {
+            const itemAngle = angle + i * STEP;
+            const rad = (itemAngle * Math.PI) / 180;
+            const x = Math.sin(rad) * RADIUS;
+            const z = Math.cos(rad) * RADIUS;
+            // normalised depth: 1 = front, 0 = back
+            const depth = (z + RADIUS) / (2 * RADIUS);
+            const isActive = i === activeIdx;
+            const scale = 0.68 + depth * 0.32;
+            const blurAmount = isActive ? 0 : (1 - depth) * 6 + (!isActive ? 3 : 0);
+            const opacity = 0.3 + depth * 0.7;
+
+            return (
+              <div
+                key={item.id}
+                onClick={() => !isDragging && goTo(i)}
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) scale(${scale})`,
+                  transformStyle: 'preserve-3d',
+                  transition: isDragging ? 'none' : 'filter 0.5s ease',
+                  filter: `blur(${blurAmount}px)`,
+                  opacity,
+                  zIndex: Math.round(depth * 100),
+                  cursor: isActive ? 'default' : 'pointer',
+                  pointerEvents: isDragging ? 'none' : 'auto',
+                }}
+              >
+                <div style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: isActive ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: 24,
+                  padding: '24px 20px 20px',
+                  boxShadow: isActive
+                    ? '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.1)'
+                    : '0 16px 40px rgba(0,0,0,0.4)',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'border 0.5s ease, box-shadow 0.5s ease',
+                  width: 360,
+                }}>
+                  {/* Card header */}
+                  <div className="flex flex-col items-center gap-1 mb-4">
+                    <div className="flex items-center gap-2 flex-wrap justify-center">
+                      <span className="text-base font-semibold text-white tracking-tight">{item.label}</span>
+                      {item.badge && (
+                        <span style={{ background: item.badgeBg, border: `1px solid ${item.badgeBorder}`, color: item.badgeColor }} className="text-xs font-semibold px-2 py-0.5 rounded-full">{item.badge}</span>
+                      )}
+                    </div>
+                    {item.sublabel && (
+                      <span className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>{item.sublabel}</span>
+                    )}
+                  </div>
+
+                  {/* Chat theme switcher for standard theme */}
+                  {item.id === 'standard-dark' && isActive && (
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <motion.button
+                        onClick={(e) => { e.stopPropagation(); setChatTheme('dark'); }}
+                        animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#000000', '#d4d4d8'] } : { borderColor: '#71717a' }}
+                        transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
+                        style={{ borderWidth: 2, borderStyle: 'solid' }}
+                        className={`w-5 h-5 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
+                      <motion.button
+                        onClick={(e) => { e.stopPropagation(); setChatTheme('light'); }}
+                        animate={chatTheme !== 'light' ? { borderColor: ['#e4e4e7', '#52525b', '#e4e4e7'] } : { borderColor: '#a1a1aa' }}
+                        transition={chatTheme !== 'light' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
+                        style={{ borderWidth: 2, borderStyle: 'solid' }}
+                        className={`w-5 h-5 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
+                    </div>
+                  )}
+
+                  <div style={{ pointerEvents: isActive ? 'auto' : 'none' }}>
+                    <CarouselCard item={item} chatTheme={chatTheme} setChatTheme={setChatTheme} scrollToForm={scrollToForm} paperStackRef={paperStackRef} isDark={isDark} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Dots + label */}
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex items-center gap-3">
+          {CAROUSEL_ITEMS.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className="transition-all duration-500 rounded-full"
+              style={{
+                width: i === activeIdx ? 24 : 7,
+                height: 7,
+                background: i === activeIdx ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            />
+          ))}
+        </div>
+        <p className="text-xs font-light tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.14em' }}>
+          {CAROUSEL_ITEMS[activeIdx].label} · {activeIdx + 1} / {N}
+        </p>
+        {!isUserControlled && (
+          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.18)', letterSpacing: '0.06em' }}>
+            Drag to explore · Click to focus
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ─── FEATURES SECTION ────────────────────────────────────────── */
 export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: string; onGetStarted?: () => void }) {
   const scrollToForm = onGetStarted ?? (() => { const el = document.querySelector('form, [id*="contact"], [id*="trial"], [id*="get-started"], [id*="cta"]'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
@@ -911,18 +1174,6 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
     });
   }, [scrollFull]);
 
-  const [chatTheme, setChatTheme] = useState('dark');
-  const theme = CHAT_THEMES[chatTheme];
-
-  const features = [
-    { icon: MessageSquare, title: 'Any website', desc: 'WordPress, Shopify, custom — one snippet.' },
-    { icon: Brain, title: 'Trained on you', desc: 'Knows your products, FAQs, pricing.' },
-    { icon: Clock, title: '24/7 availability', desc: 'Always available, even at 3am.' },
-    { icon: TrendingUp, title: 'Converts leads', desc: 'Guides visitors to book, buy, contact.' },
-    { icon: Zap, title: 'Progressive learning', desc: 'Gets smarter over time with data.' },
-    { icon: Users, title: 'Analytics', desc: 'Turn conversations into real-time decisions.' },
-  ];
-
   return (
     <div style={{ perspective: '1200px', overflow: 'hidden' }}>
       <motion.section
@@ -931,7 +1182,6 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
         style={{ rotateX, scale, opacity, y }}
         className="min-h-screen flex items-center justify-center bg-black py-20 px-6 relative overflow-hidden"
       >
-
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
@@ -940,52 +1190,11 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
             <p className="text-lg font-light text-zinc-400">Built on the world's most advanced AI and a comprehensive analytics dashboard.</p>
           </motion.div>
 
-          <div className="flex flex-col gap-16">
-            {/* Row 1: chats + analytics side by side */}
-            <div className="flex flex-col lg:flex-row items-start justify-center gap-16 lg:gap-12">
-              <motion.div
-                initial={{ opacity: 0, x: -80 }} whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
-                className="flex flex-col gap-3 items-center">
-                <div className="flex items-center gap-2 flex-wrap justify-center">
-                  <span className="text-lg font-semibold text-white tracking-tight text-center">Standard theme</span>
-                  <span style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399' }} className="text-xs font-semibold px-2 py-0.5 rounded-full">-20% forever</span>
-                </div>
-                <AnimatedChatLoop theme={theme} onGetStarted={scrollToForm} />
-                <div className="flex items-center gap-2 mt-1">
-                  <motion.button
-                    onClick={() => setChatTheme('dark')}
-                    animate={chatTheme !== 'dark' ? { borderColor: ['#d4d4d8', '#000000', '#d4d4d8'] } : { borderColor: '#71717a' }}
-                    transition={chatTheme !== 'dark' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
-                    style={{ borderWidth: 2, borderStyle: 'solid' }}
-                    className={`w-6 h-6 rounded-full transition-transform bg-zinc-900 ${chatTheme === 'dark' ? 'scale-110 shadow-lg shadow-white/10' : ''}`} />
-                  <motion.button
-                    onClick={() => setChatTheme('light')}
-                    animate={chatTheme !== 'light' ? { borderColor: ['#e4e4e7', '#52525b', '#e4e4e7'] } : { borderColor: '#a1a1aa' }}
-                    transition={chatTheme !== 'light' ? { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' } : { duration: 0.4 }}
-                    style={{ borderWidth: 2, borderStyle: 'solid' }}
-                    className={`w-6 h-6 rounded-full transition-transform bg-white ${chatTheme === 'light' ? 'scale-110 shadow-md' : ''}`} />
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
-                className="flex flex-col gap-3 items-center">
-                <h3 className="text-lg font-semibold text-white tracking-tight text-center">Fully customized version</h3>
-                <CustomizedChatLoop onGetStarted={scrollToForm} />
-              </motion.div>
-
-              {/* Analytics dashboard — moved to right of chats */}
-              <motion.div
-                initial={{ opacity: 0, x: 80 }} whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut', delay: 0.1 }}
-                className="flex-shrink-0 flex flex-col gap-3 items-center">
-                <h3 className="text-lg font-semibold text-white tracking-tight text-center">Analytics dashboard</h3>
-                <PaperStack isDark={isDark} ref={paperStackRef} />
-              </motion.div>
-            </div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.9, ease: 'easeOut' }}>
+            <Carousel3D scrollToForm={scrollToForm} isDark={isDark} paperStackRef={paperStackRef} />
+          </motion.div>
 
           {/* Bottom CTA */}
           <motion.div
