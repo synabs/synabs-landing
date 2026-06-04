@@ -109,7 +109,7 @@ export function HowItWorks() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            From zero to live<br />in 48 hours
+            Choose AI and<br />never miss a lead
           </h2>
           <p style={{
             fontSize: 17,
