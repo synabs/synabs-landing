@@ -27,8 +27,8 @@ const CYCLE_STEPS = [
   {
     phase: '04',
     label: 'Deploy',
-    title: 'You approve, it goes live',
-    desc: 'Every proposed improvement is shown to you in the admin panel. One click deploys the new intelligence. Your AI Agent is measurably smarter than last week.',
+    title: 'We approve and double check',
+    desc: 'Every improvement is proposed and approved by us which to minimize all errors.',
     color: '#f59e0b',
   },
 ];
