@@ -1,28 +1,5 @@
 import React from 'react';
 
-const CYCLE_STEPS = [
-  {
-    label: 'Collect',
-    title: 'Every conversation is captured',
-    desc: 'All chats are securely stored, indexed, and ready for analysis in full compliance with GDPR.',
-  },
-  {
-    label: 'Analyse',
-    title: 'AI reads 75 quality signals',
-    desc: 'Weekly AI analysis covers 75 diagnostic criteria across lead behaviour, support patterns, and knowledge gaps.',
-  },
-  {
-    label: 'Improve',
-    title: 'Over 200 targeted improvements',
-    desc: 'Over 200 targeted prompt updates are generated weekly, each sharpening a response pattern, tone, or capability.',
-  },
-  {
-    label: 'Deploy',
-    title: 'We approve and secure',
-    desc: 'Every proposed improvement is verified by a human. Your AI Agent keeps getting smarter, week after week.',
-  },
-];
-
 const STATS = [
   { value: '200+', label: 'Prompt improvements per week' },
   { value: '75', label: 'Quality signals analysed per cycle' },
@@ -57,59 +34,11 @@ export function EvolvingSection() {
             lineHeight: 1.65,
             margin: 0,
           }}>
-            Most AI tools stop learning once deployed. Ours continuously analyses real conversation data, identifies gaps, and improves itself automatically.
+            Your AI Agent gets smarter every week. Every conversation is captured, analysed across 75 quality signals, and turned into over 200 targeted improvements. All verified by a human before deployment.
           </p>
         </div>
 
-        {/* Steps with fading dividers */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 64 }}>
-          {CYCLE_STEPS.map((step, i) => (
-            <div key={step.label} style={{ position: 'relative', padding: '24px 0' }}>
-              {/* Fading bottom border */}
-              {i < CYCLE_STEPS.length - 1 && (
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: 1,
-                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 30%, transparent 45%)',
-                }} />
-              )}
-              <span style={{
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.3)',
-                display: 'block',
-                marginBottom: 6,
-              }}>
-                {step.label}
-              </span>
-              <h3 style={{
-                fontSize: 17,
-                fontWeight: 500,
-                color: '#ffffff',
-                marginBottom: 8,
-                lineHeight: 1.35,
-              }}>
-                {step.title}
-              </h3>
-              <p style={{
-                fontSize: 14,
-                color: 'rgba(255,255,255,0.42)',
-                lineHeight: 1.7,
-                margin: 0,
-                maxWidth: 680,
-              }}>
-                {step.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Stats row — fading top border, tightly packed grid */}
+        {/* Stats row */}
         <div style={{ position: 'relative', paddingTop: 32 }}>
           <div style={{
             position: 'absolute',
