@@ -63,12 +63,17 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 onClick={onGetStarted}
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
               >
-                Start Trial <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
+                Start free trial <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <a
                 href="#tia-in-action"
-                className="px-8 py-4 rounded-full text-base font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold transition-colors border border-white/20 text-white hover:bg-white/10"
               >
+                <img
+                  src="/cortex-1.04.avif"
+                  alt="AI Engine"
+                  style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                />
                 See it live
               </a>
             </motion.div>
