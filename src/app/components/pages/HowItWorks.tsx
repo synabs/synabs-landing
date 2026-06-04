@@ -58,10 +58,22 @@ export function HowItWorks() {
             color: 'rgba(255,255,255,0.45)',
             maxWidth: 560,
             lineHeight: 1.65,
-            margin: 0,
+            marginBottom: 24,
           }}>
-            No technical expertise needed. We do everything. You just get more leads.
+            We train your AI Agent on your business, install it on your site, and keep it improving every week. No technical expertise needed. We handle everything for you.
           </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              'Placeholder check item one',
+              'Placeholder check item two',
+              'Placeholder check item three',
+            ].map((item) => (
+              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Check size={13} color="#00BC7D" strokeWidth={2.5} />
+                <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Steps */}
