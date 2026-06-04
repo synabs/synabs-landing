@@ -131,13 +131,13 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             transition={{ duration: 0.6, ease: 'easeOut' }}
             style={{ marginBottom: 48 }}
           >
-            <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 16px', fontWeight: 400 }}>
+            <p style={{ color: c.faint, fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', margin: '0 0 16px', fontWeight: 400 }}>
               Pricing
             </p>
             <h2 style={{ color: c.text, fontSize: 56, fontWeight: 300, margin: '0 0 12px', letterSpacing: -2, lineHeight: 1.05, whiteSpace: 'nowrap' }}>
               Hire Your AI Agent
             </h2>
-            <p style={{ color: c.label, fontSize: 15, margin: 0, fontWeight: 300 }}>
+            <p style={{ color: c.label, fontSize: 18, margin: 0, fontWeight: 300 }}>
               Save thousands every month with AI automation.
             </p>
           </motion.div>
@@ -151,7 +151,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
 
             {/* Theme selector */}
             <div style={{ marginBottom: 36 }}>
-              <p style={{ color: c.faint, fontSize: 11, letterSpacing: '0.10em', textTransform: 'uppercase', margin: '0 0 12px' }}>
+              <p style={{ color: c.faint, fontSize: 12, letterSpacing: '0.10em', textTransform: 'uppercase', margin: '0 0 12px' }}>
                 Choose your theme
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
@@ -172,10 +172,10 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                         transition: 'all 0.2s',
                       }}
                     >
-                      <span style={{ display: 'block', fontSize: 13, color: active ? c.text : c.label, fontWeight: 400, marginBottom: 3 }}>
+                      <span style={{ display: 'block', fontSize: 14, color: active ? c.text : c.label, fontWeight: 400, marginBottom: 3 }}>
                         {opt.title}
                       </span>
-                      <span style={{ fontSize: 11, color: c.faint }}>
+                      <span style={{ fontSize: 12, color: c.faint }}>
                         {opt.subtitle}
                         {opt.badge && (
                           <span style={{ marginLeft: 8, color: active ? c.green : c.faint }}>
@@ -197,7 +197,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   onClick={() => setPlanIdx(i)}
                   style={{
                     padding: '8px 28px 10px',
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 400,
                     border: 'none',
                     background: 'transparent',
@@ -228,16 +228,16 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   </span>
                   <span style={{ fontSize: 22, color: c.muted, fontWeight: 300, paddingBottom: 4 }}>€</span>
                 </div>
-                <p style={{ color: c.faint, fontSize: 12, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
+                <p style={{ color: c.faint, fontSize: 13, margin: '10px 0 0', fontWeight: 300 }}>/month</p>
               </div>
               <div style={{ textAlign: 'right', paddingBottom: 4 }}>
-                <p style={{ color: c.text, fontSize: 15, margin: '0 0 4px', fontWeight: 300 }}>
+                <p style={{ color: c.text, fontSize: 17, margin: '0 0 4px', fontWeight: 300 }}>
                   {plan.chatsPerDay}
                 </p>
-                <p style={{ color: c.muted, fontSize: 12, margin: '0 0 2px', fontWeight: 300 }}>
+                <p style={{ color: c.muted, fontSize: 13, margin: '0 0 2px', fontWeight: 300 }}>
                   {plan.messagesLimit}
                 </p>
-                <p style={{ color: c.faint, fontSize: 11, margin: 0 }}>
+                <p style={{ color: c.faint, fontSize: 12, margin: 0 }}>
                   +{plan.additionalUsage} overage
                 </p>
               </div>
@@ -249,7 +249,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                 {plan.features.map((f) => (
                   <li
                     key={f}
-                    style={{ fontSize: 13, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
+                    style={{ fontSize: 14, color: c.label, padding: '5px 0', fontWeight: 300, breakInside: 'avoid' }}
                   >
                     {f}
                   </li>
@@ -260,11 +260,11 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {/* CTA row */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <span style={{ fontSize: 14, color: c.text, fontWeight: 300 }}>
+                <span style={{ fontSize: 15, color: c.text, fontWeight: 300 }}>
                   {discountedPrice}€ / month
                 </span>
                 {selectedTheme === 'synabs' && (
-                  <span style={{ fontSize: 11, color: c.green, marginLeft: 10 }}>
+                  <span style={{ fontSize: 12, color: c.green, marginLeft: 10 }}>
                     SYNABS discount applied
                   </span>
                 )}
@@ -276,7 +276,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
                   borderRadius: 6,
                   background: c.text,
                   color: c.bg,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: 400,
                   border: 'none',
                   cursor: 'pointer',
@@ -293,7 +293,7 @@ export function PricingSection({ activeTheme, onGetStarted }: PricingSectionProp
             {/* Trust line */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginTop: 28, paddingTop: 24, borderTop: `0.5px solid ${c.border}` }}>
               {['GDPR-ready', 'Encrypted cloud storage', 'Data encrypted in transit', 'Data deletion on request'].map((item) => (
-                <span key={item} style={{ fontSize: 11, color: c.faint }}>
+                <span key={item} style={{ fontSize: 12, color: c.faint }}>
                   {item}
                 </span>
               ))}
