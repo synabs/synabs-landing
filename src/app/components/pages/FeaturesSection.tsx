@@ -631,7 +631,7 @@ function CustomizedChatLoop({ onGetStarted }) {
             <motion.div key="chat"
               initial={{ opacity: 0, scale: 0.9, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.88, y: 8 }}
               transition={{ type: 'spring', stiffness: 280, damping: 26 }} style={{ transformOrigin: 'bottom right' }}>
-              <div style={{ background: '#1a1a1a', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.3)', width: 320, height: CHAT_PANEL_HEIGHT, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ background: '#f0efeb', borderRadius: 8, boxShadow: '0 8px 40px rgba(0,0,0,0.3)', width: 320, height: CHAT_PANEL_HEIGHT, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
                 {/* Header — musta kuten ver2 */}
                 <div style={{ background: '#1a1a1a', height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 0 16px', flexShrink: 0 }}>
@@ -650,7 +650,7 @@ function CustomizedChatLoop({ onGetStarted }) {
                 </div>
 
                 {/* Messages area — valkoinen */}
-                <div style={{ background: '#111111', display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+                <div style={{ background: '#ffffff', display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
                   <div ref={scrollRef} style={{ overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10, flex: 1, scrollbarWidth: 'none' }}>
                     <AnimatePresence initial={false}>
                       {CUSTOM_CONVERSATION.slice(0, visibleMessages).map((msg, i) => (
@@ -703,7 +703,7 @@ function CustomizedChatLoop({ onGetStarted }) {
                   {/* Chips */}
                   <div style={{ padding: '0 16px 10px', display: 'flex', gap: 6, flexWrap: 'wrap' as const }}>
                     {customChips.map(chip => (
-                      <span key={chip} style={{ padding: '5px 12px', borderRadius: 20, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: 'system-ui,sans-serif', cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
+                      <span key={chip} style={{ padding: '5px 12px', borderRadius: 20, border: '1px solid #d0d0d0', background: '#f5f5f5', fontSize: 12, color: '#333', fontFamily: 'system-ui,sans-serif', cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
                         {chip}
                       </span>
                     ))}
@@ -711,13 +711,13 @@ function CustomizedChatLoop({ onGetStarted }) {
                 </div>
 
                 {/* Input */}
-                <div style={{ position: 'relative', background: '#1a1a1a', padding: '6px 8px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ background: '#2a2a2a', border: '1.5px solid rgba(255,255,255,0.1)', borderRadius: 6, display: 'flex', alignItems: 'center', padding: '6px 10px', gap: 8 }}>
-                    <span style={{ flex: 1, fontSize: 13, color: inputTypingText ? '#e8e8e8' : 'rgba(255,255,255,0.3)', fontFamily: 'system-ui,sans-serif', overflow: 'hidden', whiteSpace: 'nowrap' as const }}>
+                <div style={{ position: 'relative', background: '#f0efeb', padding: '6px 8px' }}>
+                  <div style={{ background: '#ffffff', border: '1.5px solid #d0d0d0', borderRadius: 6, display: 'flex', alignItems: 'center', padding: '6px 10px', gap: 8 }}>
+                    <span style={{ flex: 1, fontSize: 13, color: inputTypingText ? '#222' : '#aaa', fontFamily: 'system-ui,sans-serif', overflow: 'hidden', whiteSpace: 'nowrap' as const }}>
                       {inputTypingText || 'Send a message'}
                       {inputTypingText && <span style={{ opacity: 0.5 }}>|</span>}
                     </span>
-                    <div style={{ color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center' }}>
+                    <div style={{ color: '#aaa', display: 'flex', alignItems: 'center' }}>
                       <svg width="11" height="11" viewBox="0 0 10 16" fill="none"><polyline points="2,1 9,8 2,15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
                   </div>
@@ -891,16 +891,18 @@ const PaperStack = React.forwardRef<{ closeLightbox: () => void }, { isDark: boo
 );
 
 /* ─── FEATURES SECTION ────────────────────────────────────────── */
-export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
+export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: string; onGetStarted?: () => void }) {
+  const scrollToForm = onGetStarted ?? (() => { const el = document.querySelector('form, [id*="contact"], [id*="trial"], [id*="get-started"], [id*="cta"]'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
   const isDark = activeTheme === 'dark';
   const ref = useRef<HTMLElement>(null);
   const paperStackRef = useRef<{ closeLightbox: () => void }>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.9', 'center center'] });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'start 0.3'] });
   const { scrollYProgress: scrollFull } = useScroll({ target: ref, offset: ['start end', 'end start'] });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [10, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [30, 0]);
 
   useEffect(() => {
     return scrollFull.on('change', v => {
@@ -921,11 +923,11 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
   ];
 
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={{ perspective: '1200px', overflow: 'hidden' }}>
       <motion.section
         ref={ref}
         id="features"
-        style={{ scale, opacity, y }}
+        style={{ rotateX, scale, opacity, y }}
         className="min-h-screen flex items-center justify-center bg-zinc-950 py-20 px-6 relative overflow-hidden"
       >
         <video src="/dots.mp4" autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-80" />
@@ -945,12 +947,11 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
                 initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
                 className="flex flex-col gap-3 items-start">
-                <h3 className="text-lg font-semibold text-white tracking-tight">AI Agent Widget</h3>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm text-zinc-400">Standard theme</span>
+                  <span className="text-lg font-semibold text-white tracking-tight">Standard theme</span>
                   <span style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399' }} className="text-xs font-semibold px-2 py-0.5 rounded-full">-20% forever</span>
                 </div>
-                <AnimatedChatLoop theme={theme} onGetStarted={() => { const el = document.querySelector('form, [id*="contact"], [id*="trial"], [id*="get-started"], [id*="cta"]'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }} />
+                <AnimatedChatLoop theme={theme} onGetStarted={scrollToForm} />
                 <div className="flex items-center gap-2 mt-1">
                   <motion.button
                     onClick={() => setChatTheme('dark')}
@@ -972,7 +973,7 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
                 viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.7 }}
                 className="flex flex-col gap-3 items-start">
                 <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
-                <CustomizedChatLoop onGetStarted={() => { const el = document.querySelector('form, [id*="contact"], [id*="trial"], [id*="get-started"], [id*="cta"]'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }} />
+                <CustomizedChatLoop onGetStarted={scrollToForm} />
               </motion.div>
 
               {/* Analytics dashboard — moved to right of chats */}
@@ -985,6 +986,20 @@ export function FeaturesSection({ activeTheme }: { activeTheme: string }) {
               </motion.div>
             </div>
           </div>
+
+          {/* Bottom CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center mt-16">
+            <button
+              onClick={scrollToForm}
+              className="group inline-flex items-center gap-3 px-10 py-4 rounded-full text-base font-semibold transition-all bg-white text-zinc-950 hover:bg-zinc-100"
+            >
+              Get Started Free
+              <svg className="size-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </motion.div>
         </div>
       </motion.section>
     </div>
