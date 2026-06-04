@@ -24,8 +24,8 @@ const CYCLE_STEPS = [
 ];
 
 const STATS = [
-  { value: '75', label: 'Quality signals analysed per cycle' },
   { value: '200+', label: 'Prompt improvements per week' },
+  { value: '75', label: 'Quality signals analysed per cycle' },
   { value: '7 days', label: 'Between each evolution cycle' },
 ];
 
@@ -73,7 +73,7 @@ export function EvolvingSection() {
                   left: 0,
                   right: 0,
                   height: 1,
-                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 40%, transparent 100%)',
+                  background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 100%)',
                 }} />
               )}
               <span style={{
@@ -115,7 +115,7 @@ export function EvolvingSection() {
             position: 'absolute',
             top: 0, left: 0, right: 0,
             height: 1,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 40%, transparent 100%)',
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.07) 20%, transparent 100%)',
           }} />
           <div style={{
             display: 'grid',
