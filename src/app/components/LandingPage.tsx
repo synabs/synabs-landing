@@ -35,7 +35,7 @@ export function LandingPage() {
         <HeroSection onGetStarted={() => openLead()} />
         <HowItWorks />
         <FeaturesSection activeTheme={activeTheme} />
-        {/* <EvolvingSection /> */}
+        <EvolvingSection />
         <PricingSection activeTheme={activeTheme} onGetStarted={(id) => openLead(id)} />
         <FAQSection />
         <CTASection activeTheme={activeTheme} onGetStarted={() => openLead()} />
