@@ -1187,7 +1187,7 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
           <motion.div
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.4 }} className="mb-14 text-center">
-            <h2 className="text-5xl md:text-6xl font-light mb-3 text-white">The brain behind AI Agent</h2>
+            <h2 className="text-5xl md:text-6xl font-light mb-3 text-white">Work smart not hard</h2>
             <p className="text-lg font-light text-zinc-400">Built on the world's most advanced AI and a comprehensive analytics dashboard.</p>
           </motion.div>
 
