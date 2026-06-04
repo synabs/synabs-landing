@@ -12,10 +12,10 @@ export function EvolvingSection() {
       id="evolving"
       style={{ background: '#09090b', padding: '96px 24px' }}
     >
-      <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 64 }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 64 }}>
 
         {/* Left image */}
-        <div style={{ flex: '0 0 420px' }}>
+        <div style={{ flex: '0 0 780px' }}>
           <img
             src="/bg-nd.avif"
             alt=""
