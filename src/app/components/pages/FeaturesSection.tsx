@@ -946,9 +946,9 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
               <motion.div
                 initial={{ opacity: 0, x: -80 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
-                className="flex flex-col gap-3 items-start">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-lg font-semibold text-white tracking-tight">Standard theme</span>
+                className="flex flex-col gap-3 items-center">
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <span className="text-lg font-semibold text-white tracking-tight text-center">Standard theme</span>
                   <span style={{ background: 'rgba(52,211,153,0.15)', border: '1px solid rgba(52,211,153,0.4)', color: '#34d399' }} className="text-xs font-semibold px-2 py-0.5 rounded-full">-20% forever</span>
                 </div>
                 <AnimatedChatLoop theme={theme} onGetStarted={scrollToForm} />
@@ -971,8 +971,8 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
               <motion.div
                 initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut' }}
-                className="flex flex-col gap-3 items-start">
-                <h3 className="text-lg font-semibold text-white tracking-tight">Fully customized version</h3>
+                className="flex flex-col gap-3 items-center">
+                <h3 className="text-lg font-semibold text-white tracking-tight text-center">Fully customized version</h3>
                 <CustomizedChatLoop onGetStarted={scrollToForm} />
               </motion.div>
 
@@ -980,8 +980,8 @@ export function FeaturesSection({ activeTheme, onGetStarted }: { activeTheme: st
               <motion.div
                 initial={{ opacity: 0, x: 80 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.875, ease: 'easeOut', delay: 0.1 }}
-                className="flex-shrink-0 flex flex-col gap-3">
-                <h3 className="text-lg font-semibold text-white tracking-tight">Analytics dashboard</h3>
+                className="flex-shrink-0 flex flex-col gap-3 items-center">
+                <h3 className="text-lg font-semibold text-white tracking-tight text-center">Analytics dashboard</h3>
                 <PaperStack isDark={isDark} ref={paperStackRef} />
               </motion.div>
             </div>
