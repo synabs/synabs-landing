@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            Every website visitor is a potential customer, but most businesses miss opportunities because they can't respond fast enough. Our AI agent engages visitors instantly, answers their questions, and captures valuable lead information around the clock. Setup takes just one line of code. Let AI handle the rest.
+            Most websites lose customers simply because they can’t respond fast enough. Our AI Agent engages visitors instantly, answers questions, and captures qualified leads 24/7, helping you convert more traffic into customers. Setup takes just one line of code, and the AI handles the rest.
           </p>
 
           <CmdStat />
