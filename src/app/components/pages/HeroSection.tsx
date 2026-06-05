@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { ParticleField } from '../common/ParticleField';
 
 interface HeroSectionProps {
@@ -101,14 +101,20 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.35 }}
-              className="flex items-center gap-7 flex-wrap"
+              className="flex items-center gap-3"
             >
-              {['No credit card required', 'Setup in 48 hours', 'Cancel anytime'].map(item => (
-                <span key={item} className="flex items-center gap-2 text-white/40" style={{ fontSize: '0.95rem' }}>
-                  <Check className="size-4" style={{ color: '#00BC7D' }} />
-                  {item}
-                </span>
-              ))}
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-white/60 italic" style={{ fontSize: '0.95rem' }}>
+                "Not human. Better"
+              </p>
+              <span className="text-white/30" style={{ fontSize: '0.95rem' }}>—</span>
+              <span className="text-white/50 font-medium" style={{ fontSize: '0.95rem' }}>Verkkopantteri</span>
             </motion.div>
           </motion.div>
         </div>
