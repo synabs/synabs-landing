@@ -96,11 +96,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 alt="AI Engine"
                 className="pointer-events-none"
                 style={{
-                  position: 'absolute',
-                  left: 'calc(100% + 1.5rem)',
-                  bottom: '-10px',
-                  width: '110px',
-                  height: '150px',
+                  position: "absolute",
+                  top: 0,
+                  left: "calc(100% + 10px)",
+                  bottom: 0,
+                  width: "auto",
+                  height: "100%",
                   objectFit: 'contain',
                 }}
               />
