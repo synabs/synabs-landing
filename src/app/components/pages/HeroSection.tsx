@@ -63,7 +63,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             transition={{ duration: 0.7 }}
           >
             <h2 className="font-light mb-4 text-white leading-tight" style={{ fontSize: 'clamp(2.8rem, 6.5vw, 4.2rem)' }}>
-              BEYOND CHATBOTS:<br />THE EVOLVING AI AGENT
+              Live chat support by the<br />world's smartest AI Agent
             </h2>
             <p className="font-light text-zinc-400 max-w-2xl mb-9" style={{ fontSize: '1.2rem' }}>
               The AI Agent resolves complex inquiries, evolves every week, and helps increase
@@ -74,7 +74,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row items-center gap-4 mb-7"
+              className="flex flex-col sm:flex-row items-end gap-4 mb-7"
             >
               <a
                 href="#tia-in-action"
@@ -93,7 +93,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               <img
                 src="/cortex-1.04.avif"
                 alt="AI Engine"
-                style={{ width: '110px', height: '150px', objectFit: 'contain' }}
+                style={{ width: "110px", height: "150px", objectFit: "contain", flexShrink: 0 }}
               />
             </motion.div>
 
