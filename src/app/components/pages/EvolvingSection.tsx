@@ -49,7 +49,7 @@ export function EvolvingSection() {
             lineHeight: 1.65,
             margin: '0 0 0 auto',
           }}>
-            After a short period of use, it begins predicting your leads and customer behavior with increasing accuracy. Over time, it learns your audience patterns so well that it can anticipate intent before it fully forms. With continued use, it masters your funnel, improving conversions and driving higher revenue through continuous refinement.
+            An AI agent that doesn’t just analyze your funnel, it masters it. It learns your audience behavior, predicts intent before it happens, and continuously optimizes conversions to grow revenue automatically over time.
           </p>
         </div>
 
