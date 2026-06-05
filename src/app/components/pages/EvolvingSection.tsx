@@ -49,7 +49,7 @@ export function EvolvingSection() {
             lineHeight: 1.65,
             margin: '0 0 0 auto',
           }}>
-            Your AI agent improves every week. Each conversation is analyzed across 75 quality signals and converted into 200+ targeted improvements that make it smarter and more effective over time.
+            Most AI agents are trained once and fall behind over time. Ours improves continuously from every conversation, 200+ weekly updates, so the longer you use it, the more it masters your audience’s behavior and maximizes conversions, getting better every week as a next-generation AI agent.
           </p>
         </div>
 
