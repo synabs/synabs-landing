@@ -74,7 +74,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col sm:flex-row items-end gap-4 mb-7"
+              className="flex flex-col sm:flex-row items-center gap-4 mb-7"
             >
               <a
                 href="#tia-in-action"
