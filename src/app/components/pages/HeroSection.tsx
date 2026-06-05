@@ -54,7 +54,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               BEYOND CHATBOTS:<br />THE EVOLVING AI AGENT
             </h2>
             <p className="font-light text-zinc-400 max-w-2xl mb-9" style={{ fontSize: '1.2rem' }}>
-              The AI Agent resolves complex inquiries, evolves every week, and helps increase
+              Live chat AI Agent resolves complex inquiries, evolves every week, and helps increase
               conversions while reducing support workload.
             </p>
 
