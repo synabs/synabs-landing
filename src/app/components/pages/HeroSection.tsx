@@ -63,7 +63,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             transition={{ duration: 0.7 }}
           >
             <h2 className="font-light mb-4 text-white leading-tight" style={{ fontSize: 'clamp(2.8rem, 6.5vw, 4.2rem)' }}>
-              Live chat support by the<br />world's smartest AI Agent
+              BEYOND CHATBOTS:<br />THE EVOLVING AI AGENT
             </h2>
             <p className="font-light text-zinc-400 max-w-2xl mb-9" style={{ fontSize: '1.2rem' }}>
               The AI Agent resolves complex inquiries, evolves every week, and helps increase
