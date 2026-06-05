@@ -109,7 +109,7 @@ export function HowItWorks() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            Seconds win customers, <br />minutes lose them
+            Support is broken, <br />we fixed it
           </h2>
           <p style={{
             fontSize: 17,
@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            Most businesses spend money getting visitors but lose them before they ever make contact. Our AI Agent responds instantly, captures leads, and helps convert more visitors into customers around the clock. Setup takes just one line of code, and the AI handles the rest.
+            Most AI chatbots fail the moment a customer asks something real. The AI Agent understands context, learns from every conversation, and resolves what others can't. So your team never has to.
           </p>
 
           <CmdStat />
