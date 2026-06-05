@@ -74,8 +74,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative flex flex-col sm:flex-row items-center gap-4 mb-7"
-              style={{ width: 'fit-content' }}
+              className="flex flex-col sm:flex-row items-center gap-4 mb-7"
             >
               <a
                 href="#tia-in-action"
@@ -94,17 +93,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               <img
                 src="/cortex-1.04.avif"
                 alt="AI Engine"
-                className="pointer-events-none"
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  left: "calc(100% + 10px)",
-                  
-                  width: "110px",
-                  height: "150px",
-                  objectFit: 'contain',
-                }}
+                style={{ width: '110px', height: '150px', objectFit: 'contain' }}
               />
             </motion.div>
 
