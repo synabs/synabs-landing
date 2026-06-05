@@ -97,11 +97,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 className="pointer-events-none"
                 style={{
                   position: "absolute",
-                  top: 0,
+                  top: "50%",
+                  transform: "translateY(-50%)",
                   left: "calc(100% + 10px)",
-                  bottom: 0,
-                  width: "auto",
-                  height: "100%",
+                  
+                  width: "110px",
+                  height: "150px",
                   objectFit: 'contain',
                 }}
               />
