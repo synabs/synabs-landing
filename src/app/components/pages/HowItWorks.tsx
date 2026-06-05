@@ -109,7 +109,7 @@ export function HowItWorks() {
             marginBottom: 16,
             letterSpacing: '-0.02em',
           }}>
-            Not human, but <br />better where it counts
+            Seconds win customers, <br />minutes lose them
           </h2>
           <p style={{
             fontSize: 17,
@@ -119,7 +119,7 @@ export function HowItWorks() {
             lineHeight: 1.65,
             marginBottom: 24,
           }}>
-            Most websites lose customers simply because they can’t respond fast enough. Our AI Agent engages visitors instantly, answers questions, and captures qualified leads 24/7, helping you convert more traffic into customers. Setup takes just one line of code, and the AI handles the rest.
+            Most businesses spend money getting visitors but lose them before they ever make contact. Our AI Agent responds instantly, captures leads, and helps convert more visitors into customers around the clock. Setup takes just one line of code, and the AI handles the rest.
           </p>
 
           <CmdStat />
