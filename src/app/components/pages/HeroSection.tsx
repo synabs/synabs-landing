@@ -58,12 +58,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
               conversions while reducing support workload.
             </p>
 
-            {/* Buttons + review */}
+            {/* Buttons + review + cortex */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-col gap-4 mb-7"
+              className="flex flex-col items-start gap-4 mb-7"
             >
               <div className="flex flex-row items-center gap-4">
                 <a
@@ -99,14 +99,13 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 <span className="text-white/25" style={{ fontSize: '0.82rem' }}>—</span>
                 <span className="text-white/40 font-medium" style={{ fontSize: '0.82rem' }}>Verkkopantteri</span>
               </motion.div>
+              {/* Cortex image — centered under buttons and review */}
+              <img
+                src="/cortex-1.04.avif"
+                alt="AI Engine"
+                style={{ width: '110px', height: '150px', objectFit: 'contain', marginTop: '0.5rem' }}
+              />
             </motion.div>
-
-            {/* Cortex image — below buttons and review */}
-            <img
-              src="/cortex-1.04.avif"
-              alt="AI Engine"
-              style={{ width: '110px', height: '150px', objectFit: 'contain', marginTop: '1.5rem' }}
-            />
 
           </motion.div>
         </div>
